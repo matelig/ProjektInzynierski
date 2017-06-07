@@ -3,6 +3,11 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/EmployeeTracker.iml" filepath="$PROJECT_DIR$/EmployeeTracker.iml" />
+<<<<<<< HEAD
+      <module fileurl="file://$PROJECT_DIR$/ProjektInzynierski.iml" filepath="$PROJECT_DIR$/ProjektInzynierski.iml" />
+      <module fileurl="file://$PROJECT_DIR$/android.iml" filepath="$PROJECT_DIR$/android.iml" />
+=======
+>>>>>>> 472711499270ac3e4406b588644a415448b13bdc
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>
