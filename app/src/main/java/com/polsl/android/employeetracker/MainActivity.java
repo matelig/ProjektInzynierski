@@ -29,6 +29,10 @@ public class MainActivity extends AppCompatActivity {
     TextView name;
     @BindView(R.id.secondText)
     TextView second;
+    @BindView(R.id.vin_number)
+    TextView vinNumber;
+    @BindView(R.id.speed_view)
+    TextView speedText;
     @BindView(R.id.button_main)
     Button button;
 
@@ -39,8 +43,12 @@ public class MainActivity extends AppCompatActivity {
         public void onReceive(Context context, Intent intent) {
             String RPM = intent.getStringExtra("engineRpmCommand");
             String position = intent.getStringExtra("position");
+            String vin = intent.getStringExtra("vinNumber");
+            String speed = intent.getStringExtra("speed");
             name.setText(RPM);
             second.setText(position);
+            vinNumber.setText(vin);
+            speedText.setText(speed);
         }
     };
 
@@ -55,6 +63,7 @@ public class MainActivity extends AppCompatActivity {
         editor.putBoolean("finish",false);
         editor.putInt("engineRpmCommand",0);
         editor.putLong("position",0);
+        editor.putString("vinNumber","");
         editor.apply();
     }
 
@@ -118,5 +127,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onResetButtonClick(View view) {
+
     }
 }

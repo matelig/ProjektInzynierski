@@ -13,14 +13,19 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.github.pires.obd.commands.SpeedCommand;
+import com.github.pires.obd.commands.control.VinCommand;
 import com.github.pires.obd.commands.engine.RPMCommand;
 import com.github.pires.obd.commands.engine.ThrottlePositionCommand;
 import com.github.pires.obd.commands.protocol.EchoOffCommand;
+import com.github.pires.obd.commands.protocol.HeadersOffCommand;
 import com.github.pires.obd.commands.protocol.LineFeedOffCommand;
+import com.github.pires.obd.commands.protocol.ObdResetCommand;
 import com.github.pires.obd.commands.protocol.SelectProtocolCommand;
+import com.github.pires.obd.commands.protocol.SpacesOffCommand;
 import com.github.pires.obd.commands.protocol.TimeoutCommand;
 import com.github.pires.obd.enums.ObdProtocols;
 import com.github.pires.obd.exceptions.MisunderstoodCommandException;
+import com.github.pires.obd.exceptions.NoDataException;
 
 
 import java.io.IOException;
@@ -120,45 +125,79 @@ public class ODBInterface {
 
         try {
 
-            new EchoOffCommand().run(socket.getInputStream(), socket.getOutputStream());
-
-            new LineFeedOffCommand().run(socket.getInputStream(), socket.getOutputStream());
-
-            try {
-                new TimeoutCommand(125).run(socket.getInputStream(), socket.getOutputStream());
-                //new TimeoutObdCommand().run(socket.getInputStream(), socket.getOutputStream()); A MOZE TO?
-
-            } catch (MisunderstoodCommandException e) {
-                Log.d("gping2", "Timeout command not understood, hope that wasn't important..");
-            }
-
-            try {
-                new SelectProtocolCommand(ObdProtocols.AUTO).run(socket.getInputStream(), socket.getOutputStream());
-            } catch (MisunderstoodCommandException e) {
-                Log.d("gping2", "Select protocol command failed");
-            }
-
             readValues = true;
             new Thread() {
                 public void run() {
-                    RPMCommand engineRpmCommand = new RPMCommand();
-                    SpeedCommand speedCommand = new SpeedCommand();
-                    ThrottlePositionCommand throttlePositionCommand = new ThrottlePositionCommand();
-                    engineRpmCommand.setResponseTimeDelay(responseDelay);
-                    speedCommand.setResponseTimeDelay(responseDelay);
-                    throttlePositionCommand.setResponseTimeDelay(responseDelay);
+
+                    try {
+                        ObdSetDefaultCommand defaultCommand = new ObdSetDefaultCommand();
+                        defaultCommand.setResponseTimeDelay(responseDelay);
+                        defaultCommand.run(socket.getInputStream(), socket.getOutputStream());
+
+                        ObdResetCommand obdResetCommand = new ObdResetCommand();
+                        obdResetCommand.setResponseTimeDelay(responseDelay);
+                        obdResetCommand.run(socket.getInputStream(), socket.getOutputStream());
+
+                        EchoOffCommand echoOffCommand = new EchoOffCommand();
+                        echoOffCommand.setResponseTimeDelay(responseDelay);
+                        echoOffCommand.run(socket.getInputStream(), socket.getOutputStream());
+
+                        LineFeedOffCommand lineFeedOffCommand = new LineFeedOffCommand();
+                        lineFeedOffCommand.setResponseTimeDelay(responseDelay);
+                        lineFeedOffCommand.run(socket.getInputStream(), socket.getOutputStream());
+
+                        SpacesOffCommand spacesOffCommand = new SpacesOffCommand();
+                        spacesOffCommand.setResponseTimeDelay(responseDelay);
+                        spacesOffCommand.run(socket.getInputStream(), socket.getOutputStream());
+
+                        HeadersOffCommand headersOffCommand = new HeadersOffCommand();
+                        headersOffCommand.setResponseTimeDelay(responseDelay);
+                        headersOffCommand.run(socket.getInputStream(), socket.getOutputStream());
+
+                        SelectProtocolCommand selectProtocolCommand = new SelectProtocolCommand(ObdProtocols.AUTO);
+                        selectProtocolCommand.setResponseTimeDelay(responseDelay);
+                        selectProtocolCommand.run(socket.getInputStream(), socket.getOutputStream());
+
+                        TimeoutCommand timeoutCommand = new TimeoutCommand(200);
+                        timeoutCommand.setResponseTimeDelay(responseDelay);
+                        timeoutCommand.run(socket.getInputStream(), socket.getOutputStream());
+
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+
+
+                    Intent intent = new Intent("GETDATA");
                     while (socket.isConnected() && readValues) {
                         try {
-                            Intent intent = new Intent("GETDATA");
-                            engineRpmCommand.run(socket.getInputStream(), socket.getOutputStream());
-                            intent.putExtra("engineRpmCommand", engineRpmCommand.getFormattedResult());
-
-                            speedCommand.run(socket.getInputStream(), socket.getOutputStream());
-                            intent.putExtra("speed", speedCommand.getImperialSpeed());
-
-                            throttlePositionCommand.run(socket.getInputStream(), socket.getOutputStream());
-                            intent.putExtra("position", throttlePositionCommand.getFormattedResult());
-
+                            RPMCommand engineRpmCommand = new RPMCommand();
+                            SpeedCommand speedCommand = new SpeedCommand();
+                            VinCommand vinCommand = new VinCommand();
+                            ThrottlePositionCommand throttlePositionCommand = new ThrottlePositionCommand();
+                            engineRpmCommand.setResponseTimeDelay(responseDelay);
+                            speedCommand.setResponseTimeDelay(responseDelay);
+                            throttlePositionCommand.setResponseTimeDelay(responseDelay);
+                            vinCommand.setResponseTimeDelay(responseDelay);
+                            try {
+                                engineRpmCommand.run(socket.getInputStream(), socket.getOutputStream());
+                                intent.putExtra("engineRpmCommand", engineRpmCommand.getFormattedResult());
+                            } catch (NoDataException e) {
+                                intent.putExtra("engineRpmCommand","NO DATA");
+                            } catch(IndexOutOfBoundsException e) {}
+                            try {
+                                speedCommand.run(socket.getInputStream(), socket.getOutputStream());
+                                intent.putExtra("speed", speedCommand.getFormattedResult());
+                            } catch (NoDataException e) {
+                                intent.putExtra("speed","NO DATA");
+                            } catch(IndexOutOfBoundsException e) {}
+                            try {
+                                vinCommand.run(socket.getInputStream(), socket.getOutputStream());
+                                intent.putExtra("vinNumber", vinCommand.getFormattedResult());
+                            } catch (NoDataException e) {
+                                intent.putExtra("vinNumber","NO DATA");
+                            } catch(IndexOutOfBoundsException e) {}
                             context.sendBroadcast(intent);
                         } catch (IOException e) {
                         } catch (InterruptedException e) {
@@ -172,12 +211,7 @@ public class ODBInterface {
 
         } catch (MisunderstoodCommandException e) {
             Log.e("gping2", "MisunderstoodCommandException: " + e.toString());
-        } catch (IOException e) {
-            Log.e("gping2", "test error");
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            Log.e("gping2", "test error");
-            e.printStackTrace();
+
         }
     }
 }
