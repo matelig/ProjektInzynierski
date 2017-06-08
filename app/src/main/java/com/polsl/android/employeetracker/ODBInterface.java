@@ -16,6 +16,7 @@ import com.github.pires.obd.commands.SpeedCommand;
 import com.github.pires.obd.commands.control.VinCommand;
 import com.github.pires.obd.commands.engine.RPMCommand;
 import com.github.pires.obd.commands.engine.ThrottlePositionCommand;
+import com.github.pires.obd.commands.protocol.CloseCommand;
 import com.github.pires.obd.commands.protocol.EchoOffCommand;
 import com.github.pires.obd.commands.protocol.HeadersOffCommand;
 import com.github.pires.obd.commands.protocol.LineFeedOffCommand;
@@ -176,6 +177,8 @@ public class ODBInterface {
                             SpeedCommand speedCommand = new SpeedCommand();
                             VinCommand vinCommand = new VinCommand();
                             ThrottlePositionCommand throttlePositionCommand = new ThrottlePositionCommand();
+                            CloseCommand closeCommand = new CloseCommand();
+                            closeCommand.setResponseTimeDelay(responseDelay);
                             engineRpmCommand.setResponseTimeDelay(responseDelay);
                             speedCommand.setResponseTimeDelay(responseDelay);
                             throttlePositionCommand.setResponseTimeDelay(responseDelay);
@@ -185,18 +188,28 @@ public class ODBInterface {
                                 intent.putExtra("engineRpmCommand", engineRpmCommand.getFormattedResult());
                             } catch (NoDataException e) {
                                 intent.putExtra("engineRpmCommand","NO DATA");
+                                closeCommand.run(socket.getInputStream(), socket.getOutputStream());
                             } catch(IndexOutOfBoundsException e) {}
                             try {
                                 speedCommand.run(socket.getInputStream(), socket.getOutputStream());
                                 intent.putExtra("speed", speedCommand.getFormattedResult());
                             } catch (NoDataException e) {
                                 intent.putExtra("speed","NO DATA");
+                                closeCommand.run(socket.getInputStream(), socket.getOutputStream());
+                            } catch(IndexOutOfBoundsException e) {}
+                            try {
+                                throttlePositionCommand.run(socket.getInputStream(), socket.getOutputStream());
+                                intent.putExtra("position", throttlePositionCommand.getFormattedResult());
+                            } catch (NoDataException e) {
+                                intent.putExtra("position","NO DATA");
+                                closeCommand.run(socket.getInputStream(), socket.getOutputStream());
                             } catch(IndexOutOfBoundsException e) {}
                             try {
                                 vinCommand.run(socket.getInputStream(), socket.getOutputStream());
                                 intent.putExtra("vinNumber", vinCommand.getFormattedResult());
                             } catch (NoDataException e) {
                                 intent.putExtra("vinNumber","NO DATA");
+                                closeCommand.run(socket.getInputStream(), socket.getOutputStream());
                             } catch(IndexOutOfBoundsException e) {}
                             context.sendBroadcast(intent);
                         } catch (IOException e) {
