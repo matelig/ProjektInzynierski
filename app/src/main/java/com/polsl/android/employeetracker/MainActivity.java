@@ -61,6 +61,7 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("finish",false);
+        editor.putBoolean("obdConnected",true);
         editor.putInt("engineRpmCommand",0);
         editor.putLong("position",0);
         editor.putString("vinNumber","");

@@ -30,6 +30,7 @@ import com.github.pires.obd.exceptions.NoDataException;
 
 
 import java.io.IOException;
+import java.lang.reflect.Method;
 import java.util.UUID;
 
 
@@ -55,7 +56,14 @@ public class ODBInterface {
         sharedPreferences = preferences;
     }
 
-
+    public void disconnect() {
+        try {
+            if (socket!=null)
+                socket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
     private void saveNewAddress() {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(deviceAddress, "previousDeviceAddress");
@@ -63,6 +71,8 @@ public class ODBInterface {
     }
 
     public void connect_bt(String deviceAddress) {
+
+
         Handler handler = new Handler(Looper.getMainLooper());
         handler.post(new Runnable() {
 
@@ -73,7 +83,7 @@ public class ODBInterface {
                         Toast.LENGTH_SHORT).show();
             }
         });
-
+        disconnect();
         BluetoothAdapter btAdapter = BluetoothAdapter.getDefaultAdapter();
         btAdapter.cancelDiscovery();
         BluetoothDevice device = btAdapter.getRemoteDevice(deviceAddress);
@@ -81,8 +91,12 @@ public class ODBInterface {
         UUID uuid = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
 
         try {
-            socket = device.createInsecureRfcommSocketToServiceRecord(uuid);
+            socket = device.createRfcommSocketToServiceRecord(uuid);
             socket.connect();
+            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putBoolean("obdConnected",true);
+            editor.apply();
             handler = new Handler(Looper.getMainLooper());
             handler.post(new Runnable() {
 
@@ -94,18 +108,34 @@ public class ODBInterface {
                 }
             });
         } catch (IOException e) {
-            e.printStackTrace();
-            handler = new Handler(Looper.getMainLooper());
-            handler.post(new Runnable() {
+            Log.e("gping2", "There was an error while establishing Bluetooth connection. Falling back..", e);
+            Class<?> clazz = socket.getRemoteDevice().getClass();
+            Class<?>[] paramTypes = new Class<?>[]{Integer.TYPE};
+            BluetoothSocket sockFallback = null;
+            try {
+                Method m = clazz.getMethod("createRfcommSocket", paramTypes);
+                Object[] params = new Object[]{Integer.valueOf(1)};
+                sockFallback = (BluetoothSocket) m.invoke(socket.getRemoteDevice(), params);
+                sockFallback.connect();
+                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putBoolean("obdConnected",true);
+                editor.apply();
+                socket = sockFallback;
+            } catch (Exception e2) {
+                handler = new Handler(Looper.getMainLooper());
+                handler.post(new Runnable() {
 
-                @Override
-                public void run() {
-                    Toast.makeText(context,
-                            "ODB connection failed",
-                            Toast.LENGTH_SHORT).show();
-                }
-            });
-            Log.e("gping2", "BT connect error");
+                    @Override
+                    public void run() {
+                        Toast.makeText(context,
+                                "ODB connection failed",
+                                Toast.LENGTH_SHORT).show();
+                    }
+                });
+                Log.e("gping2", "BT connect error");
+            }
+
         }
         saveNewAddress();
     }
@@ -114,19 +144,12 @@ public class ODBInterface {
         readValues = false;
     }
 
-    public void disconnect() {
-        try {
-            socket.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+
 
     public void startODBReadings() {
-
         try {
-
             readValues = true;
+
             new Thread() {
                 public void run() {
 
@@ -162,14 +185,14 @@ public class ODBInterface {
                         TimeoutCommand timeoutCommand = new TimeoutCommand(200);
                         timeoutCommand.setResponseTimeDelay(responseDelay);
                         timeoutCommand.run(socket.getInputStream(), socket.getOutputStream());
-
                     } catch (IOException e) {
                         e.printStackTrace();
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
 
-
+                    SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+                    SharedPreferences.Editor editor = preferences.edit();
                     Intent intent = new Intent("GETDATA");
                     while (socket.isConnected() && readValues) {
                         try {
@@ -177,8 +200,7 @@ public class ODBInterface {
                             SpeedCommand speedCommand = new SpeedCommand();
                             VinCommand vinCommand = new VinCommand();
                             ThrottlePositionCommand throttlePositionCommand = new ThrottlePositionCommand();
-                            CloseCommand closeCommand = new CloseCommand();
-                            closeCommand.setResponseTimeDelay(responseDelay);
+
                             engineRpmCommand.setResponseTimeDelay(responseDelay);
                             speedCommand.setResponseTimeDelay(responseDelay);
                             throttlePositionCommand.setResponseTimeDelay(responseDelay);
@@ -187,31 +209,47 @@ public class ODBInterface {
                                 engineRpmCommand.run(socket.getInputStream(), socket.getOutputStream());
                                 intent.putExtra("engineRpmCommand", engineRpmCommand.getFormattedResult());
                             } catch (NoDataException e) {
-                                intent.putExtra("engineRpmCommand","NO DATA");
-                                closeCommand.run(socket.getInputStream(), socket.getOutputStream());
-                            } catch(IndexOutOfBoundsException e) {}
+                                intent.putExtra("engineRpmCommand", "NO DATA");
+                                editor.putBoolean("obdConnected",false);
+
+                                finishODBReadings();
+                            } catch (IndexOutOfBoundsException e) {
+                            }
                             try {
                                 speedCommand.run(socket.getInputStream(), socket.getOutputStream());
                                 intent.putExtra("speed", speedCommand.getFormattedResult());
                             } catch (NoDataException e) {
-                                intent.putExtra("speed","NO DATA");
-                                closeCommand.run(socket.getInputStream(), socket.getOutputStream());
-                            } catch(IndexOutOfBoundsException e) {}
+                                intent.putExtra("speed", "NO DATA");
+                                editor.putBoolean("obdConnected",false);
+
+                                finishODBReadings();
+                            } catch (IndexOutOfBoundsException e) {
+                            }
                             try {
                                 throttlePositionCommand.run(socket.getInputStream(), socket.getOutputStream());
                                 intent.putExtra("position", throttlePositionCommand.getFormattedResult());
                             } catch (NoDataException e) {
-                                intent.putExtra("position","NO DATA");
-                                closeCommand.run(socket.getInputStream(), socket.getOutputStream());
-                            } catch(IndexOutOfBoundsException e) {}
+                                intent.putExtra("position", "NO DATA");
+                                editor.putBoolean("obdConnected",false);
+
+                                finishODBReadings();
+                            } catch (IndexOutOfBoundsException e) {
+                            }
                             try {
                                 vinCommand.run(socket.getInputStream(), socket.getOutputStream());
                                 intent.putExtra("vinNumber", vinCommand.getFormattedResult());
                             } catch (NoDataException e) {
-                                intent.putExtra("vinNumber","NO DATA");
-                                closeCommand.run(socket.getInputStream(), socket.getOutputStream());
-                            } catch(IndexOutOfBoundsException e) {}
+                                intent.putExtra("vinNumber", "NO DATA");
+                                editor.putBoolean("obdConnected",false);
+
+                                finishODBReadings();
+                            } catch (IndexOutOfBoundsException e) {
+                            }
                             context.sendBroadcast(intent);
+                            if (!readValues) {
+                                editor.apply();
+                                disconnect();
+                            }
                         } catch (IOException e) {
                         } catch (InterruptedException e) {
                             Log.e("gping2", "test error");
@@ -226,5 +264,33 @@ public class ODBInterface {
             Log.e("gping2", "MisunderstoodCommandException: " + e.toString());
 
         }
+    }
+
+    private void resetConnection(BluetoothSocket socket) {
+        boolean isConnected = false;
+        Intent intent = new Intent("GETDATA");
+        while (!isConnected) {
+            CloseCommand closeCommand = new CloseCommand();
+            closeCommand.setResponseTimeDelay(responseDelay);
+            try {
+                closeCommand.run(socket.getInputStream(), socket.getOutputStream());
+                intent.putExtra("position", closeCommand.getResult());
+                RPMCommand engineRpmCommand = new RPMCommand();
+                engineRpmCommand.setResponseTimeDelay(responseDelay);
+                engineRpmCommand.run(socket.getInputStream(), socket.getOutputStream());
+                intent.putExtra("engineRpmCommand", engineRpmCommand.getResult());
+                context.sendBroadcast(intent);
+                isConnected = true;
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (NoDataException e) {
+                isConnected = false;
+            } catch (IndexOutOfBoundsException e) {
+            }
+        }
+
+
     }
 }
