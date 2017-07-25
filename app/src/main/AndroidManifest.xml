@@ -4,6 +4,9 @@
 
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <uses-permission android:name="com.javapapers.android.androidlocationmaps.permission.MAPS_RECEIVE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <application
         android:allowBackup="true"
@@ -18,6 +21,10 @@
         <activity android:name=".Activity.AfterButton" />
 
         <service android:name=".MyService" />
+
+        <service android:name=".Services.LocationService"
+            android:enabled="true"
+            android:process=":main"/>
 
         <activity android:name=".Activity.RegisterActivity">
             <intent-filter>

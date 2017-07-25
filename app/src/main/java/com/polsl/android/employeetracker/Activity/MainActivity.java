@@ -20,10 +20,14 @@ import android.widget.Toast;
 
 import com.polsl.android.employeetracker.Entity.DaoMaster;
 import com.polsl.android.employeetracker.Entity.DaoSession;
+import com.polsl.android.employeetracker.Entity.LocationData;
+import com.polsl.android.employeetracker.Entity.LocationDataDao;
 import com.polsl.android.employeetracker.Entity.User;
 import com.polsl.android.employeetracker.Entity.UserDao;
+import com.polsl.android.employeetracker.Helper.Command;
 import com.polsl.android.employeetracker.MyService;
 import com.polsl.android.employeetracker.R;
+import com.polsl.android.employeetracker.Services.LocationService;
 
 import org.greenrobot.greendao.database.Database;
 
@@ -65,10 +69,20 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
+    private BroadcastReceiver locationReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            double latitude = intent.getDoubleExtra("lat",0);
+            double longitude = intent.getDoubleExtra("long",0);
+            name.setText(String.valueOf(latitude));
+            second.setText(String.valueOf(longitude));
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        registerReceiver(dataReceiver, new IntentFilter("GETDATA"));
+        //registerReceiver(dataReceiver, new IntentFilter("GETDATA"));
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
@@ -79,6 +93,18 @@ public class MainActivity extends AppCompatActivity {
         editor.putLong("position", 0);
         editor.putString("vinNumber", "");
         editor.apply();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        registerReceiver(locationReceiver,new IntentFilter("LocationData"));
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        unregisterReceiver(locationReceiver);
     }
 
     public void onButtonClick(View view) {
@@ -130,7 +156,11 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void onSecondButtonClick(View view) {
-        Intent intent = new Intent(this, MyService.class);
+//        Intent intent = new Intent(this, MyService.class);
+//        startService(intent);
+        Toast.makeText(this,"StartLocationUpdate",Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(this, LocationService.class);
+        intent.setAction(Command.START_SERVICE);
         startService(intent);
     }
 
@@ -143,31 +173,21 @@ public class MainActivity extends AppCompatActivity {
         db = helper.getWritableDb();
         daoSession = new DaoMaster(db).newSession();
 
-        UserDao userDao = daoSession.getUserDao();
-        List<User> users = userDao.loadAll();
-        boolean notUnique = false;
-        for (User u : users) {
-            if (u.getLogin().equals("Mateusz")) {
-                Toast.makeText(this,"Wybrany użytkownik jest już zarejestrowany", Toast.LENGTH_SHORT).show();
-                notUnique = true;
-                break;
-            }
-        }
-        if (!notUnique) {
-            User user = new User();
-            user.setLogin("Mateusz");
-            user.setPassword("1234");
-            userDao.insert(user);
-        }
+        LocationDataDao locationDataDao = daoSession.getLocationDataDao();
+        List<LocationData> locationDataList = locationDataDao.loadAll();
+        vinNumber.setText(String.valueOf(locationDataList.size()));
     }
 
     public void onResetButtonClick(View view) {
-        DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(this, "main-db");
-        db = helper.getWritableDb();
-        daoSession = new DaoMaster(db).newSession();
-        UserDao userDao = daoSession.getUserDao();
-
-        List<User> users = userDao.loadAll();
-        System.out.println("WYKONANE");
+//        DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(this, "main-db");
+//        db = helper.getWritableDb();
+//        daoSession = new DaoMaster(db).newSession();
+//        UserDao userDao = daoSession.getUserDao();
+//
+//        List<User> users = userDao.loadAll();
+//        System.out.println("WYKONANE");
+        Intent intent = new Intent(this,LocationService.class);
+        intent.setAction(Command.STOP_SERVICE);
+        startService(intent);
     }
 }
