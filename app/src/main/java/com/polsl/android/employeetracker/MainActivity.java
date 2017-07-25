@@ -78,40 +78,41 @@ public class MainActivity extends AppCompatActivity {
         if (!btAdapter.isEnabled()) {
             Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
-        }
-        final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        Set<BluetoothDevice> pairedDevices = btAdapter.getBondedDevices();
+        } else {
+            final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+            Set<BluetoothDevice> pairedDevices = btAdapter.getBondedDevices();
 
-        if (pairedDevices.size() > 0) {
-            for (Object device : pairedDevices) {
-                BluetoothDevice device1 = (BluetoothDevice) device;
-                Log.d("gping2", "BT: " + device1.getName() + " - " + device1.getAddress());
-                deviceStrs.add(device1.getName() + "\n" + device1.getAddress());
-                devices.add(device1.getAddress());
+            if (pairedDevices.size() > 0) {
+                for (Object device : pairedDevices) {
+                    BluetoothDevice device1 = (BluetoothDevice) device;
+                    Log.d("gping2", "BT: " + device1.getName() + " - " + device1.getAddress());
+                    deviceStrs.add(device1.getName() + "\n" + device1.getAddress());
+                    devices.add(device1.getAddress());
 
+                }
             }
-        }
-        final android.app.AlertDialog.Builder alertDialog = new android.app.AlertDialog.Builder(this);
+            final android.app.AlertDialog.Builder alertDialog = new android.app.AlertDialog.Builder(this);
 
-        final ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.select_dialog_singlechoice,
-                deviceStrs.toArray(new String[deviceStrs.size()]));
-        alertDialog.setSingleChoiceItems(adapter, -1, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                int position = ((android.app.AlertDialog) dialog).getListView().getCheckedItemPosition();
-                editor.putString("deviceAddress", devices.get(position));
-                editor.putString("deviceName", deviceStrs.get(position));
-                editor.apply();
-            }
-        });
-        alertDialog.setTitle("Choose Bluetooth device");
-        alertDialog.show();
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString("button",String.valueOf(second.getId()));
-        editor.putBoolean("break", false);
-        editor.apply();
+            final ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.select_dialog_singlechoice,
+                    deviceStrs.toArray(new String[deviceStrs.size()]));
+            alertDialog.setSingleChoiceItems(adapter, -1, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    int position = ((android.app.AlertDialog) dialog).getListView().getCheckedItemPosition();
+                    editor.putString("deviceAddress", devices.get(position));
+                    editor.putString("deviceName", deviceStrs.get(position));
+                    editor.apply();
+                }
+            });
+            alertDialog.setTitle("Choose Bluetooth device");
+            alertDialog.show();
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putString("button", String.valueOf(second.getId()));
+            editor.putBoolean("break", false);
+            editor.apply();
+        }
     }
 
 
