@@ -9,7 +9,7 @@
     android:layout_height="match_parent"
 
     android:orientation="vertical"
-    tools:context="com.polsl.android.employeetracker.MainActivity">
+    tools:context="com.polsl.android.employeetracker.Activity.MainActivity">
 
     <TextView
         android:layout_width="wrap_content"

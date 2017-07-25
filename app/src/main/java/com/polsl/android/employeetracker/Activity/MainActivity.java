@@ -1,4 +1,4 @@
-package com.polsl.android.employeetracker;
+package com.polsl.android.employeetracker.Activity;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -16,8 +16,19 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.polsl.android.employeetracker.Entity.DaoMaster;
+import com.polsl.android.employeetracker.Entity.DaoSession;
+import com.polsl.android.employeetracker.Entity.User;
+import com.polsl.android.employeetracker.Entity.UserDao;
+import com.polsl.android.employeetracker.MyService;
+import com.polsl.android.employeetracker.R;
+
+import org.greenrobot.greendao.database.Database;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import butterknife.BindView;
@@ -37,6 +48,8 @@ public class MainActivity extends AppCompatActivity {
     Button button;
 
     Context context = this;
+    private static Database db;
+    private static DaoSession daoSession;
 
     private BroadcastReceiver dataReceiver = new BroadcastReceiver() {
         @Override
@@ -60,11 +73,11 @@ public class MainActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor editor = preferences.edit();
-        editor.putBoolean("finish",false);
-        editor.putBoolean("obdConnected",true);
-        editor.putInt("engineRpmCommand",0);
-        editor.putLong("position",0);
-        editor.putString("vinNumber","");
+        editor.putBoolean("finish", false);
+        editor.putBoolean("obdConnected", true);
+        editor.putInt("engineRpmCommand", 0);
+        editor.putLong("position", 0);
+        editor.putString("vinNumber", "");
         editor.apply();
     }
 
@@ -109,25 +122,51 @@ public class MainActivity extends AppCompatActivity {
         alertDialog.setTitle("Choose Bluetooth device");
         alertDialog.show();
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString("button",String.valueOf(second.getId()));
+        editor.putString("button", String.valueOf(second.getId()));
         editor.putBoolean("break", false);
         editor.apply();
     }
 
 
     public void onSecondButtonClick(View view) {
-        Intent intent = new Intent(this,MyService.class);
+        Intent intent = new Intent(this, MyService.class);
         startService(intent);
     }
 
     public void onButtonThreeClick(View view) {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putBoolean("finish",true);
-        editor.apply();
+//        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+//        SharedPreferences.Editor editor = preferences.edit();
+//        editor.putBoolean("finish",true);
+//        editor.apply();
+        DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(this, "main-db");
+        db = helper.getWritableDb();
+        daoSession = new DaoMaster(db).newSession();
+
+        UserDao userDao = daoSession.getUserDao();
+        List<User> users = userDao.loadAll();
+        boolean notUnique = false;
+        for (User u : users) {
+            if (u.getLogin().equals("Mateusz")) {
+                Toast.makeText(this,"Wybrany użytkownik jest już zarejestrowany", Toast.LENGTH_SHORT).show();
+                notUnique = true;
+                break;
+            }
+        }
+        if (!notUnique) {
+            User user = new User();
+            user.setLogin("Mateusz");
+            user.setPassword("1234");
+            userDao.insert(user);
+        }
     }
 
     public void onResetButtonClick(View view) {
+        DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(this, "main-db");
+        db = helper.getWritableDb();
+        daoSession = new DaoMaster(db).newSession();
+        UserDao userDao = daoSession.getUserDao();
 
+        List<User> users = userDao.loadAll();
+        System.out.println("WYKONANE");
     }
 }
