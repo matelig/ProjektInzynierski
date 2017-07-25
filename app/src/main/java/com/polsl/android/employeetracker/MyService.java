@@ -1,10 +1,7 @@
 package com.polsl.android.employeetracker;
 
 import android.app.IntentService;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
@@ -17,7 +14,7 @@ import android.widget.Toast;
 
 public class MyService extends IntentService {
 
-    ODBInterface obdInterface;
+    OBDInterface obdInterface;
     boolean finish = false;
     private String deviceAddress;
     private boolean obdConnected;
@@ -30,7 +27,7 @@ public class MyService extends IntentService {
     public void onCreate() { //<==to jako pierwsze
         super.onCreate();
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        obdInterface = new ODBInterface(this,preferences);
+        obdInterface = new OBDInterface(this,preferences);
         finish = preferences.getBoolean("finish",false);
         deviceAddress = preferences.getString("deviceAddress","");
         Toast.makeText(this,"Create",Toast.LENGTH_SHORT).show();

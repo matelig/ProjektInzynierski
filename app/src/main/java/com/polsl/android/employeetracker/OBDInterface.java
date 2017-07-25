@@ -38,7 +38,7 @@ import java.util.UUID;
  * Created by Jakub on 03.05.2017.
  */
 
-public class ODBInterface {
+public class OBDInterface {
 
 
     private String deviceAddress, deviceName;
@@ -51,7 +51,7 @@ public class ODBInterface {
     private boolean useOldAddress = false;
 
     //shared pref jak w MainService linia 151
-    public ODBInterface(Context con, SharedPreferences preferences) {
+    public OBDInterface(Context con, SharedPreferences preferences) {
         context = con;
         sharedPreferences = preferences;
     }
@@ -266,10 +266,5 @@ public class ODBInterface {
 
         }
     }
-
-    private void sendOBDCommand(ObdCommand command, BluetoothSocket socket) {
-        command.getCalculatedResult();
-    }
-
 
 }

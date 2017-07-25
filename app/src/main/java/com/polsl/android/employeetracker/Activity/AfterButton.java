@@ -1,10 +1,12 @@
-package com.polsl.android.employeetracker;
+package com.polsl.android.employeetracker.Activity;
 
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.EditText;
+
+import com.polsl.android.employeetracker.R;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
