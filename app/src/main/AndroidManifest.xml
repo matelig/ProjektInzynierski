@@ -15,16 +15,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Activity.MainActivity">
-
-        </activity>
+        <activity android:name=".Activity.MainActivity"></activity>
         <activity android:name=".Activity.AfterButton" />
 
         <service android:name=".MyService" />
-
-        <service android:name=".Services.LocationService"
+        <service
+            android:name=".Services.LocationService"
             android:enabled="true"
-            android:process=":main"/>
+            android:process=":main" />
 
         <activity android:name=".Activity.RegisterActivity">
             <intent-filter>
@@ -33,7 +31,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Activity.LoginActivity"></activity>
+        <activity android:name=".Activity.LoginActivity" />
+        <activity android:name=".Activity.RouteListActivity"></activity>
     </application>
 
 </manifest>

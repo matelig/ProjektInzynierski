@@ -27,11 +27,12 @@ import com.polsl.android.employeetracker.Entity.DaoMaster;
 import com.polsl.android.employeetracker.Entity.DaoSession;
 import com.polsl.android.employeetracker.Entity.LocationData;
 import com.polsl.android.employeetracker.Entity.LocationDataDao;
+import com.polsl.android.employeetracker.Entity.RouteData;
+import com.polsl.android.employeetracker.Entity.RouteDataDao;
 import com.polsl.android.employeetracker.Helper.Command;
 
 import org.greenrobot.greendao.database.Database;
 
-import java.security.Timestamp;
 
 /**
  * Created by m_lig on 25.07.2017.
@@ -46,6 +47,8 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
     private DaoSession daoSession;
     private Database database;
     private LocationDataDao locationDataDao;
+    private RouteData routeData;
+    private RouteDataDao routeDataDao;
 
 
     @Override
@@ -55,7 +58,7 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
         database = helper.getWritableDb();
         daoSession = new DaoMaster(database).newSession();
         locationDataDao = daoSession.getLocationDataDao();
-
+        routeDataDao = daoSession.getRouteDataDao();
         buildGoogleApiClient();
         createLocationRequest();
         createBuilder();
@@ -71,7 +74,10 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
         if (intent.getAction().equals(Command.START_SERVICE)) {
             Toast.makeText(this,"Serwis uruchomiony",Toast.LENGTH_SHORT).show();
             //TODO: stworzenie notyfikacji
+
         } else if (intent.getAction().equals(Command.STOP_SERVICE)) {
+            routeData.finish();
+            routeDataDao.update(routeData);
             finishLocationReadings();
             this.stopSelf();
         }
@@ -98,10 +104,8 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
         locationData.setLatitude(latitude);
         locationData.setLongitude(longitude);
         locationData.setTimestamp(timestamp);
-        locationData.setRouteNumber(1);
+        locationData.setRouteId(routeData.getId());
         locationDataDao.insert(locationData);
-
-
     }
 
 
@@ -110,6 +114,9 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
         if (ActivityCompat.checkSelfPermission(LocationService.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
                 ActivityCompat.checkSelfPermission(LocationService.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
         }
+        routeData = new RouteData();
+        routeData.start();
+        routeDataDao.insert(routeData);
         currentLocation = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
         if (currentLocation != null) {
             double longitude = currentLocation.getLongitude();
@@ -122,7 +129,7 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
             locationData.setLongitude(longitude);
             long timestamp = System.currentTimeMillis();
             locationData.setTimestamp(timestamp);
-            locationData.setRouteNumber(1);
+            locationData.setRouteId(routeData.getId());
             locationDataDao.insert(locationData);
             sendBroadcast(intent);
         }

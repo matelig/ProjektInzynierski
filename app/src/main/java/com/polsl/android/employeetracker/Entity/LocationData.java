@@ -12,21 +12,17 @@ import org.greenrobot.greendao.annotation.Generated;
 @Entity
 public class LocationData {
 
-    @Index
     private Long timestamp;
-    @NotNull
     private double latitude;
-    @NotNull
     private double longitude;
-    @NotNull
-    private int routeNumber;
-    @Generated(hash = 1637779407)
+    private Long routeId;
+    @Generated(hash = 388589760)
     public LocationData(Long timestamp, double latitude, double longitude,
-            int routeNumber) {
+            Long routeId) {
         this.timestamp = timestamp;
         this.latitude = latitude;
         this.longitude = longitude;
-        this.routeNumber = routeNumber;
+        this.routeId = routeId;
     }
     @Generated(hash = 1606831457)
     public LocationData() {
@@ -49,10 +45,10 @@ public class LocationData {
     public void setLongitude(double longitude) {
         this.longitude = longitude;
     }
-    public int getRouteNumber() {
-        return this.routeNumber;
+    public Long getRouteId() {
+        return this.routeId;
     }
-    public void setRouteNumber(int routeNumber) {
-        this.routeNumber = routeNumber;
+    public void setRouteId(Long routeId) {
+        this.routeId = routeId;
     }
 }
