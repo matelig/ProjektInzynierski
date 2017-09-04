@@ -22,6 +22,8 @@ import com.polsl.android.employeetracker.Entity.DaoMaster;
 import com.polsl.android.employeetracker.Entity.DaoSession;
 import com.polsl.android.employeetracker.Entity.LocationData;
 import com.polsl.android.employeetracker.Entity.LocationDataDao;
+import com.polsl.android.employeetracker.Entity.RouteData;
+import com.polsl.android.employeetracker.Entity.RouteDataDao;
 import com.polsl.android.employeetracker.Entity.User;
 import com.polsl.android.employeetracker.Entity.UserDao;
 import com.polsl.android.employeetracker.Helper.Command;
@@ -173,9 +175,11 @@ public class MainActivity extends AppCompatActivity {
         db = helper.getWritableDb();
         daoSession = new DaoMaster(db).newSession();
 
-        LocationDataDao locationDataDao = daoSession.getLocationDataDao();
-        List<LocationData> locationDataList = locationDataDao.loadAll();
-        vinNumber.setText(String.valueOf(locationDataList.size()));
+        RouteDataDao routeDataDao = daoSession.getRouteDataDao();
+        List<RouteData> routeDataList = routeDataDao.loadAll();
+        vinNumber.setText(String.valueOf(routeDataList.size()));
+        List<LocationData> locationDataList = routeDataList.get(0).getLocationDataList();
+        speedText.setText(String.valueOf(locationDataList.size()));
     }
 
     public void onResetButtonClick(View view) {

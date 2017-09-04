@@ -1,42 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:paddingRight="@dimen/horizontal_activity_padding"
     android:paddingLeft="@dimen/horizontal_activity_padding"
-    tools:context="com.polsl.android.employeetracker.LoginActivity">
+    android:paddingRight="@dimen/horizontal_activity_padding"
+    tools:context="com.polsl.android.employeetracker.Activity.LoginActivity">
 
-    <TextView
+    <LinearLayout
+        android:layout_marginTop="@dimen/vertical_activity_margin"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/login_activity_login_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/login_activity_name_string" />
+
+        <EditText
+            android:id="@+id/login_activity_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/login_activity_password_button" />
+
+        <EditText
+            android:id="@+id/login_activity_password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPassword" />
+
+        <Button
+            android:id="@+id/login_activity_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:height="@dimen/button_height"
+            android:background="@drawable/button_selector"
+            android:onClick="onLoginButtonClick"
+            android:text="@string/login_activity_button_string" />
+    </LinearLayout>
+
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/login_activity_name_string" />
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="@dimen/vertical_activity_margin">
+        <Button
+            android:gravity="bottom"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:height="@dimen/button_height"
+            android:background="@drawable/button_selector"
+            android:onClick="offlineModeCLick"/>
+    </RelativeLayout>
 
-    <EditText
-        android:id="@+id/login_activity_name"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="text" />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/login_activity_password_button" />
-
-    <EditText
-        android:id="@+id/login_activity_password"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="textPassword" />
-
-    <Button
-        android:id="@+id/login_activity_button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:height="@dimen/button_height"
-        android:background="@drawable/button_selector"
-        android:text="@string/login_activity_button_string"
-        android:onClick="onLoginButtonClick"/>
-
-</LinearLayout>
+</RelativeLayout>

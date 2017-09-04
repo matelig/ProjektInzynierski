@@ -7,4 +7,5 @@ package com.polsl.android.employeetracker.Helper;
 public class Command {
     public static final String START_SERVICE = "START";
     public static final String STOP_SERVICE = "STOP";
+    public static final String USER_NAME = "userName";
 }

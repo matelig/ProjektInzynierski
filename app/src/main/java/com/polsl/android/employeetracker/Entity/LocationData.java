@@ -19,17 +19,18 @@ public class LocationData {
     @NotNull
     private double longitude;
     @NotNull
-    private int routeNumber;
-    @Generated(hash = 1637779407)
+    private Long routeId;
+
+    @Generated(hash = 1606831457)
+    public LocationData() {
+    }
+    @Generated(hash = 1464004124)
     public LocationData(Long timestamp, double latitude, double longitude,
-            int routeNumber) {
+            @NotNull Long routeId) {
         this.timestamp = timestamp;
         this.latitude = latitude;
         this.longitude = longitude;
-        this.routeNumber = routeNumber;
-    }
-    @Generated(hash = 1606831457)
-    public LocationData() {
+        this.routeId = routeId;
     }
     public Long getTimestamp() {
         return this.timestamp;
@@ -49,10 +50,11 @@ public class LocationData {
     public void setLongitude(double longitude) {
         this.longitude = longitude;
     }
-    public int getRouteNumber() {
-        return this.routeNumber;
+    public Long getRouteId() {
+        return this.routeId;
     }
-    public void setRouteNumber(int routeNumber) {
-        this.routeNumber = routeNumber;
+    public void setRouteId(Long routeId) {
+        this.routeId = routeId;
     }
+
 }

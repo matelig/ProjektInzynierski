@@ -18,6 +18,9 @@
         <activity android:name=".Activity.MainActivity">
 
         </activity>
+        <activity android:name=".Activity.SlideActivityPager">
+
+        </activity>
         <activity android:name=".Activity.AfterButton" />
 
         <service android:name=".MyService" />
@@ -27,13 +30,15 @@
             android:process=":main"/>
 
         <activity android:name=".Activity.RegisterActivity">
+
+        </activity>
+        <activity android:name=".Activity.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Activity.LoginActivity"></activity>
     </application>
 
 </manifest>
