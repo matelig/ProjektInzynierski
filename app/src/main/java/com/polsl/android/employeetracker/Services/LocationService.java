@@ -49,8 +49,7 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
     private RouteData routeData;
     private RouteDataDao routeDataDao;
     private LocationDataDao locationDataDao;
-    private RouteData routeData;
-    private RouteDataDao routeDataDao;
+
 
 
     @Override

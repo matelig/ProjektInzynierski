@@ -28,9 +28,7 @@ public class LocationData {
         this.longitude = longitude;
         this.routeId = routeId;
     }
-    @Generated(hash = 1606831457)
-    public LocationData() {
-    }
+
     public Long getTimestamp() {
         return this.timestamp;
     }

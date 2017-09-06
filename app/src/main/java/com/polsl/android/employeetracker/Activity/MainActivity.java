@@ -193,6 +193,7 @@ public class MainActivity extends AppCompatActivity {
 //        List<User> users = userDao.loadAll();
 //        System.out.println("WYKONANE");
 
+        Intent intent = new Intent(this, LocationService.class);
         intent.setAction(Command.STOP_SERVICE);
         startService(intent);
     }
