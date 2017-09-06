@@ -16,6 +16,10 @@ public class LocationData {
     private double latitude;
     private double longitude;
     private Long routeId;
+
+    @Generated(hash = 1606831457)
+    public LocationData() {
+    }
     @Generated(hash = 388589760)
     public LocationData(Long timestamp, double latitude, double longitude,
             Long routeId) {

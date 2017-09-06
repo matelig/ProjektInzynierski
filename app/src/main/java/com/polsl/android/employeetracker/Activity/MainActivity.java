@@ -71,6 +71,7 @@ public class MainActivity extends AppCompatActivity {
     private BroadcastReceiver locationReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
+
             double latitude = intent.getDoubleExtra("lat", 0);
             double longitude = intent.getDoubleExtra("long", 0);
             name.setText(String.valueOf(latitude));
@@ -100,6 +101,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+
         registerReceiver(locationReceiver, new IntentFilter("LocationData"));
     }
 
@@ -162,6 +164,7 @@ public class MainActivity extends AppCompatActivity {
     public void onSecondButtonClick(View view) {
 //        Intent intent = new Intent(this, MyService.class);
 //        startService(intent);
+  
         Toast.makeText(this, "StartLocationUpdate", Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(this, LocationService.class);
         intent.setAction(Command.START_SERVICE);
@@ -189,7 +192,7 @@ public class MainActivity extends AppCompatActivity {
 //
 //        List<User> users = userDao.loadAll();
 //        System.out.println("WYKONANE");
-        Intent intent = new Intent(this, LocationService.class);
+
         intent.setAction(Command.STOP_SERVICE);
         startService(intent);
     }

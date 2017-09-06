@@ -46,6 +46,8 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
     private Location currentLocation;
     private DaoSession daoSession;
     private Database database;
+    private RouteData routeData;
+    private RouteDataDao routeDataDao;
     private LocationDataDao locationDataDao;
     private RouteData routeData;
     private RouteDataDao routeDataDao;
@@ -57,8 +59,9 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
         DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(this, "main-db");
         database = helper.getWritableDb();
         daoSession = new DaoMaster(database).newSession();
-        locationDataDao = daoSession.getLocationDataDao();
         routeDataDao = daoSession.getRouteDataDao();
+        locationDataDao = daoSession.getLocationDataDao();
+
         buildGoogleApiClient();
         createLocationRequest();
         createBuilder();
@@ -79,6 +82,7 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
             routeData.finish();
             routeDataDao.update(routeData);
             finishLocationReadings();
+
             this.stopSelf();
         }
         return START_STICKY;
