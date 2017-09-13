@@ -16,11 +16,18 @@ import com.polsl.android.employeetracker.Entity.RouteData;
 import com.polsl.android.employeetracker.Entity.RouteDataDao;
 import com.polsl.android.employeetracker.R;
 import com.polsl.android.employeetracker.adapter.RouteListAdapter;
+import com.polsl.android.employeetracker.adapter.RouteListYearAdapter;
 
 import org.greenrobot.greendao.database.Database;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import butterknife.ButterKnife;
 
@@ -33,10 +40,8 @@ public class RouteListFragment extends Fragment {
     RouteDataDao routeDataDao;
 
     private List<RouteData> tracks = new ArrayList<>();
-    private RouteListAdapter tAdapter;
+    private RouteListYearAdapter yearAdapter;
     private RecyclerView routeListView;
-    private Toast message;
-    private DaoMaster daoMaster;
     private DaoSession daoSession;
 
     public RouteListFragment() {
@@ -49,7 +54,7 @@ public class RouteListFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_route_list, container, false);
         routeListView = (RecyclerView) rootView.findViewById(R.id.route_recycler);
-
+        Set<Integer> usedYears = new HashSet<>();
 //        setContentView(R.layout.activity_route_list);
         DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(rootView.getContext(), "main-db");
         Database db = helper.getWritableDb();
@@ -62,17 +67,46 @@ public class RouteListFragment extends Fragment {
                 tracks.remove(i);
             }
         }
-        RouteData routeData = new RouteData();
-        routeData.start();
-        routeData.finish();
-        tracks.add(routeData);
+        for (RouteData routeData : tracks) {
+            Date startDate = routeData.getStartDate();
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(startDate);
+            usedYears.add(cal.get(Calendar.YEAR));
+        }
+        List<Integer> tempYears = new ArrayList<>();
+        tempYears.addAll(usedYears);
+        Collections.sort(tempYears);
+        List<String> usedYearsNames = new ArrayList<>();
+        for (int year : tempYears) {
+            usedYearsNames.add(Integer.toString(year));
+        }
 //        routeListView = (RecyclerView) findViewById(R.id.route_recycler);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         routeListView.setLayoutManager(layoutManager);
-        tAdapter = new RouteListAdapter(tracks, rootView.getContext());
-        routeListView.setAdapter(tAdapter);
+        //tAdapter = new RouteListAdapter(tracks, rootView.getContext());
+        yearAdapter = new RouteListYearAdapter(usedYearsNames,rootView.getContext());
+        routeListView.setAdapter(yearAdapter);
 //        // Inflate the layout for this fragment
         return rootView;
+    }
+
+    public void refresh() {
+        tracks = routeDataDao.loadAll();
+        Set<Integer> usedYears = new HashSet<>();
+        for (RouteData routeData : tracks) {
+            Date startDate = routeData.getStartDate();
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(startDate);
+            usedYears.add(cal.get(Calendar.YEAR));
+        }
+        List<Integer> tempYears = new ArrayList<>();
+        tempYears.addAll(usedYears);
+        Collections.sort(tempYears);
+        List<String> usedYearsNames = new ArrayList<>();
+        for (int year : tempYears) {
+            usedYearsNames.add(Integer.toString(year));
+        }
+        yearAdapter.refresh(usedYearsNames);
     }
 
 }

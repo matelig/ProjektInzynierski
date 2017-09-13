@@ -3,4 +3,6 @@
     <dimen name="horizontal_activity_padding">64dp</dimen>
     <dimen name="button_height">60dp</dimen>
     <dimen name="vertical_activity_margin">30dp</dimen>
+    <dimen name="height_route_item">64dp</dimen>
+    <dimen name="bottom_padding_route_item">1dp</dimen>
 </resources>

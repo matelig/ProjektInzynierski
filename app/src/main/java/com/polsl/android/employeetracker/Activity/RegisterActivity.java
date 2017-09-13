@@ -69,8 +69,7 @@ public class RegisterActivity extends AppCompatActivity {
 //        UserDao userDao = daoSession.getUserDao();
 //        List<User> users = userDao.loadAll();
 //        System.out.println("cos");
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
+
     }
 
     public boolean checkLocationPermission() {

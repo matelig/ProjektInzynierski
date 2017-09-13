@@ -1,12 +1,10 @@
 package com.polsl.android.employeetracker.Activity;
 
 import android.content.Intent;
-import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
@@ -17,69 +15,76 @@ import com.polsl.android.employeetracker.Entity.RouteDataDao;
 import com.polsl.android.employeetracker.Helper.ApiHelper;
 import com.polsl.android.employeetracker.R;
 import com.polsl.android.employeetracker.adapter.RouteListAdapter;
+import com.polsl.android.employeetracker.adapter.RouteListMonthAdapter;
+import com.polsl.android.employeetracker.adapter.RouteListYearAdapter;
 
 import org.greenrobot.greendao.database.Database;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import butterknife.ButterKnife;
 
-public class RouteListActivity extends AppCompatActivity {
+public class RouteMonthList extends AppCompatActivity {
 
 
     RouteDataDao routeDataDao;
 
     private List<RouteData> tracks = new ArrayList<>();
-    private RouteListAdapter tAdapter;
+    private RouteListMonthAdapter tAdapter;
     private RecyclerView routeListView;
     private Toast message;
     private DaoMaster daoMaster;
     private DaoSession daoSession;
+    private int year;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_route_list);
+        setContentView(R.layout.activity_route_month_list);
         Intent intent = getIntent();
-        Integer year = intent.getIntExtra("year",0);
-        String monthName = intent.getStringExtra("month");
-        int month = 0;
-        for (int i=1;i<=12;i++) {
-            if (monthName.equals(ApiHelper.monthNames[i-1])) {
-                month = i;
-                break;
-            }
-        }
+        year = Integer.parseInt(intent.getStringExtra("year"));
         DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(this, "main-db");
         Database db = helper.getWritableDb();
         daoSession = new DaoMaster(db).newSession();
         routeDataDao = daoSession.getRouteDataDao();
         ButterKnife.bind(this);
         tracks = routeDataDao.loadAll();
+        RouteData routeData1 = new RouteData();
+        routeData1.start();
+        routeData1.finish();
+        tracks.add(routeData1);
         for (int i = tracks.size() - 1; i >= 0; i--) {
             if (tracks.get(i).getEndDate() == null) {
                 tracks.remove(i);
             }
         }
-        for (int i = tracks.size()-1;i>=0;i--) {
+        Set<Integer> months = new HashSet<>();
+        for (int i = tracks.size() - 1; i >= 0; i--) {
             Date startDate = tracks.get(i).getStartDate();
             Calendar cal = Calendar.getInstance();
             cal.setTime(startDate);
             int routeYear = cal.get(Calendar.YEAR);
-            int routeMonth = cal.get(Calendar.MONTH);
-            if (routeYear != year || routeMonth!=month) {
-                tracks.remove(i);
+            if (routeYear == year) {
+                months.add(cal.get(Calendar.MONTH));
             }
 
+        }
+        List<String> monthNames = new ArrayList<>();
+        for (int i = 1; i <= 12; i++) {
+            if (months.contains(i)) {
+                monthNames.add(ApiHelper.monthNames[i - 1]);
+            }
         }
         routeListView = (RecyclerView) findViewById(R.id.route_recycler);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         routeListView.setLayoutManager(layoutManager);
-        tAdapter = new RouteListAdapter(tracks, RouteListActivity.this);
+        tAdapter = new RouteListMonthAdapter(monthNames, RouteMonthList.this, year);
         routeListView.setAdapter(tAdapter);
         routeListView.invalidate();
     }
@@ -125,8 +130,4 @@ public class RouteListActivity extends AppCompatActivity {
 //        Intent intent = new Intent(RouteListActivity.this, ExampleActivity.class);
 //        startActivity(intent);
 //    }
-
-    private void prepareView() {
-
-    }
 }

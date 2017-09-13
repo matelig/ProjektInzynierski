@@ -67,6 +67,12 @@ public class SlideActivityPager extends FragmentActivity {
                     return new MainActivityFragment();
             }
 
+
+        }
+
+        @Override
+        public int getItemPosition(Object object) {
+            return POSITION_NONE;
         }
 
         @Override
@@ -74,5 +80,6 @@ public class SlideActivityPager extends FragmentActivity {
             return NUM_PAGES;
         }
     }
+
 
 }

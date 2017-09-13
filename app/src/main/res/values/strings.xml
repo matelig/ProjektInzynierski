@@ -6,7 +6,19 @@
     <string name="offline_mode_dialog">Do you really want to proceed in offline mode? In this mode all data should be send manually.</string>
     <string name="yes_button">Yes</string>
     <string name="no_button">No</string>
+    <string name="start_service">Start</string>
+    <string name="stop_service">Stop</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="location_service_status">Location service status</string>
+    <string name="obd_connection_status">OBD connection status</string>
+    <string name="vin_number">VIN number</string>
+    <string name="average_fuel_consumption">Average fuel consumption</string>
+    <string name="distance">Distance traveled in current session</string>
+    <string name="speed">Speed</string>
+    <string name="current_session_time">Current session time</string>
+    <string name="bluetooth_status">Bluetooth status</string>
+    <string name="obd_set_button">Set OBD</string>
+    <string name="title_activity_maps">Map</string>
 </resources>

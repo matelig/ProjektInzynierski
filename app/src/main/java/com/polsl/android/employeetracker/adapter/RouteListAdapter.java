@@ -1,6 +1,7 @@
 package com.polsl.android.employeetracker.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,7 +9,9 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.polsl.android.employeetracker.Activity.MapsActivity;
 import com.polsl.android.employeetracker.Entity.RouteData;
+import com.polsl.android.employeetracker.Helper.ApiHelper;
 import com.polsl.android.employeetracker.R;
 
 import java.text.DateFormat;
@@ -19,7 +22,7 @@ import java.util.List;
  * Created by m_lig on 27.07.2017.
  */
 
-public class RouteListAdapter extends RecyclerView.Adapter<RouteListAdapter.DataViewHolder> {
+public class RouteListAdapter extends RecyclerView.Adapter<RouteListAdapter.DataViewHolder>  {
     String[] mDataset = {"Data", "In", "Adapter"};
     private List<RouteData> tracks;
     private Context context;
@@ -53,11 +56,9 @@ public class RouteListAdapter extends RecyclerView.Adapter<RouteListAdapter.Data
         holder.position = position;
 
         holder.view.setOnClickListener(v -> {
-            //Intent intent = new Intent(context, MapActivity.class);
-            //intent.putExtra("ROUTE_ID", tracks.get(position).getId());
-            //context.startActivity(intent);
-            toast = Toast.makeText(context, "You clicked an item " + tracks.get(position).getId(), Toast.LENGTH_SHORT);
-            toast.show();
+            Intent intent = new Intent(context, MapsActivity.class);
+            intent.putExtra(ApiHelper.ROUTE_ID, tracks.get(position).getId());
+            context.startActivity(intent);
         });
 
         holder.optionsItemView.setOnClickListener(v -> {
@@ -94,6 +95,8 @@ public class RouteListAdapter extends RecyclerView.Adapter<RouteListAdapter.Data
     public int getItemCount() {
         return tracks.size();
     }
+
+
 
     class DataViewHolder extends RecyclerView.ViewHolder {
         TextView dateItemView;

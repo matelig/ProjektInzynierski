@@ -15,22 +15,15 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".Activity.SlideActivityPager" />
 
-        <activity android:name=".Activity.MainActivity"></activity>
-        <activity android:name=".Activity.SlideActivityPager">
-
-        </activity>
-        <activity android:name=".Activity.AfterButton" />
-
-        <service android:name=".MyService" />
+        <service android:name=".Services.ObdService" />
         <service
             android:name=".Services.LocationService"
             android:enabled="true"
             android:process=":main" />
 
-        <activity android:name=".Activity.RegisterActivity">
-
-        </activity>
+        <activity android:name=".Activity.RegisterActivity" />
         <activity android:name=".Activity.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -38,8 +31,23 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".Activity.RouteListActivity" />
+        <activity android:name=".Activity.RouteMonthList" />
+        <!--
+             The API key for Google Maps-based APIs is defined as a string resource.
+             (See the file "res/values/google_maps_api.xml").
+             Note that the API key is linked to the encryption key used to sign the APK.
+             You need a different API key for each encryption key, including the release key that is used to
+             sign the APK for publishing.
+             You can define the keys for the debug and release targets in src/debug/ and src/release/. 
+        -->
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/google_maps_key" />
 
-        <activity android:name=".Activity.RouteListActivity"></activity>
+        <activity
+            android:name=".Activity.MapsActivity"
+            android:label="@string/title_activity_maps"></activity>
     </application>
 
 </manifest>

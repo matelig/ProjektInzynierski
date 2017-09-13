@@ -1,4 +1,4 @@
-package com.polsl.android.employeetracker;
+package com.polsl.android.employeetracker.Services;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -6,15 +6,9 @@ import android.bluetooth.BluetoothSocket;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Handler;
-import android.os.Looper;
-import android.preference.PreferenceManager;
 import android.util.Log;
-import android.widget.Toast;
 
-import com.github.pires.obd.commands.ObdCommand;
 import com.github.pires.obd.commands.SpeedCommand;
-import com.github.pires.obd.commands.control.VinCommand;
 import com.github.pires.obd.commands.engine.RPMCommand;
 import com.github.pires.obd.commands.engine.ThrottlePositionCommand;
 import com.github.pires.obd.commands.protocol.EchoOffCommand;
@@ -28,11 +22,11 @@ import com.github.pires.obd.enums.ObdProtocols;
 import com.github.pires.obd.exceptions.MisunderstoodCommandException;
 import com.github.pires.obd.exceptions.NoDataException;
 import com.github.pires.obd.exceptions.UnableToConnectException;
+import com.polsl.android.employeetracker.commands.ObdSetDefaultCommand;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.UUID;
-
 
 /**
  * Created by Jakub on 03.05.2017.
@@ -41,21 +35,113 @@ import java.util.UUID;
 public class OBDInterface {
 
 
-    private String deviceAddress, deviceName;
+    /**
+     * Field used to store device address
+     */
+    private String deviceAddress;
+    /**
+     * A connected or connecting Bluetooth socket.
+     */
     private BluetoothSocket socket;
+    /**
+     * Context of the MainService class
+     */
     private Context context;
+    /**
+     * Time between next commands received from OBD interface
+     */
     private static Long responseDelay = 100L;
+    /**
+     * Field that informs if receiving data should be maintain.
+     */
     private boolean readValues;
-    private Long routeId;
+    /**
+     * Shared preferences of application
+     */
     private SharedPreferences sharedPreferences;
-    private boolean useOldAddress = false;
+    /**
+     * Informs if the device successfully connected with OBD
+     */
+    private boolean isConnected = false;
 
-    //shared pref jak w MainService linia 151
-    public OBDInterface(Context con, SharedPreferences preferences) {
+
+    public OBDInterface(Context con, SharedPreferences sharedPref, Long routeId) {
         context = con;
-        sharedPreferences = preferences;
+        sharedPreferences = sharedPref;
+//        DaoSession daoSession = RoadtrackerDatabaseHelper.getDaoSessionForDb(databaseName);
+//        speedDataDao = daoSession.getSpeedDataDao();
+//        throttlePositionDataDao = daoSession.getThrottlePositionDataDao();
+//        rpmDataDao = daoSession.getRpmDataDao();
     }
 
+    /**
+     * Saving new address of the device to shared preferences
+     */
+    private void saveNewAddress() {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(deviceAddress, "previousDeviceAddress");
+        editor.commit();
+    }
+
+    /**
+     * Method that is responsible for connecting the device with OBD
+     *
+     * @param deviceAddress address of the OBD interface
+     */
+    public void connect_bt(String deviceAddress) {
+        Intent intent = new Intent("OBDStatus");
+        intent.putExtra("message", "Trying to connect with device");
+        context.sendBroadcast(intent);
+        disconnect();
+        BluetoothAdapter btAdapter = BluetoothAdapter.getDefaultAdapter();
+        btAdapter.cancelDiscovery();
+        if (deviceAddress == null) {
+            intent.putExtra("message", "OBD Connection error - Bluetooth Device not found");
+            context.sendBroadcast(intent);
+            return;
+        }
+        BluetoothDevice device = btAdapter.getRemoteDevice(deviceAddress);
+
+        UUID uuid = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
+
+        try {
+            socket = device.createInsecureRfcommSocketToServiceRecord(uuid);
+            socket.connect();
+            isConnected = true;
+            intent.putExtra("message", "OBD connected");
+            context.sendBroadcast(intent);
+        } catch (IOException e) {
+            Log.e("gping2", "There was an error while establishing Bluetooth connection. Falling back..", e);
+            Class<?> clazz = socket.getRemoteDevice().getClass();
+            Class<?>[] paramTypes = new Class<?>[]{Integer.TYPE};
+            BluetoothSocket sockFallback = null;
+            try {
+                Method m = clazz.getMethod("createInsecureRfcommSocket", paramTypes);
+                Object[] params = new Object[]{Integer.valueOf(1)};
+                sockFallback = (BluetoothSocket) m.invoke(socket.getRemoteDevice(), params);
+                sockFallback.connect();
+                isConnected = true;
+                socket = sockFallback;
+            } catch (Exception e2) {
+                intent.putExtra("message", "OBD Connection error");
+                context.sendBroadcast(intent);
+                Log.e("gping2", "BT connect error");
+            }
+        }
+        this.deviceAddress = deviceAddress;
+        saveNewAddress();
+    }
+
+    /**
+     * End reading data
+     */
+    public void finishODBReadings() {
+        readValues = false;
+    }
+
+    /**
+     * Disconnect from OBD interface
+     */
     public void disconnect() {
         try {
             if (socket != null)
@@ -63,93 +149,16 @@ public class OBDInterface {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        isConnected = false;
     }
 
-    private void saveNewAddress() {
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString(deviceAddress, "previousDeviceAddress");
-        editor.commit();
-    }
-
-    public void connect_bt(String deviceAddress) {
-
-
-        Handler handler = new Handler(Looper.getMainLooper());
-        handler.post(new Runnable() {
-
-            @Override
-            public void run() {
-                Toast.makeText(context,
-                        "Trying to connect with device ",
-                        Toast.LENGTH_SHORT).show();
-            }
-        });
-        disconnect();
-        BluetoothAdapter btAdapter = BluetoothAdapter.getDefaultAdapter();
-        btAdapter.cancelDiscovery();
-        BluetoothDevice device = btAdapter.getRemoteDevice(deviceAddress);
-
-        UUID uuid = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
-
-        try {
-            socket = device.createRfcommSocketToServiceRecord(uuid);
-            socket.connect();
-            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-            SharedPreferences.Editor editor = preferences.edit();
-            editor.putBoolean("obdConnected", true);
-            editor.apply();
-            handler = new Handler(Looper.getMainLooper());
-            handler.post(new Runnable() {
-
-                @Override
-                public void run() {
-                    Toast.makeText(context,
-                            "Connected",
-                            Toast.LENGTH_SHORT).show();
-                }
-            });
-        } catch (IOException e) {
-            Log.e("gping2", "There was an error while establishing Bluetooth connection. Falling back..", e);
-            Class<?> clazz = socket.getRemoteDevice().getClass();
-            Class<?>[] paramTypes = new Class<?>[]{Integer.TYPE};
-            BluetoothSocket sockFallback = null;
-            try {
-                Method m = clazz.getMethod("createRfcommSocket", paramTypes);
-                Object[] params = new Object[]{Integer.valueOf(1)};
-                sockFallback = (BluetoothSocket) m.invoke(socket.getRemoteDevice(), params);
-                sockFallback.connect();
-                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-                SharedPreferences.Editor editor = preferences.edit();
-                editor.putBoolean("obdConnected", true);
-                editor.apply();
-                socket = sockFallback;
-            } catch (Exception e2) {
-                handler = new Handler(Looper.getMainLooper());
-                handler.post(new Runnable() {
-
-                    @Override
-                    public void run() {
-                        Toast.makeText(context,
-                                "ODB connection failed",
-                                Toast.LENGTH_SHORT).show();
-                    }
-                });
-                Log.e("gping2", "BT connect error");
-            }
-
-        }
-        saveNewAddress();
-    }
-
-    public void finishODBReadings() {
-        readValues = false;
-    }
-
-
+    /**
+     * Configuration of OBD interface and receiving data from it. Saving received information in
+     * database. When any error occurred, the device is disconnected.
+     */
     public void startODBReadings() {
         try {
             readValues = true;
-
             new Thread() {
                 public void run() {
                     boolean goodRPM = true;
@@ -188,83 +197,87 @@ public class OBDInterface {
                         timeoutCommand.setResponseTimeDelay(responseDelay);
                         timeoutCommand.run(socket.getInputStream(), socket.getOutputStream());
                     } catch (IOException e) {
-                        e.printStackTrace();
+                        closeConnection("Failed to connect with OBD device");
                     } catch (InterruptedException e) {
-                        e.printStackTrace();
+                        closeConnection("Connection interrupted");
+                    } catch (NullPointerException e) {
+                        closeConnection("Something wrong happened while connecting with OBD. Restarting");
                     }
 
-                    SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-                    SharedPreferences.Editor editor = preferences.edit();
-                    Intent intent = new Intent("GETDATA");
                     while (socket.isConnected() && readValues) {
                         try {
+                            Intent OBDReadings = new Intent("OBDReadings");
                             RPMCommand engineRpmCommand = new RPMCommand();
                             SpeedCommand speedCommand = new SpeedCommand();
-                            VinCommand vinCommand = new VinCommand();
                             ThrottlePositionCommand throttlePositionCommand = new ThrottlePositionCommand();
 
                             engineRpmCommand.setResponseTimeDelay(responseDelay);
                             speedCommand.setResponseTimeDelay(responseDelay);
                             throttlePositionCommand.setResponseTimeDelay(responseDelay);
-                            vinCommand.setResponseTimeDelay(responseDelay);
                             try {
                                 engineRpmCommand.run(socket.getInputStream(), socket.getOutputStream());
-                                intent.putExtra("engineRpmCommand", engineRpmCommand.getFormattedResult());
+//                                RpmData rpmData = new RpmData(System.currentTimeMillis(), engineRpmCommand.getRPM());
+//                                rpmDataDao.insert(rpmData);
+                                OBDReadings.putExtra("engineRpm", engineRpmCommand.getFormattedResult());
                                 goodRPM = true;
                             } catch (NoDataException e) {
-                                intent.putExtra("engineRpmCommand", "NO DATA");
                                 goodRPM = false;
-                            } catch (IndexOutOfBoundsException e) {
-                            }
+                            } catch (IndexOutOfBoundsException e) {  }
                             try {
                                 speedCommand.run(socket.getInputStream(), socket.getOutputStream());
-                                intent.putExtra("speed", speedCommand.getFormattedResult());
+//                                SpeedData speedData = new SpeedData(System.currentTimeMillis(), speedCommand.getMetricSpeed());
+//                                speedDataDao.insert(speedData);
+                                OBDReadings.putExtra("speed", speedCommand.getFormattedResult());
                                 goodSpeed = true;
                             } catch (NoDataException e) {
-                                intent.putExtra("speed", "NO DATA");
                                 goodSpeed = false;
-                            } catch (IndexOutOfBoundsException e) {
-                            }
+                            } catch (IndexOutOfBoundsException e) {  }
                             try {
                                 throttlePositionCommand.run(socket.getInputStream(), socket.getOutputStream());
-                                intent.putExtra("position", throttlePositionCommand.getFormattedResult());
+//                                ThrottlePositionData throttlePositionData = new ThrottlePositionData(System.currentTimeMillis(), throttlePositionCommand.getPercentage());
+//                                throttlePositionDataDao.insert(throttlePositionData);
                                 goodPosition = true;
                             } catch (NoDataException e) {
-                                intent.putExtra("position", "NO DATA");
                                 goodPosition = false;
-                            } catch (IndexOutOfBoundsException e) {
-                            }
-                            try {
-                                vinCommand.run(socket.getInputStream(), socket.getOutputStream());
-                                intent.putExtra("vinNumber", vinCommand.getFormattedResult());
-                            } catch (NoDataException e) {
-                                intent.putExtra("vinNumber", "NO DATA");
-
-                            } catch (IndexOutOfBoundsException e) {
-                            }
-                            context.sendBroadcast(intent);
-                            if ((!goodPosition)&&(!goodRPM)&&(!goodSpeed)) {
-                                editor.putBoolean("obdConnected", false);
-                                editor.apply();
-                                finishODBReadings();
-                                disconnect();
+                            } catch (IndexOutOfBoundsException e) {  }
+                            context.sendBroadcast(OBDReadings);
+                            if ((!goodPosition) && (!goodRPM) && (!goodSpeed)) {
+                                closeConnection("NO DATA received, trying to reconnect with device");
                             }
                         } catch (IOException e) {
+                            closeConnection("Failed to connect with OBD device");
                         } catch (InterruptedException e) {
-                            Log.e("gping2", "test error");
-                            e.printStackTrace();
+                            closeConnection("Connection interrupted");
                         } catch (UnableToConnectException e) {
-
+                            closeConnection("Unable to connect");
+                        }  catch (NullPointerException e) {
+                            closeConnection("Something wrong happened while connecting with OBD. Restarting");
                         }
                     }
                 }
             }.start();
-
-
         } catch (MisunderstoodCommandException e) {
             Log.e("gping2", "MisunderstoodCommandException: " + e.toString());
-
         }
     }
 
+    /**
+     * Close connection and send message of problem
+     *
+     * @param message Message that shows on Activity showing the problem
+     */
+    private void closeConnection(String message) {
+        finishODBReadings();
+        disconnect();
+        Intent intent = new Intent("OBDStatus");
+        intent.putExtra("message", message);
+        context.sendBroadcast(intent);
+    }
+
+    /**
+     * @return State of bluetooth connection
+     */
+    public boolean isConnected() {
+        return this.isConnected;
+    }
 }

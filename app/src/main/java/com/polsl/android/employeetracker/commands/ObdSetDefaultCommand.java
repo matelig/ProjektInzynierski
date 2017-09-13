@@ -1,4 +1,4 @@
-package com.polsl.android.employeetracker;
+package com.polsl.android.employeetracker.commands;
 
 import com.github.pires.obd.commands.protocol.ObdProtocolCommand;
 

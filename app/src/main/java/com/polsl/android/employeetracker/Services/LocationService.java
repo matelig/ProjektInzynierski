@@ -2,15 +2,13 @@ package com.polsl.android.employeetracker.Services;
 
 import android.Manifest;
 import android.app.Service;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
-import android.location.LocationListener;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.support.annotation.IntDef;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -29,7 +27,7 @@ import com.polsl.android.employeetracker.Entity.LocationData;
 import com.polsl.android.employeetracker.Entity.LocationDataDao;
 import com.polsl.android.employeetracker.Entity.RouteData;
 import com.polsl.android.employeetracker.Entity.RouteDataDao;
-import com.polsl.android.employeetracker.Helper.Command;
+import com.polsl.android.employeetracker.Helper.ApiHelper;
 
 import org.greenrobot.greendao.database.Database;
 
@@ -38,7 +36,7 @@ import org.greenrobot.greendao.database.Database;
  * Created by m_lig on 25.07.2017.
  */
 
-public class LocationService extends Service implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, com.google.android.gms.location.LocationListener{
+public class LocationService extends Service implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, com.google.android.gms.location.LocationListener {
 
     private LocationRequest locationRequest;
     private GoogleApiClient googleApiClient;
@@ -51,7 +49,6 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
     private LocationDataDao locationDataDao;
 
 
-
     @Override
     public void onCreate() {
         super.onCreate();
@@ -60,24 +57,34 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
         daoSession = new DaoMaster(database).newSession();
         routeDataDao = daoSession.getRouteDataDao();
         locationDataDao = daoSession.getLocationDataDao();
+        routeData = new RouteData();
+        routeData.start();
+        routeDataDao.insert(routeData);
+        SharedPreferences prefs = getSharedPreferences(getPackageName(), Context.MODE_PRIVATE);
+        prefs.edit().putLong("routeId", routeData.getId()).apply();
+        prefs.edit().putBoolean("finish", false).apply();
 
         buildGoogleApiClient();
         createLocationRequest();
         createBuilder();
         googleApiClient.connect();
-        Toast.makeText(this,"OnCreate",Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "OnCreate", Toast.LENGTH_SHORT).show();
     }
 
     @Override
-    public int onStartCommand(Intent intent,  int flags, int startId) {
-        if (intent==null) {
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        if (intent == null) {
             return START_STICKY;
         }
-        if (intent.getAction().equals(Command.START_SERVICE)) {
-            Toast.makeText(this,"Serwis uruchomiony",Toast.LENGTH_SHORT).show();
+        if (intent.getAction().equals(ApiHelper.START_SERVICE)) {
+            Toast.makeText(this, "Serwis uruchomiony", Toast.LENGTH_SHORT).show();
+            Intent intent1 = new Intent(this, ObdService.class);
+            startService(intent1);
             //TODO: stworzenie notyfikacji
 
-        } else if (intent.getAction().equals(Command.STOP_SERVICE)) {
+        } else if (intent.getAction().equals(ApiHelper.STOP_SERVICE)) {
+            Toast.makeText(this, "Serwis zatrzymany", Toast.LENGTH_SHORT).show();
+
             routeData.finish();
             routeDataDao.update(routeData);
             finishLocationReadings();
@@ -99,8 +106,8 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
         double longitude = currentLocation.getLongitude();
         double latitude = currentLocation.getLatitude();
         Intent intent = new Intent("LocationData");
-        intent.putExtra("long",longitude);
-        intent.putExtra("lat",latitude);
+        intent.putExtra("long", longitude);
+        intent.putExtra("lat", latitude);
         sendBroadcast(intent);
         long timestamp = System.currentTimeMillis();
         LocationData locationData = new LocationData();
@@ -117,9 +124,6 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
         if (ActivityCompat.checkSelfPermission(LocationService.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
                 ActivityCompat.checkSelfPermission(LocationService.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
         }
-        routeData = new RouteData();
-        routeData.start();
-        routeDataDao.insert(routeData);
         currentLocation = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
         if (currentLocation != null) {
             double longitude = currentLocation.getLongitude();
@@ -150,7 +154,7 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
     }
 
     private void buildGoogleApiClient() {
-        if (googleApiClient==null) {
+        if (googleApiClient == null) {
             googleApiClient = new GoogleApiClient.Builder(this)
                     .addConnectionCallbacks(this)
                     .addOnConnectionFailedListener(this)
@@ -169,14 +173,14 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
     private void createBuilder() {
         builder = new LocationSettingsRequest.Builder().addLocationRequest(locationRequest);
         PendingResult<LocationSettingsResult> result = LocationServices.SettingsApi
-                .checkLocationSettings(googleApiClient,builder.build());
+                .checkLocationSettings(googleApiClient, builder.build());
     }
 
     private void startLocationReadings() {
         if (ActivityCompat.checkSelfPermission(LocationService.this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
                 ActivityCompat.checkSelfPermission(LocationService.this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
         }
-        LocationServices.FusedLocationApi.requestLocationUpdates(googleApiClient,locationRequest, LocationService.this);
+        LocationServices.FusedLocationApi.requestLocationUpdates(googleApiClient, locationRequest, LocationService.this);
     }
 
     private void finishLocationReadings() {
