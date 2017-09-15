@@ -4,12 +4,17 @@ import android.content.Intent;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.PolylineOptions;
 import com.polsl.android.employeetracker.Entity.DaoMaster;
 import com.polsl.android.employeetracker.Entity.DaoSession;
 import com.polsl.android.employeetracker.Entity.LocationData;
@@ -20,6 +25,9 @@ import com.polsl.android.employeetracker.R;
 
 import org.greenrobot.greendao.database.Database;
 
+import java.text.DateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
@@ -29,12 +37,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private RouteData routeData;
     private List<LocationData> locationData;
     private RouteDataDao routeDataDao;
+    private List<Marker> markers;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
@@ -63,14 +71,34 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+        int padding = 10;
+        markers = new ArrayList<>();
+        DateFormat dateFormat = DateFormat.getDateTimeInstance();
+        PolylineOptions polylineOptions = new PolylineOptions();
 
-        for (LocationData ld : locationData) {
+        for (int i = 0;i<locationData.size();i++) {
+            LocationData ld = locationData.get(i);
             LatLng coords = new LatLng(ld.getLatitude(),ld.getLongitude());
-            mMap.addMarker(new MarkerOptions().position(coords).title("Start?"));
+            Marker marker = mMap.addMarker(new MarkerOptions().position(coords)
+                    .title(dateFormat.format(new Date(ld.getTimestamp())))
+                    .visible(false));
+            markers.add(marker);
+            polylineOptions.add(coords);
         }
-       //  Add a marker in Sydney and move the camera
-//        LatLng sydney = new LatLng(-34, 151);
-//        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-//        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        markers.get(0).setVisible(true);
+        markers.get(markers.size()-1).setVisible(true);
+        polylineOptions.width(20.0f);
+        mMap.addPolyline(polylineOptions);
+        mMap.setPadding(padding, padding, padding, padding);
+        LatLngBounds.Builder builder = new LatLngBounds.Builder();
+        for (Marker m : markers) {
+            builder.include(m.getPosition());
+        }
+        LatLngBounds bounds = builder.build();
+        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngBounds(bounds, 5);
+        mMap.setOnMapLoadedCallback(() -> {
+            mMap.animateCamera(cameraUpdate);
+        });
     }
+
 }

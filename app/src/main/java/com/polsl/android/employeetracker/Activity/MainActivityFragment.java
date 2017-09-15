@@ -126,21 +126,15 @@ public class MainActivityFragment extends Fragment {
                 String startServiceText = getResources().getString(R.string.start_service);
                 if (serviceButton.getText().equals(startServiceText)) {
                     serviceButton.setText(R.string.stop_service);
-                    SharedPreferences prefs = getContext().getSharedPreferences(getContext().getPackageName(), Context.MODE_PRIVATE);
-                    prefs.edit().putBoolean("finish", false).apply();
                     Intent intent = new Intent(getActivity(), LocationService.class);
                     intent.setAction(ApiHelper.START_SERVICE);
                     getActivity().startService(intent);
                 } else {
                     serviceButton.setText(R.string.start_service);
-                    SharedPreferences prefs = getContext().getSharedPreferences(getContext().getPackageName(), Context.MODE_PRIVATE);
-                    prefs.edit().putBoolean("finish", true).apply();
                     Intent intent = new Intent(getActivity(), LocationService.class);
                     intent.setAction(ApiHelper.STOP_SERVICE);
                     getActivity().startService(intent);
                 }
-                Toast toast = Toast.makeText(getContext(), "klik", Toast.LENGTH_SHORT);
-                toast.show();
             }
         });
 

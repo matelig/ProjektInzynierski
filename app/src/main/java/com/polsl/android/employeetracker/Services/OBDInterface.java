@@ -9,8 +9,12 @@ import android.content.SharedPreferences;
 import android.util.Log;
 
 import com.github.pires.obd.commands.SpeedCommand;
+import com.github.pires.obd.commands.control.TroubleCodesCommand;
+import com.github.pires.obd.commands.engine.OilTempCommand;
 import com.github.pires.obd.commands.engine.RPMCommand;
 import com.github.pires.obd.commands.engine.ThrottlePositionCommand;
+import com.github.pires.obd.commands.fuel.ConsumptionRateCommand;
+import com.github.pires.obd.commands.fuel.FuelLevelCommand;
 import com.github.pires.obd.commands.protocol.EchoOffCommand;
 import com.github.pires.obd.commands.protocol.HeadersOffCommand;
 import com.github.pires.obd.commands.protocol.LineFeedOffCommand;
@@ -22,14 +26,32 @@ import com.github.pires.obd.enums.ObdProtocols;
 import com.github.pires.obd.exceptions.MisunderstoodCommandException;
 import com.github.pires.obd.exceptions.NoDataException;
 import com.github.pires.obd.exceptions.UnableToConnectException;
+import com.polsl.android.employeetracker.Entity.DaoMaster;
+import com.polsl.android.employeetracker.Entity.DaoSession;
+import com.polsl.android.employeetracker.Entity.FuelConsumptionRateData;
+import com.polsl.android.employeetracker.Entity.FuelConsumptionRateDataDao;
+import com.polsl.android.employeetracker.Entity.FuelLevelData;
+import com.polsl.android.employeetracker.Entity.FuelLevelDataDao;
+import com.polsl.android.employeetracker.Entity.OilTemperatureData;
+import com.polsl.android.employeetracker.Entity.OilTemperatureDataDao;
+import com.polsl.android.employeetracker.Entity.RPMData;
+import com.polsl.android.employeetracker.Entity.RPMDataDao;
+import com.polsl.android.employeetracker.Entity.RouteDataDao;
+import com.polsl.android.employeetracker.Entity.SpeedData;
+import com.polsl.android.employeetracker.Entity.SpeedDataDao;
+import com.polsl.android.employeetracker.Entity.TroubleCodesDataDao;
 import com.polsl.android.employeetracker.commands.ObdSetDefaultCommand;
+
+import org.greenrobot.greendao.database.Database;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
+import java.util.List;
 import java.util.UUID;
 
+
 /**
- * Created by Jakub on 03.05.2017.
+ * Created by m_lig on 25.07.2017.
  */
 
 public class OBDInterface {
@@ -64,14 +86,34 @@ public class OBDInterface {
      */
     private boolean isConnected = false;
 
+    private Long routeId;
+
+    private DaoSession daoSession;
+    private Database database;
+
+    private TroubleCodesDataDao troubleCodesDataDao;
+    private RPMDataDao rpmDataDao;
+    private SpeedDataDao speedDataDao;
+    private OilTemperatureDataDao oilTemperatureDataDao;
+    private FuelConsumptionRateDataDao fuelConsumptionRateDataDao;
+    private FuelLevelDataDao fuelLevelDataDao;
+
+    private int previousFuelLevel;
+
 
     public OBDInterface(Context con, SharedPreferences sharedPref, Long routeId) {
         context = con;
         sharedPreferences = sharedPref;
-//        DaoSession daoSession = RoadtrackerDatabaseHelper.getDaoSessionForDb(databaseName);
-//        speedDataDao = daoSession.getSpeedDataDao();
-//        throttlePositionDataDao = daoSession.getThrottlePositionDataDao();
-//        rpmDataDao = daoSession.getRpmDataDao();
+        this.routeId = routeId;
+        DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(context, "main-db");
+        database = helper.getWritableDb();
+        daoSession = new DaoMaster(database).newSession();
+        troubleCodesDataDao = daoSession.getTroubleCodesDataDao();
+        rpmDataDao = daoSession.getRPMDataDao();
+        speedDataDao = daoSession.getSpeedDataDao();
+        oilTemperatureDataDao = daoSession.getOilTemperatureDataDao();
+        fuelConsumptionRateDataDao = daoSession.getFuelConsumptionRateDataDao();
+        fuelLevelDataDao = daoSession.getFuelLevelDataDao();
     }
 
     /**
@@ -122,6 +164,8 @@ public class OBDInterface {
                 sockFallback.connect();
                 isConnected = true;
                 socket = sockFallback;
+                intent.putExtra("message", "OBD connected");
+                context.sendBroadcast(intent);
             } catch (Exception e2) {
                 intent.putExtra("message", "OBD Connection error");
                 context.sendBroadcast(intent);
@@ -163,7 +207,10 @@ public class OBDInterface {
                 public void run() {
                     boolean goodRPM = true;
                     boolean goodSpeed = true;
-                    boolean goodPosition = true;
+                    boolean goodConsumption = true;
+                    boolean goodCodes = true;
+                    boolean goodTemperature=true;
+                    boolean goodLevel = true;
                     try {
                         ObdSetDefaultCommand defaultCommand = new ObdSetDefaultCommand();
                         defaultCommand.setResponseTimeDelay(responseDelay);
@@ -196,6 +243,9 @@ public class OBDInterface {
                         TimeoutCommand timeoutCommand = new TimeoutCommand(200);
                         timeoutCommand.setResponseTimeDelay(responseDelay);
                         timeoutCommand.run(socket.getInputStream(), socket.getOutputStream());
+
+
+
                     } catch (IOException e) {
                         closeConnection("Failed to connect with OBD device");
                     } catch (InterruptedException e) {
@@ -207,17 +257,25 @@ public class OBDInterface {
                     while (socket.isConnected() && readValues) {
                         try {
                             Intent OBDReadings = new Intent("OBDReadings");
+
                             RPMCommand engineRpmCommand = new RPMCommand();
                             SpeedCommand speedCommand = new SpeedCommand();
-                            ThrottlePositionCommand throttlePositionCommand = new ThrottlePositionCommand();
+                            TroubleCodesCommand troubleCodesCommand = new TroubleCodesCommand();
+                            OilTempCommand oilTempCommand = new OilTempCommand();
+                            FuelLevelCommand fuelLevelCommand = new FuelLevelCommand();
+                            ConsumptionRateCommand consumptionRateCommand = new ConsumptionRateCommand();
 
                             engineRpmCommand.setResponseTimeDelay(responseDelay);
                             speedCommand.setResponseTimeDelay(responseDelay);
-                            throttlePositionCommand.setResponseTimeDelay(responseDelay);
+                            troubleCodesCommand.setResponseTimeDelay(responseDelay);
+                            oilTempCommand.setResponseTimeDelay(responseDelay);
+                            fuelLevelCommand.setResponseTimeDelay(responseDelay);
+                            consumptionRateCommand.setResponseTimeDelay(responseDelay);
+
                             try {
                                 engineRpmCommand.run(socket.getInputStream(), socket.getOutputStream());
-//                                RpmData rpmData = new RpmData(System.currentTimeMillis(), engineRpmCommand.getRPM());
-//                                rpmDataDao.insert(rpmData);
+                                RPMData rpmData = new RPMData(routeId,System.currentTimeMillis(),engineRpmCommand.getRPM());
+                                rpmDataDao.insert(rpmData);
                                 OBDReadings.putExtra("engineRpm", engineRpmCommand.getFormattedResult());
                                 goodRPM = true;
                             } catch (NoDataException e) {
@@ -225,23 +283,47 @@ public class OBDInterface {
                             } catch (IndexOutOfBoundsException e) {  }
                             try {
                                 speedCommand.run(socket.getInputStream(), socket.getOutputStream());
-//                                SpeedData speedData = new SpeedData(System.currentTimeMillis(), speedCommand.getMetricSpeed());
-//                                speedDataDao.insert(speedData);
+                                SpeedData speedData = new SpeedData(routeId,speedCommand.getMetricSpeed(),System.currentTimeMillis());
+                                speedDataDao.insert(speedData);
                                 OBDReadings.putExtra("speed", speedCommand.getFormattedResult());
                                 goodSpeed = true;
                             } catch (NoDataException e) {
                                 goodSpeed = false;
                             } catch (IndexOutOfBoundsException e) {  }
                             try {
-                                throttlePositionCommand.run(socket.getInputStream(), socket.getOutputStream());
-//                                ThrottlePositionData throttlePositionData = new ThrottlePositionData(System.currentTimeMillis(), throttlePositionCommand.getPercentage());
-//                                throttlePositionDataDao.insert(throttlePositionData);
-                                goodPosition = true;
+                                oilTempCommand.run(socket.getInputStream(),socket.getOutputStream());
+                                OilTemperatureData oilTemperatureData = new OilTemperatureData(routeId,oilTempCommand.getTemperature(),System.currentTimeMillis());
+                                oilTemperatureDataDao.insert(oilTemperatureData);
+                                goodTemperature = true;
                             } catch (NoDataException e) {
-                                goodPosition = false;
+                                goodTemperature = false;
                             } catch (IndexOutOfBoundsException e) {  }
+                            try {
+                                fuelLevelCommand.run(socket.getInputStream(),socket.getOutputStream());
+                                FuelLevelData fuelLevelData = new FuelLevelData(routeId,fuelLevelCommand.getFuelLevel(),System.currentTimeMillis());
+                                fuelLevelDataDao.insert(fuelLevelData);
+                                goodLevel = true;
+                            } catch (NoDataException e) {
+                                goodLevel = false;
+                            } catch (IndexOutOfBoundsException e) {  }
+                            try {
+                                consumptionRateCommand.run(socket.getInputStream(),socket.getOutputStream());
+                                FuelConsumptionRateData fuelConsumptionRateData = new FuelConsumptionRateData(routeId,consumptionRateCommand.getLitersPerHour(),System.currentTimeMillis());
+                                fuelConsumptionRateDataDao.insert(fuelConsumptionRateData);
+                                goodConsumption = true;
+                            } catch (NoDataException e) {
+                                goodConsumption = false;
+                            } catch (IndexOutOfBoundsException e) {  }
+                            try {
+                                troubleCodesCommand.run(socket.getInputStream(),socket.getOutputStream());
+                                //tutaj trzeba splitowac po enterze i wrzucac trouble codes co bazy
+                                //OBDReadings.putExtra("engineRpm", troubleCodesCommand.getFormattedResult());
+                                goodCodes = true;
+                            }  catch (NoDataException e) {
+                            goodCodes = false;
+                        } catch (IndexOutOfBoundsException e) {  }
                             context.sendBroadcast(OBDReadings);
-                            if ((!goodPosition) && (!goodRPM) && (!goodSpeed)) {
+                            if ((!goodCodes) && (!goodRPM) && (!goodSpeed) && (!goodTemperature) && (!goodConsumption) && (!goodLevel)) {
                                 closeConnection("NO DATA received, trying to reconnect with device");
                             }
                         } catch (IOException e) {

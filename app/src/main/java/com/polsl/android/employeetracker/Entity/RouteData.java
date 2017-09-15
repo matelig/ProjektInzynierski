@@ -27,6 +27,43 @@ public class RouteData {
     })
     @OrderBy("timestamp ASC")
     private List<LocationData> locationDataList;
+
+    @ToMany(joinProperties = {
+            @JoinProperty(name = "id", referencedName = "routeId")
+    })
+    @OrderBy("timestamp ASC")
+    private List<TroubleCodesData> troubleCodesDataList;
+
+    @ToMany(joinProperties = {
+            @JoinProperty(name = "id", referencedName = "routeId")
+    })
+    @OrderBy("timestamp ASC")
+    private List<RPMData> rpmDataList;
+
+    @ToMany(joinProperties = {
+            @JoinProperty(name = "id", referencedName = "routeId")
+    })
+    @OrderBy("timestamp ASC")
+    private List<SpeedData> speedDataList;
+
+    @ToMany(joinProperties = {
+            @JoinProperty(name = "id", referencedName = "routeId")
+    })
+    @OrderBy("timestamp ASC")
+    private List<OilTemperatureData> oilTemperatureDataList;
+
+    @ToMany(joinProperties = {
+            @JoinProperty(name = "id", referencedName = "routeId")
+    })
+    @OrderBy("timestamp ASC")
+    private List<FuelConsumptionRateData> fuelConsumptionRateDataList;
+
+    @ToMany(joinProperties = {
+            @JoinProperty(name = "id", referencedName = "routeId")
+    })
+    @OrderBy("timestamp ASC")
+    private List<FuelLevelData> fuelLevelDataList;
+
     /** Used to resolve relations */
     @Generated(hash = 2040040024)
     private transient DaoSession daoSession;
@@ -155,6 +192,177 @@ public class RouteData {
     public void __setDaoSession(DaoSession daoSession) {
         this.daoSession = daoSession;
         myDao = daoSession != null ? daoSession.getRouteDataDao() : null;
+    }
+
+    /**
+     * To-many relationship, resolved on first access (and after reset).
+     * Changes to to-many relations are not persisted, make changes to the target entity.
+     */
+    @Generated(hash = 2084841790)
+    public List<TroubleCodesData> getTroubleCodesDataList() {
+        if (troubleCodesDataList == null) {
+            final DaoSession daoSession = this.daoSession;
+            if (daoSession == null) {
+                throw new DaoException("Entity is detached from DAO context");
+            }
+            TroubleCodesDataDao targetDao = daoSession.getTroubleCodesDataDao();
+            List<TroubleCodesData> troubleCodesDataListNew = targetDao
+                    ._queryRouteData_TroubleCodesDataList(id);
+            synchronized (this) {
+                if (troubleCodesDataList == null) {
+                    troubleCodesDataList = troubleCodesDataListNew;
+                }
+            }
+        }
+        return troubleCodesDataList;
+    }
+
+    /** Resets a to-many relationship, making the next get call to query for a fresh result. */
+    @Generated(hash = 72996683)
+    public synchronized void resetTroubleCodesDataList() {
+        troubleCodesDataList = null;
+    }
+
+    /**
+     * To-many relationship, resolved on first access (and after reset).
+     * Changes to to-many relations are not persisted, make changes to the target entity.
+     */
+    @Generated(hash = 1299221027)
+    public List<RPMData> getRpmDataList() {
+        if (rpmDataList == null) {
+            final DaoSession daoSession = this.daoSession;
+            if (daoSession == null) {
+                throw new DaoException("Entity is detached from DAO context");
+            }
+            RPMDataDao targetDao = daoSession.getRPMDataDao();
+            List<RPMData> rpmDataListNew = targetDao._queryRouteData_RpmDataList(id);
+            synchronized (this) {
+                if (rpmDataList == null) {
+                    rpmDataList = rpmDataListNew;
+                }
+            }
+        }
+        return rpmDataList;
+    }
+
+    /** Resets a to-many relationship, making the next get call to query for a fresh result. */
+    @Generated(hash = 1744332308)
+    public synchronized void resetRpmDataList() {
+        rpmDataList = null;
+    }
+
+    /**
+     * To-many relationship, resolved on first access (and after reset).
+     * Changes to to-many relations are not persisted, make changes to the target entity.
+     */
+    @Generated(hash = 1810813848)
+    public List<SpeedData> getSpeedDataList() {
+        if (speedDataList == null) {
+            final DaoSession daoSession = this.daoSession;
+            if (daoSession == null) {
+                throw new DaoException("Entity is detached from DAO context");
+            }
+            SpeedDataDao targetDao = daoSession.getSpeedDataDao();
+            List<SpeedData> speedDataListNew = targetDao._queryRouteData_SpeedDataList(id);
+            synchronized (this) {
+                if (speedDataList == null) {
+                    speedDataList = speedDataListNew;
+                }
+            }
+        }
+        return speedDataList;
+    }
+
+    /** Resets a to-many relationship, making the next get call to query for a fresh result. */
+    @Generated(hash = 1865682672)
+    public synchronized void resetSpeedDataList() {
+        speedDataList = null;
+    }
+
+    /**
+     * To-many relationship, resolved on first access (and after reset).
+     * Changes to to-many relations are not persisted, make changes to the target entity.
+     */
+    @Generated(hash = 1202414507)
+    public List<OilTemperatureData> getOilTemperatureDataList() {
+        if (oilTemperatureDataList == null) {
+            final DaoSession daoSession = this.daoSession;
+            if (daoSession == null) {
+                throw new DaoException("Entity is detached from DAO context");
+            }
+            OilTemperatureDataDao targetDao = daoSession.getOilTemperatureDataDao();
+            List<OilTemperatureData> oilTemperatureDataListNew = targetDao
+                    ._queryRouteData_OilTemperatureDataList(id);
+            synchronized (this) {
+                if (oilTemperatureDataList == null) {
+                    oilTemperatureDataList = oilTemperatureDataListNew;
+                }
+            }
+        }
+        return oilTemperatureDataList;
+    }
+
+    /** Resets a to-many relationship, making the next get call to query for a fresh result. */
+    @Generated(hash = 75226629)
+    public synchronized void resetOilTemperatureDataList() {
+        oilTemperatureDataList = null;
+    }
+
+    /**
+     * To-many relationship, resolved on first access (and after reset).
+     * Changes to to-many relations are not persisted, make changes to the target entity.
+     */
+    @Generated(hash = 1667797255)
+    public List<FuelConsumptionRateData> getFuelConsumptionRateDataList() {
+        if (fuelConsumptionRateDataList == null) {
+            final DaoSession daoSession = this.daoSession;
+            if (daoSession == null) {
+                throw new DaoException("Entity is detached from DAO context");
+            }
+            FuelConsumptionRateDataDao targetDao = daoSession.getFuelConsumptionRateDataDao();
+            List<FuelConsumptionRateData> fuelConsumptionRateDataListNew = targetDao
+                    ._queryRouteData_FuelConsumptionRateDataList(id);
+            synchronized (this) {
+                if (fuelConsumptionRateDataList == null) {
+                    fuelConsumptionRateDataList = fuelConsumptionRateDataListNew;
+                }
+            }
+        }
+        return fuelConsumptionRateDataList;
+    }
+
+    /** Resets a to-many relationship, making the next get call to query for a fresh result. */
+    @Generated(hash = 782084382)
+    public synchronized void resetFuelConsumptionRateDataList() {
+        fuelConsumptionRateDataList = null;
+    }
+
+    /**
+     * To-many relationship, resolved on first access (and after reset).
+     * Changes to to-many relations are not persisted, make changes to the target entity.
+     */
+    @Generated(hash = 686232964)
+    public List<FuelLevelData> getFuelLevelDataList() {
+        if (fuelLevelDataList == null) {
+            final DaoSession daoSession = this.daoSession;
+            if (daoSession == null) {
+                throw new DaoException("Entity is detached from DAO context");
+            }
+            FuelLevelDataDao targetDao = daoSession.getFuelLevelDataDao();
+            List<FuelLevelData> fuelLevelDataListNew = targetDao._queryRouteData_FuelLevelDataList(id);
+            synchronized (this) {
+                if (fuelLevelDataList == null) {
+                    fuelLevelDataList = fuelLevelDataListNew;
+                }
+            }
+        }
+        return fuelLevelDataList;
+    }
+
+    /** Resets a to-many relationship, making the next get call to query for a fresh result. */
+    @Generated(hash = 1266587033)
+    public synchronized void resetFuelLevelDataList() {
+        fuelLevelDataList = null;
     }
 
 }

@@ -24,6 +24,12 @@ public class DaoMaster extends AbstractDaoMaster {
         UserDao.createTable(db, ifNotExists);
         LocationDataDao.createTable(db, ifNotExists);
         RouteDataDao.createTable(db, ifNotExists);
+        FuelConsumptionRateDataDao.createTable(db, ifNotExists);
+        FuelLevelDataDao.createTable(db, ifNotExists);
+        OilTemperatureDataDao.createTable(db, ifNotExists);
+        RPMDataDao.createTable(db, ifNotExists);
+        SpeedDataDao.createTable(db, ifNotExists);
+        TroubleCodesDataDao.createTable(db, ifNotExists);
     }
 
     /** Drops underlying database table using DAOs. */
@@ -31,6 +37,12 @@ public class DaoMaster extends AbstractDaoMaster {
         UserDao.dropTable(db, ifExists);
         LocationDataDao.dropTable(db, ifExists);
         RouteDataDao.dropTable(db, ifExists);
+        FuelConsumptionRateDataDao.dropTable(db, ifExists);
+        FuelLevelDataDao.dropTable(db, ifExists);
+        OilTemperatureDataDao.dropTable(db, ifExists);
+        RPMDataDao.dropTable(db, ifExists);
+        SpeedDataDao.dropTable(db, ifExists);
+        TroubleCodesDataDao.dropTable(db, ifExists);
     }
 
     /**
@@ -52,6 +64,12 @@ public class DaoMaster extends AbstractDaoMaster {
         registerDaoClass(UserDao.class);
         registerDaoClass(LocationDataDao.class);
         registerDaoClass(RouteDataDao.class);
+        registerDaoClass(FuelConsumptionRateDataDao.class);
+        registerDaoClass(FuelLevelDataDao.class);
+        registerDaoClass(OilTemperatureDataDao.class);
+        registerDaoClass(RPMDataDao.class);
+        registerDaoClass(SpeedDataDao.class);
+        registerDaoClass(TroubleCodesDataDao.class);
     }
 
     public DaoSession newSession() {

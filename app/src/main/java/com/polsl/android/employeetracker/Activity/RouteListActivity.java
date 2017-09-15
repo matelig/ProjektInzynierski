@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import com.polsl.android.employeetracker.Entity.DaoMaster;
 import com.polsl.android.employeetracker.Entity.DaoSession;
+import com.polsl.android.employeetracker.Entity.LocationData;
 import com.polsl.android.employeetracker.Entity.RouteData;
 import com.polsl.android.employeetracker.Entity.RouteDataDao;
 import com.polsl.android.employeetracker.Helper.ApiHelper;
@@ -61,6 +62,7 @@ public class RouteListActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         tracks = routeDataDao.loadAll();
         for (int i = tracks.size() - 1; i >= 0; i--) {
+            List<LocationData> temp = tracks.get(i).getLocationDataList();
             if (tracks.get(i).getEndDate() == null) {
                 tracks.remove(i);
             }

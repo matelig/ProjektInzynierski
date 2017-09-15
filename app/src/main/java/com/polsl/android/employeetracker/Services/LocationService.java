@@ -1,6 +1,8 @@
 package com.polsl.android.employeetracker.Services;
 
 import android.Manifest;
+import android.app.Notification;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -9,9 +11,12 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.os.PowerManager;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.NotificationCompat;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -28,6 +33,7 @@ import com.polsl.android.employeetracker.Entity.LocationDataDao;
 import com.polsl.android.employeetracker.Entity.RouteData;
 import com.polsl.android.employeetracker.Entity.RouteDataDao;
 import com.polsl.android.employeetracker.Helper.ApiHelper;
+import com.polsl.android.employeetracker.R;
 
 import org.greenrobot.greendao.database.Database;
 
@@ -47,11 +53,25 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
     private RouteData routeData;
     private RouteDataDao routeDataDao;
     private LocationDataDao locationDataDao;
+    private OBDInterface ODBConnection;
+    private String deviceAddress;
+    private PowerManager powerManager;
+    /**
+     * Wake lock used to maintain the device active
+     */
+    private PowerManager.WakeLock wakeLock;
+    private boolean finish = false;
 
 
     @Override
     public void onCreate() {
         super.onCreate();
+        powerManager = (PowerManager) getSystemService(POWER_SERVICE);
+        wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,
+                "MyWakelockTag");
+        wakeLock.acquire();
+        SharedPreferences sharedPreferences = getSharedPreferences(getPackageName(), Context.MODE_PRIVATE);
+        deviceAddress = sharedPreferences.getString("deviceAddress", "");
         DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(this, "main-db");
         database = helper.getWritableDb();
         daoSession = new DaoMaster(database).newSession();
@@ -60,9 +80,7 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
         routeData = new RouteData();
         routeData.start();
         routeDataDao.insert(routeData);
-        SharedPreferences prefs = getSharedPreferences(getPackageName(), Context.MODE_PRIVATE);
-        prefs.edit().putLong("routeId", routeData.getId()).apply();
-        prefs.edit().putBoolean("finish", false).apply();
+
 
         buildGoogleApiClient();
         createLocationRequest();
@@ -78,9 +96,19 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
         }
         if (intent.getAction().equals(ApiHelper.START_SERVICE)) {
             Toast.makeText(this, "Serwis uruchomiony", Toast.LENGTH_SHORT).show();
-            Intent intent1 = new Intent(this, ObdService.class);
-            startService(intent1);
-            //TODO: stworzenie notyfikacji
+//            Intent intent1 = new Intent(this, ObdService.class);
+//            startService(intent1);
+            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+            ODBConnection = new OBDInterface(this, preferences, routeData.getId());
+
+            Notification notification = new NotificationCompat.Builder(this)
+                    .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+                    .setSmallIcon(R.drawable.common_google_signin_btn_icon_dark)
+
+                    .setContentTitle("Road Tracker is running")
+                    .build();
+            startForeground(100,
+                    notification);
 
         } else if (intent.getAction().equals(ApiHelper.STOP_SERVICE)) {
             Toast.makeText(this, "Serwis zatrzymany", Toast.LENGTH_SHORT).show();
@@ -88,7 +116,10 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
             routeData.finish();
             routeDataDao.update(routeData);
             finishLocationReadings();
-
+            finish = true;
+            ODBConnection.finishODBReadings();
+            ODBConnection.disconnect();
+            wakeLock.release();
             this.stopSelf();
         }
         return START_STICKY;
@@ -141,12 +172,32 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
             sendBroadcast(intent);
         }
         startLocationReadings();
+        maintainOBDConnection();
     }
 
     @Override
     public void onConnectionSuspended(int i) {
 
     }
+
+    protected void maintainOBDConnection() {
+        new Thread(() -> {
+            ODBConnection.connect_bt(deviceAddress);
+            ODBConnection.startODBReadings();
+            while (!finish) {
+                if (!ODBConnection.isConnected()) {
+                    ODBConnection.connect_bt(deviceAddress);
+                    ODBConnection.startODBReadings();
+                }
+                try {
+                    Thread.sleep(5000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
