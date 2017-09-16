@@ -17,9 +17,15 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.polsl.android.employeetracker.Entity.DaoMaster;
 import com.polsl.android.employeetracker.Entity.DaoSession;
+import com.polsl.android.employeetracker.Entity.FuelConsumptionRateData;
+import com.polsl.android.employeetracker.Entity.FuelLevelData;
 import com.polsl.android.employeetracker.Entity.LocationData;
+import com.polsl.android.employeetracker.Entity.OilTemperatureData;
+import com.polsl.android.employeetracker.Entity.RPMData;
 import com.polsl.android.employeetracker.Entity.RouteData;
 import com.polsl.android.employeetracker.Entity.RouteDataDao;
+import com.polsl.android.employeetracker.Entity.SpeedData;
+import com.polsl.android.employeetracker.Entity.TroubleCodesData;
 import com.polsl.android.employeetracker.Helper.ApiHelper;
 import com.polsl.android.employeetracker.R;
 
@@ -56,6 +62,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         routeDataDao = daoSession.getRouteDataDao();
         routeData = routeDataDao.load(routeId);
         locationData = routeData.getLocationDataList();
+        List<SpeedData> speedDataList = routeData.getSpeedDataList();
+        List<RPMData> rpmDataList = routeData.getRpmDataList();
+        List<FuelConsumptionRateData> fuelConsumptionRateDataList = routeData.getFuelConsumptionRateDataList();
+        List<FuelLevelData> fuelLevelDataList = routeData.getFuelLevelDataList();
+        List<OilTemperatureData> oilTemperatureDatas = routeData.getOilTemperatureDataList();
+        List<TroubleCodesData> troubleCodesDatas = routeData.getTroubleCodesDataList();
+        System.out.println("sjgdssj");
     }
 
 

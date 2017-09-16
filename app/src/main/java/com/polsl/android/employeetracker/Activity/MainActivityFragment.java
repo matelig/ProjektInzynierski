@@ -22,6 +22,8 @@ import com.polsl.android.employeetracker.Helper.ApiHelper;
 import com.polsl.android.employeetracker.R;
 import com.polsl.android.employeetracker.Services.LocationService;
 
+import org.w3c.dom.Text;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -44,7 +46,16 @@ public class MainActivityFragment extends Fragment {
     TextView carSpeed;
 
     @BindView(R.id.main_time)
-    TextView rpm;
+    TextView serviceTime;
+
+    @BindView(R.id.fuel_consumption)
+    TextView carConsumption;
+
+    @BindView(R.id.vin_number)
+    TextView vinNumber;
+
+    @BindView(R.id.road_length)
+    TextView roadLength;
 
     private final BroadcastReceiver bluetoothStateReceiver = new BroadcastReceiver() {
 
@@ -71,8 +82,14 @@ public class MainActivityFragment extends Fragment {
         public void onReceive(Context context, Intent intent) {
             String speed = intent.getStringExtra("speed");
             String engineRpm = intent.getStringExtra("engineRpm");
+            String consumption = intent.getStringExtra("consumtpion");
+            String level = intent.getStringExtra("level");
+            String oil = intent.getStringExtra("oil");
             carSpeed.setText(speed);
-            rpm.setText(engineRpm);
+            serviceTime.setText(engineRpm);
+            carConsumption.setText(consumption);
+            vinNumber.setText(oil);
+            roadLength.setText(level);
         }
     };
 
