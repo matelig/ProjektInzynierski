@@ -82,7 +82,7 @@ public class MainActivityFragment extends Fragment {
         public void onReceive(Context context, Intent intent) {
             String speed = intent.getStringExtra("speed");
             String engineRpm = intent.getStringExtra("engineRpm");
-            String consumption = intent.getStringExtra("consumtpion");
+            String consumption = intent.getStringExtra("consumption");
             String level = intent.getStringExtra("level");
             String oil = intent.getStringExtra("oil");
             carSpeed.setText(speed);

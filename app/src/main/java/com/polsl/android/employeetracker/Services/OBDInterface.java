@@ -281,6 +281,8 @@ public class OBDInterface {
                                 OBDReadings.putExtra("engineRpm", engineRpmCommand.getFormattedResult());
                                 goodRPM = true;
                             } catch (NoDataException e) {
+
+                                OBDReadings.putExtra("engineRpm", "NO DATA");
                                 goodRPM = false;
                             } catch (IndexOutOfBoundsException e) {  }
                             try {
@@ -291,6 +293,7 @@ public class OBDInterface {
                                 goodSpeed = true;
                             } catch (NoDataException e) {
                                 goodSpeed = false;
+                                OBDReadings.putExtra("speed", "NO DATA");
                             } catch (IndexOutOfBoundsException e) {  }
                             try {
                                 oilTempCommand.run(socket.getInputStream(),socket.getOutputStream());
@@ -300,6 +303,7 @@ public class OBDInterface {
                                 OBDReadings.putExtra("oil",oilTempCommand.getFormattedResult());
                             } catch (NoDataException e) {
                                 goodTemperature = false;
+                                OBDReadings.putExtra("oil", "NO DATA");
                             } catch (IndexOutOfBoundsException e) {  }
                             try {
                                 fuelLevelCommand.run(socket.getInputStream(),socket.getOutputStream());
@@ -309,6 +313,8 @@ public class OBDInterface {
                                 goodLevel = true;
                             } catch (NoDataException e) {
                                 goodLevel = false;
+
+                                OBDReadings.putExtra("level", "NO DATA");
                             } catch (IndexOutOfBoundsException e) {  }
                             try {
                                 consumptionRateCommand.run(socket.getInputStream(),socket.getOutputStream());
@@ -318,6 +324,7 @@ public class OBDInterface {
                                 goodConsumption = true;
                             } catch (NoDataException e) {
                                 goodConsumption = false;
+                                OBDReadings.putExtra("consumption", "NO DATA");
                             } catch (IndexOutOfBoundsException e) {  }
                             try {
                                 troubleCodesCommand.run(socket.getInputStream(),socket.getOutputStream());
