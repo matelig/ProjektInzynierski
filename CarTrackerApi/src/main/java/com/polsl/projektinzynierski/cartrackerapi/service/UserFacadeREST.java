@@ -42,6 +42,18 @@ public class UserFacadeREST extends AbstractFacade<User> {
     public void create(User entity) {
         super.create(entity);
     }
+    
+    @POST
+    @Path("login")
+    @Consumes({MediaType.APPLICATION_JSON})
+    public String checkUser(User entity) {
+        List<User> userList = super.findAll();
+        for (User u : userList) {
+            if (entity.getName().equals(u.getName())&&entity.getSurname().equals(u.getSurname())&&entity.getPassword().equals(u.getPassword()))
+                return "OK";
+        }
+        return "User not found";
+    }
 
     @PUT
     @Path("{id}")

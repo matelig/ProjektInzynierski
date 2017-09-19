@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">EmployeeTracker</string>
     <string name="login_activity_button_string">Login</string>
-    <string name="login_activity_name_string">Login:</string>
+    <string name="login_activity_name_string">Name:</string>
     <string name="login_activity_password_button">Password:</string>
     <string name="offline_mode_dialog">Do you really want to proceed in offline mode? In this mode all data should be send manually.</string>
     <string name="yes_button">Yes</string>
@@ -21,4 +21,5 @@
     <string name="bluetooth_status">Bluetooth status</string>
     <string name="obd_set_button">Set OBD</string>
     <string name="title_activity_maps">Map</string>
+    <string name="login_activity_surname">Surname:</string>
 </resources>

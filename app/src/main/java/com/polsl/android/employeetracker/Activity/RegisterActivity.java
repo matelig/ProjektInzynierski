@@ -46,20 +46,20 @@ public class RegisterActivity extends AppCompatActivity {
         DaoSession daoSession = new DaoMaster(db).newSession();
         UserDao userDao = daoSession.getUserDao();
         List<User> users = userDao.loadAll();
-        boolean notUnique = false;
-        for (User u : users) {
-            if (u.getLogin().equals(login.getText().toString())) {
-                Toast.makeText(this, "Wybrany użytkownik jest już zarejestrowany", Toast.LENGTH_SHORT).show();
-                notUnique = true;
-                break;
-            }
-        }
-        if (!notUnique) {
-            User user = new User();
-            user.setLogin(login.getText().toString());
-            user.setPassword(password.getText().toString());
-            userDao.insert(user);
-        }
+//        boolean notUnique = false;
+//        for (User u : users) {
+//            if (u.getLogin().equals(login.getText().toString())) {
+//                Toast.makeText(this, "Wybrany użytkownik jest już zarejestrowany", Toast.LENGTH_SHORT).show();
+//                notUnique = true;
+//                break;
+//            }
+//        }
+//        if (!notUnique) {
+//            User user = new User();
+//            user.setLogin(login.getText().toString());
+//            user.setPassword(password.getText().toString());
+//            userDao.insert(user);
+//        }
     }
 
     public void OnListClicl(View view) {

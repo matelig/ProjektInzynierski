@@ -15,7 +15,6 @@
         android:layout_height="wrap_content">
 
         <TextView
-            android:id="@+id/login_activity_login_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/login_activity_name_string" />
@@ -25,6 +24,17 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="text" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/login_activity_surname" />
+
+        <EditText
+            android:id="@+id/login_activity_surname"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPassword" />
 
         <TextView
             android:layout_width="match_parent"
