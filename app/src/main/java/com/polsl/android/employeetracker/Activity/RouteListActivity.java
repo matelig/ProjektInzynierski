@@ -1,6 +1,8 @@
 package com.polsl.android.employeetracker.Activity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -8,15 +10,22 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.polsl.android.employeetracker.Entity.DaoMaster;
 import com.polsl.android.employeetracker.Entity.DaoSession;
 import com.polsl.android.employeetracker.Entity.LocationData;
 import com.polsl.android.employeetracker.Entity.RouteData;
 import com.polsl.android.employeetracker.Entity.RouteDataDao;
+import com.polsl.android.employeetracker.Entity.User;
 import com.polsl.android.employeetracker.Helper.ApiHelper;
+import com.polsl.android.employeetracker.Helper.UploadStatus;
 import com.polsl.android.employeetracker.R;
+import com.polsl.android.employeetracker.RESTApi.RESTServicesEndpoints;
+import com.polsl.android.employeetracker.RESTApi.RetrofitClient;
+import com.polsl.android.employeetracker.RESTApi.Route;
 import com.polsl.android.employeetracker.adapter.RouteListAdapter;
 
 import org.greenrobot.greendao.database.Database;
@@ -27,12 +36,16 @@ import java.util.Date;
 import java.util.List;
 
 import butterknife.ButterKnife;
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class RouteListActivity extends AppCompatActivity {
 
 
     RouteDataDao routeDataDao;
-
+    private Context context = this;
     private List<RouteData> tracks = new ArrayList<>();
     private RouteListAdapter tAdapter;
     private RecyclerView routeListView;
@@ -48,6 +61,8 @@ public class RouteListActivity extends AppCompatActivity {
         Intent intent = getIntent();
         Integer year = intent.getIntExtra("year",0);
         String monthName = intent.getStringExtra("month");
+        SharedPreferences prefs = getSharedPreferences(getPackageName(), Context.MODE_PRIVATE);
+        Long userId = prefs.getLong(ApiHelper.USER_ID,0);
         int month = 0;
         for (int i=1;i<=12;i++) {
             if (monthName.equals(ApiHelper.monthNames[i-1])) {
@@ -62,13 +77,12 @@ public class RouteListActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         tracks = routeDataDao.loadAll();
         for (int i = tracks.size() - 1; i >= 0; i--) {
-            List<LocationData> temp = tracks.get(i).getLocationDataList();
-            if (tracks.get(i).getEndDate() == null) {
+            if (tracks.get(i).getEndDate() == null|| tracks.get(i).getUserId()!=userId) {
                 tracks.remove(i);
             }
         }
         for (int i = tracks.size()-1;i>=0;i--) {
-            Date startDate = tracks.get(i).getStartDate();
+            Date startDate = new Date(tracks.get(i).getStartDate());
             Calendar cal = Calendar.getInstance();
             cal.setTime(startDate);
             int routeYear = cal.get(Calendar.YEAR);
@@ -129,6 +143,34 @@ public class RouteListActivity extends AppCompatActivity {
 //    }
 
     private void prepareView() {
+
+    }
+
+    public void sendRoutesClick(View view) {
+        RESTServicesEndpoints endpoints = RetrofitClient.getApiService();
+
+        for (RouteData r : tracks) {
+            if (r.getToSend()) {
+                Route route = new Route(r.getStartDate(),r.getEndDate(),r.getUserId(),r.getVinNumber(),r.getLocationDataList());
+
+                String json = new Gson().toJson(route);
+                Call<ResponseBody> call = endpoints.create(route);
+                call.enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        if (response.code()==204) {
+                            r.setUploadStatus(UploadStatus.UPLOADED);
+                            Toast.makeText(context,"Wysłano;o",Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+                    }
+                });
+            }
+        }
 
     }
 }

@@ -1,6 +1,8 @@
 package com.polsl.android.employeetracker.Activity;
 
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -10,10 +12,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.google.android.gms.common.api.Api;
 import com.polsl.android.employeetracker.Entity.DaoMaster;
 import com.polsl.android.employeetracker.Entity.DaoSession;
 import com.polsl.android.employeetracker.Entity.RouteData;
 import com.polsl.android.employeetracker.Entity.RouteDataDao;
+import com.polsl.android.employeetracker.Helper.ApiHelper;
 import com.polsl.android.employeetracker.R;
 import com.polsl.android.employeetracker.adapter.RouteListAdapter;
 import com.polsl.android.employeetracker.adapter.RouteListYearAdapter;
@@ -54,6 +58,8 @@ public class RouteListFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_route_list, container, false);
         routeListView = (RecyclerView) rootView.findViewById(R.id.route_recycler);
+        SharedPreferences prefs = getContext().getSharedPreferences(getContext().getPackageName(), Context.MODE_PRIVATE);
+        Long userId = prefs.getLong(ApiHelper.USER_ID,0);
         Set<Integer> usedYears = new HashSet<>();
 //        setContentView(R.layout.activity_route_list);
         DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(rootView.getContext(), "main-db");
@@ -63,12 +69,12 @@ public class RouteListFragment extends Fragment {
         ButterKnife.bind(rootView);
         tracks = routeDataDao.loadAll();
         for (int i = tracks.size() - 1; i >= 0; i--) {
-            if (tracks.get(i).getEndDate() == null) {
+            if (tracks.get(i).getEndDate() == null || tracks.get(i).getUserId()!=userId) {
                 tracks.remove(i);
             }
         }
         for (RouteData routeData : tracks) {
-            Date startDate = routeData.getStartDate();
+            Date startDate = new Date(routeData.getStartDate());
             Calendar cal = Calendar.getInstance();
             cal.setTime(startDate);
             usedYears.add(cal.get(Calendar.YEAR));
@@ -88,25 +94,6 @@ public class RouteListFragment extends Fragment {
         routeListView.setAdapter(yearAdapter);
 //        // Inflate the layout for this fragment
         return rootView;
-    }
-
-    public void refresh() {
-        tracks = routeDataDao.loadAll();
-        Set<Integer> usedYears = new HashSet<>();
-        for (RouteData routeData : tracks) {
-            Date startDate = routeData.getStartDate();
-            Calendar cal = Calendar.getInstance();
-            cal.setTime(startDate);
-            usedYears.add(cal.get(Calendar.YEAR));
-        }
-        List<Integer> tempYears = new ArrayList<>();
-        tempYears.addAll(usedYears);
-        Collections.sort(tempYears);
-        List<String> usedYearsNames = new ArrayList<>();
-        for (int year : tempYears) {
-            usedYearsNames.add(Integer.toString(year));
-        }
-        yearAdapter.refresh(usedYearsNames);
     }
 
 }

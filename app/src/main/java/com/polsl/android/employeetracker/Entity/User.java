@@ -1,5 +1,6 @@
 package com.polsl.android.employeetracker.Entity;
 
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import org.greenrobot.greendao.annotation.Entity;
@@ -11,27 +12,22 @@ import org.greenrobot.greendao.annotation.NotNull;
  * Created by m_lig on 24.07.2017.
  */
 
-@Entity
 public class User {
-
+    @Expose
     @SerializedName("idUser")
-    @Id(autoincrement = true)
     private Long id;
-
-    @NotNull
+    @Expose
     private String name;
-
-    @NotNull
+    @Expose
     private String surname;
-
+    @Expose
     private String pesel;
-
-    @NotNull
+    @Expose
     private String password;
 
-    @Generated(hash = 44559750)
-    public User(Long id, @NotNull String name, @NotNull String surname,
-                String pesel, @NotNull String password) {
+
+    public User(Long id, String name, String surname,
+             String pesel, String password) {
         this.id = id;
         this.name = name;
         this.surname = surname;
@@ -39,9 +35,9 @@ public class User {
         this.password = password;
     }
 
-    @Generated(hash = 586692638)
     public User() {
     }
+
 
     public Long getId() {
         return this.id;

@@ -5,6 +5,9 @@
  */
 package com.polsl.projektinzynierski.cartrackerapi;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonView;
 import java.io.Serializable;
 import java.math.BigInteger;
 import java.util.Collection;
@@ -23,6 +26,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
+import com.polsl.projektinzynierski.cartrackerapi.Location;
+import javax.inject.Named;
 
 /**
  *
@@ -203,5 +208,5 @@ public class Route implements Serializable {
     public String toString() {
         return "com.polsl.projektinzynierski.cartrackerapi.Route[ idRoute=" + idRoute + " ]";
     }
-    
+
 }

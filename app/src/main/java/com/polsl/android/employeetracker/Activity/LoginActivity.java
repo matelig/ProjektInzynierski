@@ -14,6 +14,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,13 +38,11 @@ public class LoginActivity extends AppCompatActivity {
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
     final Context context = this;
     @BindView(R.id.login_activity_name)
-    TextView name;
+    EditText pesel;
 
-    @BindView(R.id.login_activity_surname)
-    TextView surname;
 
     @BindView(R.id.login_activity_password)
-    TextView password;
+    EditText password;
 
 
     @Override
@@ -52,34 +51,42 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
         checkLocationPermission();
+        SharedPreferences prefs = getSharedPreferences(getPackageName(), Context.MODE_PRIVATE);
+        if (!prefs.getString(ApiHelper.USER_PESEL,"").isEmpty()) {
+            Intent intent = new Intent(this,SlideActivityPager.class);
+            startActivity(intent);
+        }
     }
 
     public void onLoginButtonClick(View view) {
-        //TODO: Sprawdzenie połączenia z internetem
-        //TODO: Połączenie z bazą, sprawdzenie użytkownika czy istnieje, zapamiętanie jego Loginu i ID w prefsach
-        SharedPreferences prefs = getSharedPreferences(getPackageName(), Context.MODE_PRIVATE);
-        prefs.edit().putString(ApiHelper.USER_NAME, "nanana").apply();
         RESTServicesEndpoints endpoints = RetrofitClient.getApiService();
         User user = new User();
-        user.setName(name.getText().toString());
-        user.setSurname(surname.getText().toString());
+        user.setPesel(pesel.getText().toString());
         user.setPassword(password.getText().toString());
 
-        Call<ResponseBody> calledUser = endpoints.login(user);
-
-        calledUser.enqueue(new Callback<ResponseBody>() {
+        Call<User> calledUser = endpoints.login(user);
+        calledUser.enqueue(new Callback<User>() {
             @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-//                if (response.code()==200) {
-//
-//                }
-                int code = response.code();
-                Toast.makeText(context, "aaa", Toast.LENGTH_SHORT).show();
+            public void onResponse(Call<User> call, Response<User> response) {
+                User loggedUser = response.body();
+                if (loggedUser==null) {
+                    Toast.makeText(context, R.string.wrong_user,Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(context,"logged as " + loggedUser.getName() + " " + loggedUser.getSurname(),Toast.LENGTH_SHORT).show();
+                    SharedPreferences prefs = getSharedPreferences(getPackageName(), Context.MODE_PRIVATE);
+                    prefs.edit().putString(ApiHelper.USER_NAME, loggedUser.getName()).apply();
+                    prefs.edit().putString(ApiHelper.USER_SURNAME, loggedUser.getSurname()).apply();
+                    prefs.edit().putString(ApiHelper.USER_PESEL, loggedUser.getPesel()).apply();
+                    prefs.edit().putLong(ApiHelper.USER_ID, loggedUser.getId()).apply();
+                    Intent intent = new Intent(context,SlideActivityPager.class);
+                    startActivity(intent);
+                    finish();
+                }
             }
 
             @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                Toast.makeText(context,"Nima neta",Toast.LENGTH_SHORT).show();
+            public void onFailure(Call<User> call, Throwable t) {
+                Toast.makeText(context, R.string.login_failure,Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -150,4 +157,8 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
+    public void registerNewUser(View view) {
+        Intent intent = new Intent(this,RegisterActivity.class);
+        startActivity(intent);
+    }
 }

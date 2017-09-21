@@ -6,13 +6,20 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.polsl.android.employeetracker.Activity.MapsActivity;
+import com.polsl.android.employeetracker.Entity.DaoMaster;
+import com.polsl.android.employeetracker.Entity.DaoSession;
 import com.polsl.android.employeetracker.Entity.RouteData;
+import com.polsl.android.employeetracker.Entity.RouteDataDao;
 import com.polsl.android.employeetracker.Helper.ApiHelper;
+import com.polsl.android.employeetracker.Helper.UploadStatus;
 import com.polsl.android.employeetracker.R;
+
+import org.greenrobot.greendao.database.Database;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -42,6 +49,7 @@ public class RouteListAdapter extends RecyclerView.Adapter<RouteListAdapter.Data
         viewHolder.descriptionItemView = (TextView) itemTrack.findViewById(R.id.description_text);
         viewHolder.durationItemView = (TextView) itemTrack.findViewById(R.id.duration_text);
         viewHolder.optionsItemView = (TextView) itemTrack.findViewById(R.id.list_options);
+        viewHolder.checkBox = (CheckBox) itemTrack.findViewById(R.id.checkbox);
         return viewHolder;
     }
 
@@ -53,7 +61,21 @@ public class RouteListAdapter extends RecyclerView.Adapter<RouteListAdapter.Data
         holder.dateItemView.setText(dateFormat.format(info.getStartDate()));
         holder.descriptionItemView.setText("Route " + info.getId());
         holder.durationItemView.setText("Duration: " + info.calculateDuration());
+        holder.checkBox.setOnCheckedChangeListener(null);
+
+        if(info.getUploadStatus() == UploadStatus.UPLOADED)
+            holder.checkBox.setEnabled(false);
         holder.position = position;
+
+        holder.checkBox.setChecked(tracks.get(position).getToSend());
+        holder.checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            tracks.get(position).setToSend(isChecked);
+            DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(context, "main-db");
+            Database db = helper.getWritableDb();
+            DaoSession daoSession = new DaoMaster(db).newSession();
+            RouteDataDao routeDataDao = daoSession.getRouteDataDao();
+            routeDataDao.update(tracks.get(position));
+        });
 
         holder.view.setOnClickListener(v -> {
             Intent intent = new Intent(context, MapsActivity.class);
@@ -103,6 +125,7 @@ public class RouteListAdapter extends RecyclerView.Adapter<RouteListAdapter.Data
         TextView descriptionItemView;
         TextView durationItemView;
         TextView optionsItemView;
+        CheckBox checkBox;
         View view;
         int position;
 

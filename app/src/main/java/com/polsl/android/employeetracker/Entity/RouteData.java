@@ -1,5 +1,11 @@
 package com.polsl.android.employeetracker.Entity;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+import com.polsl.android.employeetracker.Helper.UploadStatus;
+import com.polsl.android.employeetracker.Helper.UploadStatusPropertyConverter;
+
+import org.greenrobot.greendao.annotation.Convert;
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.JoinProperty;
@@ -18,14 +24,30 @@ import org.greenrobot.greendao.DaoException;
 public class RouteData {
     @Generated
     @Id(autoincrement = true)
+    @SerializedName("idRoute")
+    @Expose
     private Long id;
-    private Date startDate;
-    private Date endDate;
+    @Expose
+    private Long startDate;
+    @Expose
+    private Long endDate;
+    @SerializedName("User_idUser")
+    @Expose
+    private Long userId;
+    @Expose
+    @SerializedName("Car_vinNumber")
+    private Long vinNumber=123L;
+
+    private boolean toSend;
+
+    @Convert(converter = UploadStatusPropertyConverter.class, columnType = Integer.class)
+    private UploadStatus uploadStatus;
 
     @ToMany(joinProperties = {
             @JoinProperty(name = "id", referencedName = "routeId")
     })
     @OrderBy("timestamp ASC")
+    @SerializedName("locationCollection")
     private List<LocationData> locationDataList;
 
     @ToMany(joinProperties = {
@@ -71,27 +93,40 @@ public class RouteData {
     @Generated(hash = 368698595)
     private transient RouteDataDao myDao;
 
-    @Generated(hash = 1561554076)
-    public RouteData(Long id, Date startDate, Date endDate) {
-        this.id = id;
-        this.startDate = startDate;
-        this.endDate = endDate;
-    }
 
     @Generated(hash = 280729267)
     public RouteData() {
     }
 
+
+
+    @Generated(hash = 147681151)
+    public RouteData(Long id, Long startDate, Long endDate, Long userId, Long vinNumber, boolean toSend,
+            UploadStatus uploadStatus) {
+        this.id = id;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.userId = userId;
+        this.vinNumber = vinNumber;
+        this.toSend = toSend;
+        this.uploadStatus = uploadStatus;
+    }
+
+
+
     public void start() {
-        setStartDate(new Date(System.currentTimeMillis()));
+        setStartDate(System.currentTimeMillis());
+        setUploadStatus(UploadStatus.NOT_UPLOADED);
+        toSend = false;
     }
 
     public void finish() {
-        setEndDate(new Date(System.currentTimeMillis()));
+        setEndDate(System.currentTimeMillis());
+        setUploadStatus(UploadStatus.READY_TO_UPLOAD);
     }
 
     public String calculateDuration() {
-        long ms = (endDate.getTime() - startDate.getTime());
+        long ms = (endDate - startDate);
         long seconds = (ms / 1000) % 60;
         long minutes = (ms / (1000 * 60)) % 60;
         long hours = (ms / (1000 * 60 * 60)) % 24;
@@ -106,19 +141,19 @@ public class RouteData {
         this.id = id;
     }
 
-    public Date getStartDate() {
+    public Long getStartDate() {
         return this.startDate;
     }
 
-    public void setStartDate(Date startDate) {
+    public void setStartDate(Long startDate) {
         this.startDate = startDate;
     }
 
-    public Date getEndDate() {
+    public Long getEndDate() {
         return this.endDate;
     }
 
-    public void setEndDate(Date endDate) {
+    public void setEndDate(Long endDate) {
         this.endDate = endDate;
     }
 
@@ -363,6 +398,38 @@ public class RouteData {
     @Generated(hash = 1266587033)
     public synchronized void resetFuelLevelDataList() {
         fuelLevelDataList = null;
+    }
+
+    public Long getUserId() {
+        return this.userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
+    public boolean getToSend() {
+        return this.toSend;
+    }
+
+    public void setToSend(boolean toSend) {
+        this.toSend = toSend;
+    }
+
+    public UploadStatus getUploadStatus() {
+        return this.uploadStatus;
+    }
+
+    public void setUploadStatus(UploadStatus uploadStatus) {
+        this.uploadStatus = uploadStatus;
+    }
+
+    public Long getVinNumber() {
+        return this.vinNumber;
+    }
+
+    public void setVinNumber(Long vinNumber) {
+        this.vinNumber = vinNumber;
     }
 
 }

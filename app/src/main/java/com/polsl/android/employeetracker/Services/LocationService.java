@@ -56,6 +56,8 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
     private OBDInterface ODBConnection;
     private String deviceAddress;
     private PowerManager powerManager;
+    private SharedPreferences preferences;
+    private Long userId;
     /**
      * Wake lock used to maintain the device active
      */
@@ -70,16 +72,12 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
         wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,
                 "MyWakelockTag");
         wakeLock.acquire();
-        SharedPreferences sharedPreferences = getSharedPreferences(getPackageName(), Context.MODE_PRIVATE);
-        deviceAddress = sharedPreferences.getString("deviceAddress", "");
         DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(this, "main-db");
         database = helper.getWritableDb();
         daoSession = new DaoMaster(database).newSession();
         routeDataDao = daoSession.getRouteDataDao();
         locationDataDao = daoSession.getLocationDataDao();
-        routeData = new RouteData();
-        routeData.start();
-        routeDataDao.insert(routeData);
+        preferences = PreferenceManager.getDefaultSharedPreferences(this);
 
 
         buildGoogleApiClient();
@@ -96,11 +94,8 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
         }
         if (intent.getAction().equals(ApiHelper.START_SERVICE)) {
             Toast.makeText(this, "Serwis uruchomiony", Toast.LENGTH_SHORT).show();
-//            Intent intent1 = new Intent(this, ObdService.class);
-//            startService(intent1);
-            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-            ODBConnection = new OBDInterface(this, preferences, routeData.getId());
-
+            userId = intent.getLongExtra(ApiHelper.USER_ID,0);
+            deviceAddress = intent.getStringExtra(ApiHelper.OBD_DEVICE_ADDRESS);
             Notification notification = new NotificationCompat.Builder(this)
                     .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
                     .setSmallIcon(R.drawable.common_google_signin_btn_icon_dark)
@@ -152,6 +147,11 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
+        routeData = new RouteData();
+        routeData.start();
+        routeData.setUserId(userId);
+        routeDataDao.insert(routeData);
+        ODBConnection = new OBDInterface(this, preferences, routeData.getId());
         if (ActivityCompat.checkSelfPermission(LocationService.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
                 ActivityCompat.checkSelfPermission(LocationService.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
         }

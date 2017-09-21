@@ -144,6 +144,9 @@ public class MainActivityFragment extends Fragment {
                 if (serviceButton.getText().equals(startServiceText)) {
                     serviceButton.setText(R.string.stop_service);
                     Intent intent = new Intent(getActivity(), LocationService.class);
+                    SharedPreferences prefs = getContext().getSharedPreferences(getContext().getPackageName(), Context.MODE_PRIVATE);
+                    intent.putExtra(ApiHelper.OBD_DEVICE_ADDRESS,prefs.getString(ApiHelper.OBD_DEVICE_ADDRESS,""));
+                    intent.putExtra(ApiHelper.USER_ID, prefs.getLong(ApiHelper.USER_ID,0));
                     intent.setAction(ApiHelper.START_SERVICE);
                     getActivity().startService(intent);
                 } else {

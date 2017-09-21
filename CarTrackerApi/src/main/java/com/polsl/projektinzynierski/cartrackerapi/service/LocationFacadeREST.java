@@ -25,7 +25,7 @@ import javax.ws.rs.core.MediaType;
  * @author m_lig
  */
 @Stateless
-@Path("com.polsl.projektinzynierski.cartrackerapi.location")
+@Path("location")
 public class LocationFacadeREST extends AbstractFacade<Location> {
 
     @PersistenceContext(unitName = "com.polsl.projektInzynierski_CarTrackerApi_war_1.0-SNAPSHOTPU")
@@ -37,7 +37,8 @@ public class LocationFacadeREST extends AbstractFacade<Location> {
 
     @POST
     @Override
-    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Path("create")
+    @Consumes({MediaType.APPLICATION_JSON})
     public void create(Location entity) {
         super.create(entity);
     }

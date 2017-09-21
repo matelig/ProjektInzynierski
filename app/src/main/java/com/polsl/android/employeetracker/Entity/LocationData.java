@@ -1,5 +1,7 @@
 package com.polsl.android.employeetracker.Entity;
 
+import com.google.gson.annotations.Expose;
+
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Index;
 import org.greenrobot.greendao.annotation.NotNull;
@@ -11,10 +13,13 @@ import org.greenrobot.greendao.annotation.Generated;
 
 @Entity
 public class LocationData {
-
+    @Expose
     private Long timestamp;
+    @Expose
     private double latitude;
+    @Expose
     private double longitude;
+    @Expose(serialize = false, deserialize = false)
     private Long routeId;
 
     @Generated(hash = 1606831457)

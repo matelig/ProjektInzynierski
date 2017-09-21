@@ -25,6 +25,7 @@ import com.polsl.android.employeetracker.R;
 import java.util.ArrayList;
 import java.util.Set;
 
+import butterknife.BindBitmap;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -39,6 +40,15 @@ public class SettingsActivityFragment extends Fragment {
     @BindView(R.id.obd_device_name)
     TextView obdDeviceName;
 
+    @BindView(R.id.user_name)
+    TextView userName;
+
+    @BindView(R.id.user_surname)
+    TextView userSurname;
+
+    @BindView(R.id.logout_button)
+    Button logoutButton;
+
     public SettingsActivityFragment() {
     }
 
@@ -52,8 +62,24 @@ public class SettingsActivityFragment extends Fragment {
         ButterKnife.bind(this, rootView); //jedyne słuszne bindowanie widoku z polami
 
         SharedPreferences prefs = getContext().getSharedPreferences(getContext().getPackageName(), Context.MODE_PRIVATE);
-        obdDeviceName.setText(prefs.getString(ApiHelper.OBD_DEVICE_ADDRESS,""));
+        userName.setText(prefs.getString(ApiHelper.USER_NAME,""));
+        userSurname.setText(prefs.getString(ApiHelper.USER_SURNAME,""));
 
+        obdDeviceName.setText(prefs.getString(ApiHelper.OBD_DEVICE_ADDRESS, ""));
+
+        logoutButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SharedPreferences prefs = getContext().getSharedPreferences(getContext().getPackageName(), Context.MODE_PRIVATE);
+                prefs.edit().putString(ApiHelper.USER_NAME, "").apply();
+                prefs.edit().putString(ApiHelper.USER_SURNAME, "").apply();
+                prefs.edit().putString(ApiHelper.USER_PESEL, "").apply();
+                prefs.edit().putLong(ApiHelper.USER_ID, 0).apply();
+                Intent intent = new Intent (getActivity(),LoginActivity.class);
+                getActivity().startActivity(intent);
+                getActivity().finish();
+            }
+        });
 
         obdButton.setOnClickListener(new View.OnClickListener() {
             @Override

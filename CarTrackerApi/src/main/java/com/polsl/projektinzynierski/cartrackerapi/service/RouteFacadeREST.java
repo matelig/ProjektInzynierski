@@ -5,7 +5,11 @@
  */
 package com.polsl.projektinzynierski.cartrackerapi.service;
 
+import com.polsl.projektinzynierski.cartrackerapi.Car;
+import com.polsl.projektinzynierski.cartrackerapi.Location;
 import com.polsl.projektinzynierski.cartrackerapi.Route;
+import com.polsl.projektinzynierski.cartrackerapi.RouteData;
+import com.polsl.projektinzynierski.cartrackerapi.User;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -25,7 +29,7 @@ import javax.ws.rs.core.MediaType;
  * @author m_lig
  */
 @Stateless
-@Path("com.polsl.projektinzynierski.cartrackerapi.route")
+@Path("route")
 public class RouteFacadeREST extends AbstractFacade<Route> {
 
     @PersistenceContext(unitName = "com.polsl.projektInzynierski_CarTrackerApi_war_1.0-SNAPSHOTPU")
@@ -36,10 +40,32 @@ public class RouteFacadeREST extends AbstractFacade<Route> {
     }
 
     @POST
-    @Override
-    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public void create(Route entity) {
-        super.create(entity);
+    @Path("create")
+    @Consumes({MediaType.APPLICATION_JSON})
+    public void create(RouteData entity) {
+        List<Location> locations = entity.getLocationCollection();
+        Route route = new Route();
+        List<Car> cars = em.createNamedQuery("Car.findByVinNumber").setParameter("vinNumber", entity.getCarVin()).getResultList();
+        //przyda się sprawdzenie, czy istnieje dany samochód, jeśli nie istnieje - stwórz go z jakimiś defaultowymi danymi, które potem administrator może edytować (na stronce)
+        route.setCarvinNumber(cars.get(0));
+        List<User> users = em.createNamedQuery("User.findByIdUser").setParameter("idUser", entity.getIdUser()).getResultList();
+        route.setUseridUser(users.get(0));
+        route.setEndDate(entity.getEndDate());
+        route.setStartDate(entity.getStartDate());
+        for (Location l : locations) {
+            l.setRouteidRoute(route);
+        }
+        route.setLocationCollection(locations);
+        super.create(route);
+    }
+
+    @POST
+    @Path("insert")
+    @Consumes({MediaType.APPLICATION_JSON})
+    public void insert(List<Route> routeList) {
+        for (Route r : routeList) {
+            create(r);
+        }
     }
 
     @PUT
@@ -87,5 +113,5 @@ public class RouteFacadeREST extends AbstractFacade<Route> {
     protected EntityManager getEntityManager() {
         return em;
     }
-    
+
 }

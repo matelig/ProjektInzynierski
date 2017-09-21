@@ -1,6 +1,8 @@
 package com.polsl.android.employeetracker.Activity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -47,6 +49,8 @@ public class RouteMonthList extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_route_month_list);
+        SharedPreferences prefs = getSharedPreferences(getPackageName(), Context.MODE_PRIVATE);
+        Long userId = prefs.getLong(ApiHelper.USER_ID,0);
         Intent intent = getIntent();
         year = Integer.parseInt(intent.getStringExtra("year"));
         DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(this, "main-db");
@@ -60,13 +64,13 @@ public class RouteMonthList extends AppCompatActivity {
         routeData1.finish();
         tracks.add(routeData1);
         for (int i = tracks.size() - 1; i >= 0; i--) {
-            if (tracks.get(i).getEndDate() == null) {
+            if (tracks.get(i).getEndDate() == null|| tracks.get(i).getUserId()!=userId) {
                 tracks.remove(i);
             }
         }
         Set<Integer> months = new HashSet<>();
         for (int i = tracks.size() - 1; i >= 0; i--) {
-            Date startDate = tracks.get(i).getStartDate();
+            Date startDate = new Date(tracks.get(i).getStartDate());
             Calendar cal = Calendar.getInstance();
             cal.setTime(startDate);
             int routeYear = cal.get(Calendar.YEAR);

@@ -1,40 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:paddingLeft="@dimen/horizontal_activity_padding"
+    android:paddingRight="@dimen/horizontal_activity_padding"
     tools:context="com.polsl.android.employeetracker.Activity.RegisterActivity">
 
-    <TextView
+    <LinearLayout
+        android:layout_marginTop="@dimen/vertical_activity_margin"
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Login:" />
+        android:layout_height="wrap_content">
 
-    <EditText
-        android:id="@+id/login_input"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/login_activity_name_string" />
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Login:" />
+        <EditText
+            android:id="@+id/register_activity_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text" />
 
-    <EditText
-        android:id="@+id/password_input"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/login_activity_surname" />
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Zarejestruj"
-        android:onClick="onButtonClick"/>
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="List"
-        android:onClick="OnListClicl"/>
-</LinearLayout>
+        <EditText
+            android:id="@+id/register_activity_surname"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPassword" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/register_pesel" />
+
+        <EditText
+            android:id="@+id/register_activity_pesel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPassword" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/login_activity_password_button" />
+
+        <EditText
+            android:id="@+id/register_activity_password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPassword" />
+
+        <Button
+            android:id="@+id/register_activity_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:height="@dimen/button_height"
+            android:background="@drawable/button_selector"
+            android:onClick="onRegisterClick"
+            android:text="@string/register_activity_button_click" />
+    </LinearLayout>
+
+
+
+</RelativeLayout>

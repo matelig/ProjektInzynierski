@@ -1,5 +1,6 @@
 package com.polsl.android.employeetracker.RESTApi;
 
+import com.polsl.android.employeetracker.Entity.RouteData;
 import com.polsl.android.employeetracker.Entity.User;
 
 import java.util.List;
@@ -20,14 +21,26 @@ public interface RESTServicesEndpoints {
 
     @Headers("Content-Type: application/json")
     @POST("user/login") //<- trzeba mieć w klasie User w api jakas deklaracje login żeby się odwołać
-    Call<ResponseBody> login(@Body User user);
+    Call<User> login(@Body User user);
+
+    @Headers("Content-Type: application/json")
+    @POST("user/create")
+    Call<ResponseBody> create(@Body User user);
 
 
     @Headers("Content-Type: application/json")
-    @GET("user/{id}")
+    @GET("user/{id}")  //pobieranie usera po ID
     Call<User> user(@Path("id") int id);
 
     @Headers("Content-Type: application/json")
-    @GET("user")
+    @GET("user")   //pobieranie listy userów
     Call<List<User>> usersList();
+
+    @Headers("Content-Type: application/json")
+    @POST("route/create")
+    Call<ResponseBody> create(@Body Route route);
+
+    @Headers("Content-Type: application/json")
+    @POST("route/insert")
+    Call<ResponseBody> insert(@Body List<Route> routeData);
 }

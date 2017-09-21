@@ -5,7 +5,9 @@
  */
 package com.polsl.projektinzynierski.cartrackerapi.service;
 
+import com.polsl.projektinzynierski.cartrackerapi.Route;
 import com.polsl.projektinzynierski.cartrackerapi.User;
+import java.util.Collection;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -42,17 +44,25 @@ public class UserFacadeREST extends AbstractFacade<User> {
     public void create(User entity) {
         super.create(entity);
     }
-    
+
+    @GET
+    @Path("routes")
+    @Consumes({MediaType.APPLICATION_JSON})
+    public Collection<Route> getRouteList(User user) {
+        return user.getRouteCollection();
+    }
+
     @POST
     @Path("login")
     @Consumes({MediaType.APPLICATION_JSON})
-    public String checkUser(User entity) {
-        List<User> userList = super.findAll();
-        for (User u : userList) {
-            if (entity.getName().equals(u.getName())&&entity.getSurname().equals(u.getSurname())&&entity.getPassword().equals(u.getPassword()))
-                return "OK";
+    @Produces({MediaType.APPLICATION_JSON})
+    public User checkUser(User entity) {
+        List<User> userList = em.createNamedQuery("User.findByPesel").setParameter("pesel", entity.getPesel()).getResultList();
+        if (userList.isEmpty()) {
+            return null;
+        } else {
+            return userList.get(0);
         }
-        return "User not found";
     }
 
     @PUT
@@ -100,5 +110,5 @@ public class UserFacadeREST extends AbstractFacade<User> {
     protected EntityManager getEntityManager() {
         return em;
     }
-    
+
 }

@@ -22,4 +22,12 @@
     <string name="obd_set_button">Set OBD</string>
     <string name="title_activity_maps">Map</string>
     <string name="login_activity_surname">Surname:</string>
+    <string name="register_pesel">Pesel:</string>
+    <string name="register_activity_button_click">Register</string>
+    <string name="register">Register</string>
+    <string name="login_failure">No internet connection</string>
+    <string name="wrong_user">No user in database</string>
+    <string name="logged_as_string">Logged as</string>
+    <string name="logout">Logout</string>
+    <string name="send">SEND</string>
 </resources>

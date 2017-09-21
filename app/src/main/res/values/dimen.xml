@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="horizontal_activity_padding">64dp</dimen>
+    <dimen name="horizontal_activity_padding">30dp</dimen>
     <dimen name="button_height">60dp</dimen>
     <dimen name="vertical_activity_margin">30dp</dimen>
     <dimen name="height_route_item">64dp</dimen>

@@ -6,9 +6,25 @@
     android:layout_height="match_parent"
     tools:context="com.polsl.android.employeetracker.Activity.RouteListActivity">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/route_recycler"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/route_recycler"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"/>
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/vertical_activity_margin"
+            android:layout_marginRight="@dimen/vertical_activity_margin"
+            android:text="@string/send"
+            android:onClick="sendRoutesClick"/>
+    </LinearLayout>
+
 
 </android.support.v4.widget.DrawerLayout>

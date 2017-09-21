@@ -17,24 +17,13 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/login_activity_name_string" />
+            android:text="@string/register_pesel" />
 
         <EditText
             android:id="@+id/login_activity_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="text" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/login_activity_surname" />
-
-        <EditText
-            android:id="@+id/login_activity_surname"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textPassword" />
 
         <TextView
             android:layout_width="match_parent"
@@ -55,6 +44,14 @@
             android:background="@drawable/button_selector"
             android:onClick="onLoginButtonClick"
             android:text="@string/login_activity_button_string" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/register"
+            android:gravity="center"
+            android:paddingTop="@dimen/bottom_padding_route_item"
+            android:onClick="registerNewUser"/>
     </LinearLayout>
 
     <RelativeLayout
