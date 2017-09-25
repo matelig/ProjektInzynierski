@@ -69,6 +69,7 @@ public class RouteListFragment extends Fragment {
         ButterKnife.bind(rootView);
         tracks = routeDataDao.loadAll();
         for (int i = tracks.size() - 1; i >= 0; i--) {
+            tracks.get(i).setToSend(false);
             if (tracks.get(i).getEndDate() == null || tracks.get(i).getUserId()!=userId) {
                 tracks.remove(i);
             }

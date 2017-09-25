@@ -1,6 +1,5 @@
 com\polsl\projektinzynierski\cartrackerapi\service\SpeedFacadeREST.class
 com\polsl\projektinzynierski\cartrackerapi\service\RpmFacadeREST.class
-com\polsl\projektinzynierski\cartrackerapi\service\RouteDataSender.class
 com\polsl\projektinzynierski\cartrackerapi\OilTemperature_.class
 com\polsl\projektinzynierski\cartrackerapi\User.class
 com\polsl\projektinzynierski\cartrackerapi\service\OilTemperatureFacadeREST.class

@@ -18,7 +18,25 @@ public class RouteData {
     private BigInteger startDate;
     private BigInteger endDate;
     private List<Location> locationCollection;
+    private List<Speed> speedCollection;
+    private List<Rpm> RPMCollection;
 
+    public List<Speed> getSpeedCollection() {
+        return speedCollection;
+    }
+
+    public void setSpeedCollection(List<Speed> speedCollection) {
+        this.speedCollection = speedCollection;
+    }
+
+    public List<Rpm> getRPMCollection() {
+        return RPMCollection;
+    }
+
+    public void setRPMCollection(List<Rpm> RPMCollection) {
+        this.RPMCollection = RPMCollection;
+    }
+ 
     public int getIdUser() {
         return idUser;
     }

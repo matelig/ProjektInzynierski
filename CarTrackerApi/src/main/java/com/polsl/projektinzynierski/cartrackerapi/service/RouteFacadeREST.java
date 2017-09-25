@@ -9,6 +9,8 @@ import com.polsl.projektinzynierski.cartrackerapi.Car;
 import com.polsl.projektinzynierski.cartrackerapi.Location;
 import com.polsl.projektinzynierski.cartrackerapi.Route;
 import com.polsl.projektinzynierski.cartrackerapi.RouteData;
+import com.polsl.projektinzynierski.cartrackerapi.Rpm;
+import com.polsl.projektinzynierski.cartrackerapi.Speed;
 import com.polsl.projektinzynierski.cartrackerapi.User;
 import java.util.List;
 import javax.ejb.Stateless;
@@ -44,6 +46,8 @@ public class RouteFacadeREST extends AbstractFacade<Route> {
     @Consumes({MediaType.APPLICATION_JSON})
     public void create(RouteData entity) {
         List<Location> locations = entity.getLocationCollection();
+        List<Speed> speed = entity.getSpeedCollection();
+        List<Rpm> rpm = entity.getRPMCollection();
         Route route = new Route();
         List<Car> cars = em.createNamedQuery("Car.findByVinNumber").setParameter("vinNumber", entity.getCarVin()).getResultList();
         //przyda się sprawdzenie, czy istnieje dany samochód, jeśli nie istnieje - stwórz go z jakimiś defaultowymi danymi, które potem administrator może edytować (na stronce)
@@ -55,6 +59,14 @@ public class RouteFacadeREST extends AbstractFacade<Route> {
         for (Location l : locations) {
             l.setRouteidRoute(route);
         }
+        for (Rpm r : rpm) {
+            r.setRouteidRoute(route);
+        }
+        for (Speed s : speed) {
+            s.setRouteidRoute(route);
+        }
+        route.setSpeedCollection(speed);
+        route.setRpmCollection(rpm);
         route.setLocationCollection(locations);
         super.create(route);
     }

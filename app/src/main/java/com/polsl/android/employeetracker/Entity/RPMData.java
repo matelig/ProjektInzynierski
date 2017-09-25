@@ -1,5 +1,7 @@
 package com.polsl.android.employeetracker.Entity;
 
+import com.google.gson.annotations.Expose;
+
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Generated;
 
@@ -10,8 +12,11 @@ import org.greenrobot.greendao.annotation.Generated;
 @Entity
 public class RPMData {
 
+    @Expose(serialize = false, deserialize = false)
     private Long routeId;
+    @Expose
     private Long timestamp;
+    @Expose
     private int value;
     @Generated(hash = 1314842728)
     public RPMData(Long routeId, Long timestamp, int value) {

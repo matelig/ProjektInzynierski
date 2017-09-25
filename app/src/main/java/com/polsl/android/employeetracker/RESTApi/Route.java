@@ -3,7 +3,9 @@ package com.polsl.android.employeetracker.RESTApi;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.polsl.android.employeetracker.Entity.LocationData;
+import com.polsl.android.employeetracker.Entity.RPMData;
 import com.polsl.android.employeetracker.Entity.RouteData;
+import com.polsl.android.employeetracker.Entity.SpeedData;
 import com.polsl.android.employeetracker.Entity.User;
 
 import java.util.List;
@@ -19,7 +21,7 @@ public class Route {
     @Expose
     private Long endDate;
     @Expose
-    @SerializedName("userId")
+    @SerializedName("idUser")
     private Long idUser;
     @Expose
     private Long carVin;
@@ -28,6 +30,30 @@ public class Route {
     @Expose
     private List<LocationData> locationDataList;
 
+    @SerializedName("RPMCollection")
+    @Expose
+    private List<RPMData> rpmDataList;
+
+    public List<RPMData> getRpmDataList() {
+        return rpmDataList;
+    }
+
+    public void setRpmDataList(List<RPMData> rpmDataList) {
+        this.rpmDataList = rpmDataList;
+    }
+
+    public List<SpeedData> getSpeedDataList() {
+        return speedDataList;
+    }
+
+    public void setSpeedDataList(List<SpeedData> speedDataList) {
+        this.speedDataList = speedDataList;
+    }
+
+    @SerializedName("speedCollection")
+    @Expose
+
+    private List<SpeedData> speedDataList;
 
     public Long getStartDate() {
         return startDate;

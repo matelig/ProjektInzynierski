@@ -77,6 +77,7 @@ public class RouteListActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         tracks = routeDataDao.loadAll();
         for (int i = tracks.size() - 1; i >= 0; i--) {
+            tracks.get(i).setToSend(false);
             if (tracks.get(i).getEndDate() == null|| tracks.get(i).getUserId()!=userId) {
                 tracks.remove(i);
             }
@@ -152,7 +153,8 @@ public class RouteListActivity extends AppCompatActivity {
         for (RouteData r : tracks) {
             if (r.getToSend()) {
                 Route route = new Route(r.getStartDate(),r.getEndDate(),r.getUserId(),r.getVinNumber(),r.getLocationDataList());
-
+                route.setRpmDataList(r.getRpmDataList());
+                route.setSpeedDataList(r.getSpeedDataList());
                 String json = new Gson().toJson(route);
                 Call<ResponseBody> call = endpoints.create(route);
                 call.enqueue(new Callback<ResponseBody>() {
@@ -161,6 +163,7 @@ public class RouteListActivity extends AppCompatActivity {
                         if (response.code()==204) {
                             r.setUploadStatus(UploadStatus.UPLOADED);
                             Toast.makeText(context,"Wysłano;o",Toast.LENGTH_SHORT).show();
+                            tAdapter.notifyDataSetChanged();
                         }
                     }
 
