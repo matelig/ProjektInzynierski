@@ -1,0 +1,68 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+        <div id="wrap">
+            <div class="container-fluid" style="margin:0;">
+                <p:outputPanel id="headerPanel">
+                    <p:outputPanel rendered="#{!loggedUserBean.fullScreenMode}">
+                        <div class="row">
+                            <div class="col-md-12 no-padding" >
+                                <div class="no-border no-padding header-container">
+                                    <!--                                        <ui:insert name="header" class="no-padding" >
+                                                                                <ui:include src="/layout/header.xhtml"/>
+                                                                            </ui:insert></div>-->
+                                </div>
+                            </div>
+                        </div>
+                    </p:outputPanel>
+                </p:outputPanel>
+
+                <div class="row" style="margin-top: 20px;">
+                    <p:outputPanel id="menuPanel">
+                        <p:outputPanel rendered="#{!loggedUserBean.fullScreenMode}">
+                            <div class="col-sm-3 col-md-3 col-lg-2 no-padding  no-print">
+                                <ui:insert name="menu-panel" >
+                                    <ui:include src="/menu.xhtml"/>
+                                </ui:insert>
+                            </div>
+                        </p:outputPanel>
+                    </p:outputPanel>
+                    <p:outputPanel id="contentPanel">
+                        <div class="col-sm-12 col-md-12 col-lg-12 no-padding  print-custom ">
+                            <p:outputPanel styleClass="main-container-content">
+
+
+                                <p:outputPanel>
+                                    <!--<p:outputLabel value="#{permissions}" />-->                                        
+                                    <!--                                        <ui:insert name="content" /> -->
+                                    <h:outputLabel value="TU COS BĘDZIE" />
+                                </p:outputPanel>
+
+                            </p:outputPanel>
+                        </div>
+                    </p:outputPanel>
+                </div>
+
+            </div>
+        </div>
+
+        <p:outputPanel id="footerPanel">
+            <p:outputPanel >
+                <div id="footer" class="no-print">
+                    <!--                        <ui:insert name="footer" class="no-padding no-print" >
+                                                <ui:include src="/layout/footer.xhtml"/>
+                                            </ui:insert>-->
+                </div>
+            </p:outputPanel>
+        </p:outputPanel>
+
+    </h:body>
+</html>
+
