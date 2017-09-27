@@ -54,8 +54,8 @@ public class MenuView implements Serializable {
 //First submenu
         DefaultSubMenu firstSubmenu = new DefaultSubMenu("Dynamic Submenu");
 
-        DefaultMenuItem item = new DefaultMenuItem("External");
-        item.setUrl("http://www.primefaces.org");
+        DefaultMenuItem item = new DefaultMenuItem("Route List");
+        item.setCommand("route-list-view.xhtml?faces-redirect=true");
         item.setIcon("ui-icon-home");
         firstSubmenu.addElement(item);
 
@@ -75,9 +75,9 @@ public class MenuView implements Serializable {
         item.setAjax(false);
         secondSubmenu.addElement(item);
 
-        item = new DefaultMenuItem("Redirect");
+        item = new DefaultMenuItem("Logout");
         item.setIcon("ui-icon-search");
-        item.setCommand("#{menuBean.redirect}");
+        item.setCommand("#{loggedUser.logout}");
         secondSubmenu.addElement(item);
 
         model.addElement(secondSubmenu);
