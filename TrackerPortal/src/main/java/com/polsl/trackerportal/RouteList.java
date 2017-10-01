@@ -15,6 +15,7 @@ import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
+import javax.faces.bean.ViewScoped;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
@@ -23,12 +24,13 @@ import javax.persistence.PersistenceContext;
  * @author m_lig
  */
 @ManagedBean(name = "routeList")
-@SessionScoped
+@ViewScoped
 public class RouteList implements Serializable {
 
     private List<Route> routeList;
     @PersistenceContext
     private EntityManager entityManager;
+    private int clickedRouteId;
 
     @ManagedProperty("#{loggedUser}")
     private LoggedUser loggedUser;
@@ -41,6 +43,11 @@ public class RouteList implements Serializable {
                 routeList.remove(i);
             }
         }
+    }
+    
+    public String showRouteDetails(Route route) {
+        clickedRouteId = route.getIdRoute();
+        return "route-details.xhtml?faces-redirect=true&includeViewParams=true";
     }
 
     public List<Route> getRouteList() {
@@ -67,4 +74,13 @@ public class RouteList implements Serializable {
         this.loggedUser = loggedUser;
     }
 
+    public int getClickedRouteId() {
+        return clickedRouteId;
+    }
+
+    public void setClickedRouteId(int clickedRouteId) {
+        this.clickedRouteId = clickedRouteId;
+    }
+
+    
 }

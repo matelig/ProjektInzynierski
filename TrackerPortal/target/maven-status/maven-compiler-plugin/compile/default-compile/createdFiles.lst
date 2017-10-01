@@ -18,7 +18,10 @@ com\polsl\trackerportal\database\entity\Speed_.class
 com\polsl\trackerportal\database\entity\Rpm.class
 com\polsl\trackerportal\database\entity\Route.class
 com\polsl\trackerportal\RouteList.class
+com\polsl\trackerportal\RouteDetails$1.class
 com\polsl\trackerportal\database\entity\Location.class
+com\polsl\trackerportal\util\ChartModeler.class
 com\polsl\trackerportal\database\entity\User_.class
 com\polsl\trackerportal\util\ResourceFilter.class
+com\polsl\trackerportal\RouteDetails.class
 com\polsl\trackerportal\database\entity\Rpm_.class

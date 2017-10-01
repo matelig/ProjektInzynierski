@@ -1,34 +1,59 @@
 <f:view 
-  xmlns="http://www.w3.org/1999/xhtml" 
-  xmlns:f="http://java.sun.com/jsf/core"
-  xmlns:h="http://java.sun.com/jsf/html" 
-  xmlns:ui="http://java.sun.com/jsf/facelets"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://www.w3.org/1999/xhtml http://www.w3.org/2002/08/xhtml/xhtml1-transitional.xsd">
+    xmlns="http://www.w3.org/1999/xhtml" 
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html" 
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.w3.org/1999/xhtml http://www.w3.org/2002/08/xhtml/xhtml1-transitional.xsd"
+    xmlns:p="http://primefaces.org/ui">
 
 
-  <html>
-  <h:head>
-    <ui:insert name="htmlHead" />
-    <link rel="stylesheet" type="text/css" href="css/customStyles.css" />
-  </h:head>
-  <h:body>
-    <h:panelGroup layout="block" styleClass="header">
-      <ui:include src="/header/logon-header.xhtml" />
-    </h:panelGroup>
-      <h:panelGrid columns="2" columnClasses="nav-col, main-col" styleClass="vertical-panel-grid">
-      <h:panelGroup layout="block">
-        <h:form>
-          <ui:insert name="navigation" />
-        </h:form>
-      </h:panelGroup>
-      <h:panelGroup layout="block" >
-        <ui:insert name="main" />
-      </h:panelGroup>
-    </h:panelGrid>
-    <h:panelGroup layout="block" styleClass="footer">
-<!--      <ui:include src="/WEB-INF/includes/footer.xhtml" />-->
-    </h:panelGroup>
-  </h:body>
-  </html>
+    <html>
+        <h:head>
+            <ui:insert name="htmlHead" />
+            <link rel="stylesheet" type="text/css" href="css/customStyles.css" />
+        </h:head>
+        <h:body>
+            <!--            <div class="ui-g">
+                            <div class="ui-g-12">
+                                <ui:include src="/header/logon-header.xhtml" />
+                            </div>
+                            <div  style="float: left;padding-top: 8px">
+                                <h:form style="float: left">
+                                    <p:menu model="#{menuView.model}"/>
+                                </h:form>
+                            </div>
+                            <div class="ui-g-12 ui-md-10 ui-g-nopad"  style="padding-top:  0px">
+            
+                                <div class="ui-g-12 ui-g-8">
+                                    <h:form>
+                                        <ui:insert name="main" />
+                                    </h:form>
+                                </div>
+                            </div>
+                            <div class="ui-g-12">
+                                Footer
+                            </div>
+                        </div>    -->
+            <p:layout fullPage="true" onResize="update: form">
+
+                <p:layoutUnit position="north" size="100" >
+                    <ui:include src="/header/logon-header.xhtml" />
+                </p:layoutUnit>
+
+                <p:layoutUnit position="west" size="250"  collapsible="true">
+                    <h:form style="float: left">
+                        <p:menu model="#{menuView.model}"/>
+                    </h:form>
+                </p:layoutUnit>
+
+                <p:layoutUnit position="center">
+                    <h:form>
+                        <ui:insert name="main" />
+                    </h:form>
+                </p:layoutUnit>
+
+            </p:layout>
+        </h:body>
+    </html>
 </f:view>

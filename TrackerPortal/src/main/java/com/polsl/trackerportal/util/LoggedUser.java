@@ -27,8 +27,10 @@ public class LoggedUser implements Serializable {
     private String userSurname;
     private String pesel;
     private String email;
-    private String phoneNumber;
+    private int phoneNumber;
     private String password;
+    
+    private boolean administrator;
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -47,6 +49,8 @@ public class LoggedUser implements Serializable {
             if (password.equals(currentUser.getPassword())) {
                 userName = currentUser.getName();
                 userSurname = currentUser.getSurname();
+                pesel = currentUser.getPesel();
+                phoneNumber = currentUser.getPhoneNumber();
                 
                 context.getExternalContext().getSessionMap().put("user", currentUser);
                 return "index?faces-redirect=true";
@@ -95,11 +99,11 @@ public class LoggedUser implements Serializable {
         this.email = email;
     }
 
-    public String getPhoneNumber() {
+    public int getPhoneNumber() {
         return phoneNumber;
     }
 
-    public void setPhoneNumber(String phoneNumber) {
+    public void setPhoneNumber(int phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
 
@@ -118,5 +122,15 @@ public class LoggedUser implements Serializable {
     public void setPassword(String password) {
         this.password = password;
     }
+
+    public boolean isAdministrator() {
+        return administrator;
+    }
+
+    public void setAdministrator(boolean administrator) {
+        this.administrator = administrator;
+    }
+    
+    
 
 }

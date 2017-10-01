@@ -15,7 +15,7 @@
     </ui:define>
 
     <ui:define name="main">
-        <p:dataTable value="#{routeList.routeList}" var="route">
+        <p:dataTable value="#{routeList.routeList}" var="route" >
             <p:column headerText="Route ID">
                 <h:outputText value="#{route.idRoute}"/>
             </p:column>
@@ -27,6 +27,10 @@
             </p:column>
             <p:column headerText="Duration">
                 <h:outputText value="#{route.endDate-route.startDate}"/>
+            </p:column>
+            <p:column style="width: fit-content">
+                <p:commandButton value="C" action="#{routeList.showRouteDetails(route)}">                    
+                </p:commandButton>
             </p:column>
             
         </p:dataTable>

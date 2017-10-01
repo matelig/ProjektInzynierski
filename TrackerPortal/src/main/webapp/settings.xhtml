@@ -1,0 +1,80 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xsi:schemaLocation="http://www.w3.org/1999/xhtml http://www.w3.org/2002/08/xhtml/xhtml1-transitional.xsd"
+                template="/template/template.xhtml"
+                xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="htmlHead">
+        <meta name="description" content="Our Company Home Page" />
+        <title>Our Company - Home</title>        
+    </ui:define>
+
+    <ui:define name="navigation">
+        <p:menu model="#{menuView.model}"/>
+    </ui:define>
+
+    <ui:define name="main">
+        <div class="ui-g-4"/>
+        <div class="ui-g-4" align="center">
+            <p:panelGrid>
+                <p:row>
+                    <p:column>
+                        <p:outputLabel value="Pesel"/>
+                    </p:column>
+                    <p:column>
+                        <p:inputText value="#{loggedUser.pesel}" disabled="true" style="width: 100%"/>
+                    </p:column>
+                </p:row>
+                <p:row>
+                    <p:column>
+                        <p:outputLabel value="Name"/>
+                    </p:column>
+                    <p:column>
+                        <p:inputText value="#{loggedUser.userName}" style="width: 100%"/>
+                    </p:column>
+                </p:row>
+                <p:row>
+                    <p:column>
+                        <p:outputLabel value="Surname"/>
+                    </p:column>
+                    <p:column>
+                        <p:inputText value="#{loggedUser.userSurname}" style="width: 100%"/>
+                    </p:column>
+                </p:row>
+                <p:row>
+                    <p:column>
+                        <p:outputLabel value="Phone"/>
+                    </p:column>
+                    <p:column>
+                        <p:inputText value="#{loggedUser.phoneNumber}" style="width: 100%"/>
+                    </p:column>
+                </p:row>
+                <p:row>
+                    <p:column>
+                        <p:outputLabel value="E-mail"/>
+                    </p:column>
+                    <p:column>
+                        <p:inputText value="#{loggedUser.email}" style="width: 100%"/>
+                    </p:column>
+                </p:row>
+                <p:row>
+                    <p:column>
+                        <p:outputLabel value="Administrator account"/>
+                    </p:column>
+                    <p:column style="text-align: center;">
+                        <p:selectBooleanCheckbox value="#{loggedUser.administrator}" disabled="true"/>
+                    </p:column>                    
+                </p:row>
+            </p:panelGrid>
+            <div class="ui-g-6">
+                <p:commandButton value="Discard" style="width: 100px"/>
+            </div>
+            <div class="ui-g-6">
+                <p:commandButton value="Save" style="width: 100px"/>
+            </div>
+        </div>
+
+    </ui:define>
+
+</ui:composition>

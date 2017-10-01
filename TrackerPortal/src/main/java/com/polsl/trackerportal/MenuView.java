@@ -52,35 +52,47 @@ public class MenuView implements Serializable {
         model = new DefaultMenuModel();
 
 //First submenu
-        DefaultSubMenu firstSubmenu = new DefaultSubMenu("Dynamic Submenu");
+        DefaultSubMenu firstSubmenu = new DefaultSubMenu("Menu");
 
-        DefaultMenuItem item = new DefaultMenuItem("Route List");
+        DefaultMenuItem item = new DefaultMenuItem("Home");
+        item.setCommand("index.xhtml?faces-redirect=true");
+        item.setIcon("ui-icon-home");
+        firstSubmenu.addElement(item);
+        
+        item = new DefaultMenuItem("Routes");
         item.setCommand("route-list-view.xhtml?faces-redirect=true");
+        item.setIcon("ui-icon-home");
+        firstSubmenu.addElement(item);
+        
+        item = new DefaultMenuItem("Settings");
+        item.setCommand("settings.xhtml?faces-redirect=true");
+        item.setIcon("ui-icon-home");
+        firstSubmenu.addElement(item);
+        
+        item = new DefaultMenuItem("Logout");
+        item.setCommand("#{loggedUser.logout}");
         item.setIcon("ui-icon-home");
         firstSubmenu.addElement(item);
 
         model.addElement(firstSubmenu);
 
 //Second submenu
-        DefaultSubMenu secondSubmenu = new DefaultSubMenu("Dynamic Actions");
+        DefaultSubMenu secondSubmenu = new DefaultSubMenu("Admin managment");
 
-        item = new DefaultMenuItem("Save");
+        item = new DefaultMenuItem("Users managment");
         item.setIcon("ui-icon-disk");
-        item.setCommand("#{menuBean.save}");
         secondSubmenu.addElement(item);
 
-        item = new DefaultMenuItem("Delete");
+        item = new DefaultMenuItem("Cars managment");
         item.setIcon("ui-icon-close");
-        item.setCommand("#{menuBean.delete}");
-        item.setAjax(false);
         secondSubmenu.addElement(item);
 
-        item = new DefaultMenuItem("Logout");
+        item = new DefaultMenuItem("Routes managment");
         item.setIcon("ui-icon-search");
-        item.setCommand("#{loggedUser.logout}");
         secondSubmenu.addElement(item);
 
         model.addElement(secondSubmenu);
+        
     }
 
 }
