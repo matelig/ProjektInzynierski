@@ -8,12 +8,21 @@ package com.polsl.trackerportal.util;
 import com.polsl.trackerportal.database.entity.User;
 import java.io.Serializable;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.annotation.Resource;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.transaction.HeuristicMixedException;
+import javax.transaction.HeuristicRollbackException;
+import javax.transaction.NotSupportedException;
+import javax.transaction.RollbackException;
+import javax.transaction.SystemException;
+import javax.transaction.UserTransaction;
 
 /**
  *
@@ -29,7 +38,9 @@ public class LoggedUser implements Serializable {
     private String email;
     private int phoneNumber;
     private String password;
-    
+    @Resource
+    UserTransaction userTransaction;
+
     private boolean administrator;
 
     @PersistenceContext
@@ -51,20 +62,36 @@ public class LoggedUser implements Serializable {
                 userSurname = currentUser.getSurname();
                 pesel = currentUser.getPesel();
                 phoneNumber = currentUser.getPhoneNumber();
-                
+
                 context.getExternalContext().getSessionMap().put("user", currentUser);
                 return "index?faces-redirect=true";
             } else {
-                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN,"Login Failed","Incorrect password, try again"));
+                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Login Failed", "Incorrect password, try again"));
                 password = null;
                 return null;
             }
         }
     }
-    
+
     public String logout() {
         FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
         return "login?faces-redirect=true";
+    }
+
+    public void update() {
+        try {
+            userTransaction.begin();
+            User user = (User) entityManager.createNamedQuery("User.findByPesel").setParameter("pesel", pesel).getSingleResult();
+            user.setPhoneNumber(phoneNumber);
+            user.setEmail(email);
+            user.setName(userName);
+            user.setSurname(userSurname);
+            entityManager.merge(user);            
+            userTransaction.commit();
+        } catch (NotSupportedException | SystemException | RollbackException | HeuristicMixedException | HeuristicRollbackException | SecurityException | IllegalStateException  ex) {
+            Logger.getLogger(LoggedUser.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
     }
 
     public String getUserName() {
@@ -130,7 +157,5 @@ public class LoggedUser implements Serializable {
     public void setAdministrator(boolean administrator) {
         this.administrator = administrator;
     }
-    
-    
 
 }

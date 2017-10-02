@@ -36,7 +36,7 @@ public class ResourceFilter implements Filter, Serializable {
         HttpServletRequest request = (HttpServletRequest) req;
         HttpServletResponse response = (HttpServletResponse) res;
         HttpSession session = request.getSession(false);
-        String loginURI = request.getContextPath() + "/faces/login.xhtml";
+        String loginURI = request.getContextPath() + "/login.xhtml";
 
         boolean loggedIn = session != null && session.getAttribute("user") != null;
         boolean loginRequest = request.getRequestURI().equals(loginURI);

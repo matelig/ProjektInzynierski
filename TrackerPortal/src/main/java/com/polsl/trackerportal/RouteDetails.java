@@ -39,7 +39,7 @@ import org.primefaces.model.map.Polyline;
  */
 @ManagedBean(name = "routeDetails")
 @ViewScoped
-public class RouteDetails implements Serializable{
+public class RouteDetails implements Serializable {
 
     private LineChartModel speedChartModel;
 
@@ -134,14 +134,13 @@ public class RouteDetails implements Serializable{
         locationList = route.getLocationList();
         RPMList = route.getRpmList();
         if (locationList.size() > 0) {
-            Collections.sort(locationList,new Comparator<Location>() {
+            Collections.sort(locationList, new Comparator<Location>() {
                 @Override
                 public int compare(Location o1, Location o2) {
                     return o1.getTimestamp().compareTo(o2.getTimestamp());
                 }
             });
-            }
-
+        }
 
     }
 

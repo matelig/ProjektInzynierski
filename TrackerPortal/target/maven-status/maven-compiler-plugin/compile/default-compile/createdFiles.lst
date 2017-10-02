@@ -11,6 +11,7 @@ com\polsl\trackerportal\database\entity\OilTemperature_.class
 com\polsl\trackerportal\database\entity\TroubleCodes_.class
 com\polsl\trackerportal\database\entity\Location_.class
 com\polsl\trackerportal\util\LoggedUser.class
+com\polsl\trackerportal\CurrentUserSettings.class
 com\polsl\trackerportal\database\entity\OilTemperature.class
 com\polsl\trackerportal\database\entity\Car_.class
 com\polsl\trackerportal\database\entity\FuelComsumptionRate_.class
