@@ -38,6 +38,7 @@ public class LoggedUser implements Serializable {
     private String email;
     private int phoneNumber;
     private String password;
+    
     @Resource
     UserTransaction userTransaction;
 
@@ -62,11 +63,12 @@ public class LoggedUser implements Serializable {
                 userSurname = currentUser.getSurname();
                 pesel = currentUser.getPesel();
                 phoneNumber = currentUser.getPhoneNumber();
+                email = currentUser.getEmail();
 
                 context.getExternalContext().getSessionMap().put("user", currentUser);
                 return "index?faces-redirect=true";
             } else {
-                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Login Failed", "Incorrect password, try again"));
+                context.addMessage(null, new FacesMessage("Incorrect password, try again"));
                 password = null;
                 return null;
             }

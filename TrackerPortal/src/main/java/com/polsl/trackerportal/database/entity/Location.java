@@ -1,8 +1,8 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+(c) Systemy Przetwarzania i Integracji Danych SPIID sp. z o.o.
+1:1 Realny obraz Twojej firmy
+*/
+
 package com.polsl.trackerportal.database.entity;
 
 import java.io.Serializable;
@@ -10,6 +10,7 @@ import java.math.BigInteger;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -23,7 +24,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author m_lig
+ * @author Mateusz Ligus <mateusz.ligus@spiid.pl>
  */
 @Entity
 @Table(name = "location")
@@ -53,7 +54,7 @@ public class Location implements Serializable {
     @Column(name = "timestamp")
     private BigInteger timestamp;
     @JoinColumn(name = "Route_idRoute", referencedColumnName = "idRoute")
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private Route routeidRoute;
 
     public Location() {
@@ -133,5 +134,5 @@ public class Location implements Serializable {
     public String toString() {
         return "com.polsl.trackerportal.database.entity.Location[ idLocation=" + idLocation + " ]";
     }
-    
+
 }

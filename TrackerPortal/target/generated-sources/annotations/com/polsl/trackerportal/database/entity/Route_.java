@@ -11,25 +11,25 @@ import com.polsl.trackerportal.database.entity.TroubleCodes;
 import com.polsl.trackerportal.database.entity.User;
 import java.math.BigInteger;
 import javax.annotation.Generated;
-import javax.persistence.metamodel.ListAttribute;
+import javax.persistence.metamodel.CollectionAttribute;
 import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.StaticMetamodel;
 
-@Generated(value="EclipseLink-2.5.2.v20140319-rNA", date="2017-10-02T10:40:02")
+@Generated(value="EclipseLink-2.5.2.v20140319-rNA", date="2017-10-12T11:43:16")
 @StaticMetamodel(Route.class)
 public class Route_ { 
 
-    public static volatile SingularAttribute<Route, Car> carvinNumber;
-    public static volatile ListAttribute<Route, TroubleCodes> troubleCodesList;
-    public static volatile ListAttribute<Route, Speed> speedList;
-    public static volatile ListAttribute<Route, Location> locationList;
-    public static volatile ListAttribute<Route, OilTemperature> oilTemperatureList;
+    public static volatile CollectionAttribute<Route, FuelComsumptionRate> fuelComsumptionRateCollection;
+    public static volatile CollectionAttribute<Route, TroubleCodes> troubleCodesCollection;
+    public static volatile CollectionAttribute<Route, OilTemperature> oilTemperatureCollection;
+    public static volatile CollectionAttribute<Route, FuelLevel> fuelLevelCollection;
     public static volatile SingularAttribute<Route, User> useridUser;
     public static volatile SingularAttribute<Route, Integer> idRoute;
-    public static volatile ListAttribute<Route, Rpm> rpmList;
     public static volatile SingularAttribute<Route, BigInteger> endDate;
-    public static volatile ListAttribute<Route, FuelComsumptionRate> fuelComsumptionRateList;
-    public static volatile ListAttribute<Route, FuelLevel> fuelLevelList;
+    public static volatile CollectionAttribute<Route, Rpm> rpmCollection;
+    public static volatile SingularAttribute<Route, Car> caridCar;
+    public static volatile CollectionAttribute<Route, Speed> speedCollection;
+    public static volatile CollectionAttribute<Route, Location> locationCollection;
     public static volatile SingularAttribute<Route, BigInteger> startDate;
 
 }

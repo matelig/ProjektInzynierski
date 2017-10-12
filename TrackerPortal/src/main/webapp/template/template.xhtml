@@ -1,4 +1,4 @@
-<f:view 
+<f:view contentType="text/html"
     xmlns="http://www.w3.org/1999/xhtml" 
     xmlns:f="http://java.sun.com/jsf/core"
     xmlns:h="http://java.sun.com/jsf/html" 
@@ -9,9 +9,11 @@
 
 
     <html>
-        <h:head>
+        <h:head>         
+            
+            <link rel="stylesheet" href="resources/css/customStyles.css"/>
             <ui:insert name="htmlHead" />
-            <link rel="stylesheet" type="text/css" href="css/customStyles.css" />
+            
         </h:head>
         <h:body>
             <!--            <div class="ui-g">
@@ -48,9 +50,7 @@
                 </p:layoutUnit>
 
                 <p:layoutUnit position="center">
-                    <h:form>
                         <ui:insert name="main" />
-                    </h:form>
                 </p:layoutUnit>
 
             </p:layout>

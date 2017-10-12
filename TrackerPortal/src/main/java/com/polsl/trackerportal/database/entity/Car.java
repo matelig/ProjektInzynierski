@@ -1,16 +1,18 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+(c) Systemy Przetwarzania i Integracji Danych SPIID sp. z o.o.
+1:1 Realny obraz Twojej firmy
+*/
+
 package com.polsl.trackerportal.database.entity;
 
 import java.io.Serializable;
-import java.util.List;
+import java.util.Collection;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -23,7 +25,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author m_lig
+ * @author Mateusz Ligus <mateusz.ligus@spiid.pl>
  */
 @Entity
 @Table(name = "car")
@@ -31,16 +33,22 @@ import javax.xml.bind.annotation.XmlTransient;
 @NamedQueries({
     @NamedQuery(name = "Car.findAll", query = "SELECT c FROM Car c")
     , @NamedQuery(name = "Car.findByVinNumber", query = "SELECT c FROM Car c WHERE c.vinNumber = :vinNumber")
+    , @NamedQuery(name = "Car.findByIdCar", query = "SELECT c FROM Car c WHERE c.idCar = :idCar")
     , @NamedQuery(name = "Car.findByMake", query = "SELECT c FROM Car c WHERE c.make = :make")
     , @NamedQuery(name = "Car.findByModel", query = "SELECT c FROM Car c WHERE c.model = :model")})
 public class Car implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    @Id
     @Basic(optional = false)
     @NotNull
+    @Size(min = 1, max = 50)
     @Column(name = "vinNumber")
-    private Long vinNumber;
+    private String vinNumber;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    @Column(name = "idCar")
+    private Long idCar;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 45)
@@ -51,28 +59,37 @@ public class Car implements Serializable {
     @Size(min = 1, max = 45)
     @Column(name = "model")
     private String model;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "carvinNumber")
-    private List<Route> routeList;
+    @OneToMany(mappedBy = "caridCar", fetch = FetchType.EAGER)
+    private Collection<Route> routeCollection;
 
     public Car() {
     }
 
-    public Car(Long vinNumber) {
-        this.vinNumber = vinNumber;
+    public Car(Long idCar) {
+        this.idCar = idCar;
     }
 
-    public Car(Long vinNumber, String make, String model) {
+    public Car(Long idCar, String vinNumber, String make, String model) {
+        this.idCar = idCar;
         this.vinNumber = vinNumber;
         this.make = make;
         this.model = model;
     }
 
-    public Long getVinNumber() {
+    public String getVinNumber() {
         return vinNumber;
     }
 
-    public void setVinNumber(Long vinNumber) {
+    public void setVinNumber(String vinNumber) {
         this.vinNumber = vinNumber;
+    }
+
+    public Long getIdCar() {
+        return idCar;
+    }
+
+    public void setIdCar(Long idCar) {
+        this.idCar = idCar;
     }
 
     public String getMake() {
@@ -92,18 +109,18 @@ public class Car implements Serializable {
     }
 
     @XmlTransient
-    public List<Route> getRouteList() {
-        return routeList;
+    public Collection<Route> getRouteCollection() {
+        return routeCollection;
     }
 
-    public void setRouteList(List<Route> routeList) {
-        this.routeList = routeList;
+    public void setRouteCollection(Collection<Route> routeCollection) {
+        this.routeCollection = routeCollection;
     }
 
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (vinNumber != null ? vinNumber.hashCode() : 0);
+        hash += (idCar != null ? idCar.hashCode() : 0);
         return hash;
     }
 
@@ -114,7 +131,7 @@ public class Car implements Serializable {
             return false;
         }
         Car other = (Car) object;
-        if ((this.vinNumber == null && other.vinNumber != null) || (this.vinNumber != null && !this.vinNumber.equals(other.vinNumber))) {
+        if ((this.idCar == null && other.idCar != null) || (this.idCar != null && !this.idCar.equals(other.idCar))) {
             return false;
         }
         return true;
@@ -122,7 +139,7 @@ public class Car implements Serializable {
 
     @Override
     public String toString() {
-        return "com.polsl.trackerportal.database.entity.Car[ vinNumber=" + vinNumber + " ]";
+        return "com.polsl.trackerportal.database.entity.Car[ idCar=" + idCar + " ]";
     }
-    
+
 }

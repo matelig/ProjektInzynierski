@@ -1,0 +1,85 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xsi:schemaLocation="http://www.w3.org/1999/xhtml http://www.w3.org/2002/08/xhtml/xhtml1-transitional.xsd"
+                template="/template/template.xhtml"
+                xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="htmlHead">
+        <meta name="description" content="Our Company Home Page" />
+        <title>Our Company - Home</title>
+    </ui:define>
+
+    <ui:define name="navigation">
+        <p:menu model="#{menuView.model}"/>
+    </ui:define>
+
+    <ui:define name="main">
+        <ui:include src="dialogs/new-user-dialog.xhtml"/>
+        <ui:include src="dialogs/edit-user-dialog.xhtml"/>
+        <h:form id="userManagementForm">
+            <p:growl autoUpdate="true" id="addUserGrowl" showDetail="true">
+
+            </p:growl>
+            <div class="ui-g-1">
+
+            </div>
+            <div class="ui-g-10">
+                <p:dataTable 
+                    value="#{userManagement.userList}" 
+                    var="user"
+                    rowIndexVar="row"
+                    id="usersDataTable"
+                    rowStyleClass="#{row % 2 eq 0 ? 'row-even' : 'row-odd'}">
+                    <p:column headerText="ID" style="background-color: inherit;width: 30px;text-align: center">
+                        <h:outputText value="#{user.idUser}"/>
+                    </p:column>
+                    <p:column headerText="Imię" style="background-color: inherit;text-align: center">
+                        <h:outputText value="#{user.name}"/>
+                    </p:column>
+                    <p:column headerText="Nazwisko" style="background-color: inherit;text-align: center">
+                        <h:outputText value="#{user.surname}"/>
+                    </p:column>
+                    <p:column headerText="Pesel" style="background-color: inherit;text-align: center">
+                        <h:outputText value="#{user.pesel}"/>
+                    </p:column>
+                    <p:column headerText="Adres e-mail" style="background-color: inherit;text-align: center">
+                        <h:outputText value="#{user.email}"/>
+                    </p:column>
+                    <p:column headerText="Numer telefonu" style="background-color: inherit;text-align: center">
+                        <h:outputText value="#{user.phoneNumber}"/>
+                    </p:column>
+
+
+                    <p:column style="width: 50px; background-color: inherit;text-align: center">
+                        <p:commandButton id="delete" style="width: 30px;height: 30px" icon="fa fa-trash" action="#{userManagement.removeUser(user)}" update="usersDataTable" >                    
+                        </p:commandButton>
+                        <p:tooltip for="delete" value="Usuń" />
+                    </p:column>
+                    <p:column style="width: 50px; background-color: inherit;text-align: center">
+                        <p:commandButton id="edit" style="width: 30px;height: 30px" icon="fa fa-edit" action="#{userManagement.openEditUserDialog(user)}" update="editUserDialog" >                    
+                        </p:commandButton>
+                        <p:tooltip for="edit" value="Edytuj" />
+                    </p:column>
+
+                </p:dataTable>
+                <div class="ui-g-12">
+
+                </div>
+                <div class="ui-g-1" >
+                    <div class="ui-g-1">
+
+                    </div>
+                    <p:commandButton style="width: 150px;height: 40px" value="Dodaj" action="#{userManagement.openAddUserDialog()}" update="newUserDialog"/>
+                </div>
+            </div>
+            <div class="ui-g-1">
+
+            </div>
+           
+        </h:form>
+    </ui:define>
+
+</ui:composition>
+
+

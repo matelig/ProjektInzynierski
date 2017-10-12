@@ -1,0 +1,23 @@
+.vertical-panel-grid td {
+    vertical-align: top;
+}
+
+.login-panel-grid td {
+}
+
+.row-even {
+    background-color: #f6a828 !important
+}
+
+.row-odd {
+    background-color: #eeeeee !important
+}
+
+.ui-icon {
+    text-indent: 0;
+}
+
+.button-icon button{
+    width: 30px;
+    height: 30px;
+}

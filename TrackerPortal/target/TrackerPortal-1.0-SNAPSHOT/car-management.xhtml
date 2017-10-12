@@ -1,0 +1,77 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xsi:schemaLocation="http://www.w3.org/1999/xhtml http://www.w3.org/2002/08/xhtml/xhtml1-transitional.xsd"
+                template="/template/template.xhtml"
+                xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="htmlHead">
+        <meta name="description" content="Our Company Home Page" />
+        <title>Our Company - Home</title>
+    </ui:define>
+
+    <ui:define name="navigation">
+        <p:menu model="#{menuView.model}"/>
+    </ui:define>
+
+    <ui:define name="main">
+        <h:form id="carManagementForm">
+            <p:growl autoUpdate="true" id="addUserGrowl" >
+
+            </p:growl>
+            <div class="ui-g-1">
+
+            </div>
+            <div class="ui-g-10">
+                <p:dataTable 
+                    value="#{carManagement.carList}" 
+                    var="car"
+                    rowIndexVar="row"
+                    id="carDataTable"
+                    rowStyleClass="#{row % 2 eq 0 ? 'row-even' : 'row-odd'}">
+                    <p:column headerText="ID" style="background-color: inherit;text-align: center">
+                        <h:outputText value="#{car.idCar}"/>
+                    </p:column>
+                    <p:column headerText="Numer VIN" style="background-color: inherit;text-align: center">
+                        <h:outputText value="#{car.vinNumber}"/>
+                    </p:column>
+                    <p:column headerText="Marka" style="background-color: inherit;text-align: center">
+                        <h:outputText value="#{car.make}"/>
+                    </p:column>
+                    <p:column headerText="Model" style="background-color: inherit;text-align: center">
+                        <h:outputText value="#{car.model}"/>
+                    </p:column>
+
+                    <p:column style="width: 50px; background-color: inherit;text-align: center">
+                        <p:commandButton id="delete" style="width: 30px;height: 30px" icon="fa fa-trash" action="#{carManagement.removeCar(car)}" update="carDataTable" >                    
+                        </p:commandButton>
+                        <p:tooltip for="delete" value="Usuń" />
+                    </p:column>
+                    <p:column style="width: 50px; background-color: inherit;text-align: center">
+                        <p:commandButton id="edit" style="width: 30px;height: 30px" icon="fa fa-edit">                    
+                        </p:commandButton>
+                        <p:tooltip for="edit" value="Edytuj" />
+                    </p:column>
+
+                </p:dataTable>
+                <div class="ui-g-12">
+
+                </div>
+                <div class="ui-g-1" >
+                    <div class="ui-g-1">
+
+                    </div>
+                    <p:commandButton style="width: 150px;height: 40px" value="Dodaj"/>
+                </div>
+            </div>
+            <div class="ui-g-1">
+
+            </div>
+
+
+        </h:form>
+    </ui:define>
+
+</ui:composition>
+
+

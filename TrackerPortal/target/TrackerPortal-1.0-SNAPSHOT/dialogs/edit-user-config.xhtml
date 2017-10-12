@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core" 
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+    <div>
+        <ui:component>
+            <p:messages id="userErrors" autoUpdate="true" />
+            <p:panelGrid styleClass="ui-noborder" >
+                <p:row>
+                    <p:column>
+                        <p:outputLabel value="Pesel"/>
+                    </p:column>
+                    <p:column>
+                        <p:inputText disabled="true" value="#{userManagement.user.pesel}"/>
+                    </p:column>
+                </p:row>
+                <p:row>
+                    <p:column>
+                        <p:outputLabel value="Name"/>
+                    </p:column>
+                    <p:column>
+                        <p:inputText value="#{userManagement.user.name}"/>
+                    </p:column>
+                </p:row>
+                <p:row>
+                    <p:column>
+                        <p:outputLabel value="Surname"/>
+                    </p:column>
+                    <p:column>
+                        <p:inputText value="#{userManagement.user.surname}"/>
+                    </p:column>
+                </p:row>
+                
+                <p:row>
+                    <p:column>
+                        <p:outputLabel value="Email"/>
+                    </p:column>
+                    <p:column>
+                        <p:inputText value="#{userManagement.user.email}"/>
+                    </p:column>
+                </p:row>
+                <p:row>
+                    <p:column>
+                        <p:outputLabel value="Phone number"/>
+                    </p:column>
+                    <p:column>
+                        <p:inputText value="#{userManagement.user.phoneNumber}"/>
+                    </p:column>
+                </p:row>
+                <p:row >
+                    <p:column colspan="2" style="text-align: center">
+                        <p:commandButton  value="Zapisz" action="#{userManagement.editUser}" update="userManagementForm">
+                        </p:commandButton>
+                    </p:column>
+                </p:row>
+            </p:panelGrid>
+        </ui:component>
+    </div>
+</html>

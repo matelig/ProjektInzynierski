@@ -1,17 +1,18 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+(c) Systemy Przetwarzania i Integracji Danych SPIID sp. z o.o.
+1:1 Realny obraz Twojej firmy
  */
 package com.polsl.trackerportal.database.entity;
 
 import java.io.Serializable;
 import java.math.BigInteger;
-import java.util.List;
+import java.util.Collection;
+import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -26,7 +27,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author m_lig
+ * @author Mateusz Ligus <mateusz.ligus@spiid.pl>
  */
 @Entity
 @Table(name = "route")
@@ -48,26 +49,26 @@ public class Route implements Serializable {
     private BigInteger startDate;
     @Column(name = "endDate")
     private BigInteger endDate;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "routeidRoute")
-    private List<OilTemperature> oilTemperatureList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "routeidRoute")
-    private List<FuelLevel> fuelLevelList;
-    @JoinColumn(name = "Car_vinNumber", referencedColumnName = "vinNumber")
-    @ManyToOne(optional = false)
-    private Car carvinNumber;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "routeidRoute", fetch = FetchType.EAGER)
+    private Collection<OilTemperature> oilTemperatureCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "routeidRoute", fetch = FetchType.EAGER)
+    private Collection<FuelLevel> fuelLevelCollection;
+    @JoinColumn(name = "Car_idCar", referencedColumnName = "idCar")
+    @ManyToOne(fetch = FetchType.EAGER)
+    private Car caridCar;
     @JoinColumn(name = "User_idUser", referencedColumnName = "idUser")
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private User useridUser;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "routeidRoute")
-    private List<FuelComsumptionRate> fuelComsumptionRateList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "routeidRoute")
-    private List<TroubleCodes> troubleCodesList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "routeidRoute")
-    private List<Location> locationList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "routeidRoute")
-    private List<Rpm> rpmList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "routeidRoute")
-    private List<Speed> speedList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "routeidRoute", fetch = FetchType.EAGER)
+    private Collection<FuelComsumptionRate> fuelComsumptionRateCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "routeidRoute", fetch = FetchType.EAGER)
+    private Collection<TroubleCodes> troubleCodesCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "routeidRoute", fetch = FetchType.EAGER)
+    private Collection<Location> locationCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "routeidRoute", fetch = FetchType.EAGER)
+    private Collection<Rpm> rpmCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "routeidRoute", fetch = FetchType.EAGER)
+    private Collection<Speed> speedCollection;
 
     public Route() {
     }
@@ -101,29 +102,29 @@ public class Route implements Serializable {
     }
 
     @XmlTransient
-    public List<OilTemperature> getOilTemperatureList() {
-        return oilTemperatureList;
+    public Collection<OilTemperature> getOilTemperatureCollection() {
+        return oilTemperatureCollection;
     }
 
-    public void setOilTemperatureList(List<OilTemperature> oilTemperatureList) {
-        this.oilTemperatureList = oilTemperatureList;
+    public void setOilTemperatureCollection(Collection<OilTemperature> oilTemperatureCollection) {
+        this.oilTemperatureCollection = oilTemperatureCollection;
     }
 
     @XmlTransient
-    public List<FuelLevel> getFuelLevelList() {
-        return fuelLevelList;
+    public Collection<FuelLevel> getFuelLevelCollection() {
+        return fuelLevelCollection;
     }
 
-    public void setFuelLevelList(List<FuelLevel> fuelLevelList) {
-        this.fuelLevelList = fuelLevelList;
+    public void setFuelLevelCollection(Collection<FuelLevel> fuelLevelCollection) {
+        this.fuelLevelCollection = fuelLevelCollection;
     }
 
-    public Car getCarvinNumber() {
-        return carvinNumber;
+    public Car getCaridCar() {
+        return caridCar;
     }
 
-    public void setCarvinNumber(Car carvinNumber) {
-        this.carvinNumber = carvinNumber;
+    public void setCaridCar(Car caridCar) {
+        this.caridCar = caridCar;
     }
 
     public User getUseridUser() {
@@ -135,48 +136,48 @@ public class Route implements Serializable {
     }
 
     @XmlTransient
-    public List<FuelComsumptionRate> getFuelComsumptionRateList() {
-        return fuelComsumptionRateList;
+    public Collection<FuelComsumptionRate> getFuelComsumptionRateCollection() {
+        return fuelComsumptionRateCollection;
     }
 
-    public void setFuelComsumptionRateList(List<FuelComsumptionRate> fuelComsumptionRateList) {
-        this.fuelComsumptionRateList = fuelComsumptionRateList;
-    }
-
-    @XmlTransient
-    public List<TroubleCodes> getTroubleCodesList() {
-        return troubleCodesList;
-    }
-
-    public void setTroubleCodesList(List<TroubleCodes> troubleCodesList) {
-        this.troubleCodesList = troubleCodesList;
+    public void setFuelComsumptionRateCollection(Collection<FuelComsumptionRate> fuelComsumptionRateCollection) {
+        this.fuelComsumptionRateCollection = fuelComsumptionRateCollection;
     }
 
     @XmlTransient
-    public List<Location> getLocationList() {
-        return locationList;
+    public Collection<TroubleCodes> getTroubleCodesCollection() {
+        return troubleCodesCollection;
     }
 
-    public void setLocationList(List<Location> locationList) {
-        this.locationList = locationList;
-    }
-
-    @XmlTransient
-    public List<Rpm> getRpmList() {
-        return rpmList;
-    }
-
-    public void setRpmList(List<Rpm> rpmList) {
-        this.rpmList = rpmList;
+    public void setTroubleCodesCollection(Collection<TroubleCodes> troubleCodesCollection) {
+        this.troubleCodesCollection = troubleCodesCollection;
     }
 
     @XmlTransient
-    public List<Speed> getSpeedList() {
-        return speedList;
+    public Collection<Location> getLocationCollection() {
+        return locationCollection;
     }
 
-    public void setSpeedList(List<Speed> speedList) {
-        this.speedList = speedList;
+    public void setLocationCollection(Collection<Location> locationCollection) {
+        this.locationCollection = locationCollection;
+    }
+
+    @XmlTransient
+    public Collection<Rpm> getRpmCollection() {
+        return rpmCollection;
+    }
+
+    public void setRpmCollection(Collection<Rpm> rpmCollection) {
+        this.rpmCollection = rpmCollection;
+    }
+
+    @XmlTransient
+    public Collection<Speed> getSpeedCollection() {
+        return speedCollection;
+    }
+
+    public void setSpeedCollection(Collection<Speed> speedCollection) {
+        this.speedCollection = speedCollection;
     }
 
     @Override
@@ -203,5 +204,17 @@ public class Route implements Serializable {
     public String toString() {
         return "com.polsl.trackerportal.database.entity.Route[ idRoute=" + idRoute + " ]";
     }
-    
+
+    public String getRouteDuration() {
+        long duration = this.getEndDate().longValue() - this.getStartDate().longValue();
+
+        long second = (duration / 1000) % 60;
+        long minute = (duration / (1000 * 60)) % 60;
+        long hour = (duration / (1000 * 60 * 60)) % 24;
+
+        String time = String.format("%02d:%02d:%02d", hour, minute, second);
+
+        return time;
+    }
+
 }

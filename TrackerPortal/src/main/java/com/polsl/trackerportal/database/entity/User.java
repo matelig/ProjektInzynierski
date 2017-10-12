@@ -1,16 +1,17 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+(c) Systemy Przetwarzania i Integracji Danych SPIID sp. z o.o.
+1:1 Realny obraz Twojej firmy
+*/
+
 package com.polsl.trackerportal.database.entity;
 
 import java.io.Serializable;
-import java.util.List;
+import java.util.Collection;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -25,7 +26,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author m_lig
+ * @author Mateusz Ligus <mateusz.ligus@spiid.pl>
  */
 @Entity
 @Table(name = "user")
@@ -36,15 +37,10 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "User.findByName", query = "SELECT u FROM User u WHERE u.name = :name")
     , @NamedQuery(name = "User.findBySurname", query = "SELECT u FROM User u WHERE u.surname = :surname")
     , @NamedQuery(name = "User.findByPesel", query = "SELECT u FROM User u WHERE u.pesel = :pesel")
-    , @NamedQuery(name = "User.findByPassword", query = "SELECT u FROM User u WHERE u.password = :password")})
+    , @NamedQuery(name = "User.findByPassword", query = "SELECT u FROM User u WHERE u.password = :password")
+    , @NamedQuery(name = "User.findByPhoneNumber", query = "SELECT u FROM User u WHERE u.phoneNumber = :phoneNumber")
+    , @NamedQuery(name = "User.findByEmail", query = "SELECT u FROM User u WHERE u.email = :email")})
 public class User implements Serializable {
-
-    @Column(name = "phoneNumber")
-    private Integer phoneNumber;
-    // @Pattern(regexp="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", message="Invalid email")//if the field contains email address consider using this annotation to enforce field validation
-    @Size(max = 50)
-    @Column(name = "email")
-    private String email;
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -72,8 +68,14 @@ public class User implements Serializable {
     @Size(min = 1, max = 45)
     @Column(name = "password")
     private String password;
+    @Column(name = "phoneNumber")
+    private Integer phoneNumber;
+    // @Pattern(regexp="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", message="Invalid email")//if the field contains email address consider using this annotation to enforce field validation
+    @Size(max = 50)
+    @Column(name = "email")
+    private String email;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "useridUser")
-    private List<Route> routeList;
+    private Collection<Route> routeCollection;
 
     public User() {
     }
@@ -130,13 +132,29 @@ public class User implements Serializable {
         this.password = password;
     }
 
-    @XmlTransient
-    public List<Route> getRouteList() {
-        return routeList;
+    public Integer getPhoneNumber() {
+        return phoneNumber;
     }
 
-    public void setRouteList(List<Route> routeList) {
-        this.routeList = routeList;
+    public void setPhoneNumber(Integer phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    @XmlTransient
+    public Collection<Route> getRouteCollection() {
+        return routeCollection;
+    }
+
+    public void setRouteCollection(Collection<Route> routeCollection) {
+        this.routeCollection = routeCollection;
     }
 
     @Override
@@ -164,20 +182,4 @@ public class User implements Serializable {
         return "com.polsl.trackerportal.database.entity.User[ idUser=" + idUser + " ]";
     }
 
-    public Integer getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    public void setPhoneNumber(Integer phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-    
 }

@@ -26,7 +26,8 @@
                 <h:outputText value="#{route.useridUser.surname}"/>
             </p:column>
             <p:column headerText="Duration">
-                <h:outputText value="#{route.endDate-route.startDate}"/>
+                <h:outputText value="#{route.routeDuration}">
+                </h:outputText>
             </p:column>
             <p:column style="width: fit-content">
                 <p:commandButton value="C" action="#{routeList.showRouteDetails(route)}">                    

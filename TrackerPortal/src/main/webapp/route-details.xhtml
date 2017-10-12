@@ -9,8 +9,7 @@
         <meta name="description" content="Our Company Home Page" />
         <title>Our Company - Home</title>
         <script src="http://maps.google.com/maps/api/js?key=AIzaSyCoRgBWTUOwc82Jlfiz866dQfyL0YhSIVQ" 
-                
-                type="text/javascript"></script>
+        type="text/javascript"></script>
     </ui:define>
 
     <ui:define name="navigation">
@@ -18,6 +17,7 @@
     </ui:define>
 
     <ui:define name="main">
+
         <p:dataTable rendered="false"         >
             <p:column headerText="Kolumna">
 
@@ -26,9 +26,10 @@
         <f:metadata>
             <f:viewParam name="routeID" value="#{routeList.clickedRouteId}" />
         </f:metadata>        
-        <p:gmap id="gmap" center="36.890257,30.707417" zoom="13" type="HYBRID" style="width:100%;height:400px" model="#{routeDetails.mapModel}"/>
+        <p:gmap id="gmap" widgetVar="map" center="#{routeDetails.centerOfMap}" zoom="10" type="HYBRID" style="width:100%;height:400px" model="#{routeDetails.mapModel}" />
         <p:chart type="line" model="#{routeDetails.speedChartModel}" style="width: 100%;height: 300px;" responsive="true"/>
         <p:chart type="line" model="#{routeDetails.rpmChartModel}" style="width: 100%;height: 300px;" responsive="true"/>
+
     </ui:define>
 
 </ui:composition>

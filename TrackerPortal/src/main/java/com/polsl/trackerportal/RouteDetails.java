@@ -12,7 +12,9 @@ import com.polsl.trackerportal.database.entity.Rpm;
 import com.polsl.trackerportal.database.entity.Speed;
 import com.polsl.trackerportal.util.ChartModeler;
 import com.polsl.trackerportal.util.LoggedUser;
+import java.awt.geom.Point2D;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -30,6 +32,7 @@ import org.primefaces.model.chart.CartesianChartModel;
 import org.primefaces.model.chart.LineChartModel;
 import org.primefaces.model.map.DefaultMapModel;
 import org.primefaces.model.map.LatLng;
+import org.primefaces.model.map.LatLngBounds;
 import org.primefaces.model.map.MapModel;
 import org.primefaces.model.map.Polyline;
 
@@ -60,6 +63,7 @@ public class RouteDetails implements Serializable {
     private List<Rpm> RPMList;
     private Route route;
     private Car car;
+    private String centerOfMap;
 
     @PostConstruct
     public void init() {
@@ -117,22 +121,29 @@ public class RouteDetails implements Serializable {
     private void createMapModel() {
         mapModel = new DefaultMapModel();
         Polyline polyline = new Polyline();
-        for (Location l : locationList) {
-            LatLng coord = new LatLng(l.getLatitude(), l.getLongitude());
+//        for (Location l : locationList) {
+//            LatLng coord = new LatLng(l.getLatitude(), l.getLongitude());
+//            polyline.getPaths().add(coord);
+//        }
+        for (int i = 0; i < locationList.size(); i++) {
+            LatLng coord = new LatLng(locationList.get(i).getLatitude(), locationList.get(i).getLongitude());
             polyline.getPaths().add(coord);
         }
         polyline.setStrokeWeight(10);
         polyline.setStrokeColor("#FF9900");
         polyline.setStrokeOpacity(0.7);
+        Point2D.Double center = calculateCentroid(polyline.getPaths());
+        centerOfMap = center.getX() + "," + center.getY();
         mapModel.addOverlay(polyline);
+
     }
 
     private void initData() {
         route = (Route) entityManager.createNamedQuery("Route.findByIdRoute").setParameter("idRoute", Integer.valueOf(routeId)).getSingleResult();
         //route = temp.get(0);
-        speedList = route.getSpeedList();
-        locationList = route.getLocationList();
-        RPMList = route.getRpmList();
+        speedList = new ArrayList<>(route.getSpeedCollection());
+        locationList = new ArrayList<>(route.getLocationCollection());
+        RPMList = new ArrayList(route.getRpmCollection());
         if (locationList.size() > 0) {
             Collections.sort(locationList, new Comparator<Location>() {
                 @Override
@@ -141,7 +152,21 @@ public class RouteDetails implements Serializable {
                 }
             });
         }
+    }
 
+    public Point2D.Double calculateCentroid(List<LatLng> points) {
+        double x = 0.;
+        double y = 0.;
+        double pointCount = points.size();
+        for (int i = 0; i < pointCount; i++) {
+            x += points.get(i).getLat();
+            y += points.get(i).getLng();
+        }
+
+        x = x / pointCount;
+        y = y / pointCount;
+
+        return new Point2D.Double(x, y);
     }
 
     public LineChartModel getSpeedChartModel() {
@@ -166,6 +191,14 @@ public class RouteDetails implements Serializable {
 
     public void setMapModel(MapModel mapModel) {
         this.mapModel = mapModel;
+    }
+
+    public String getCenterOfMap() {
+        return centerOfMap;
+    }
+
+    public void setCenterOfMap(String centerOfMap) {
+        this.centerOfMap = centerOfMap;
     }
 
 }
