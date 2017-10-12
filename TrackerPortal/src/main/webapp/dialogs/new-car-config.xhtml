@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core" 
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+    <div>
+        <ui:component>
+            <p:messages id="carErrors" autoUpdate="true" />
+            <p:panelGrid styleClass="ui-noborder" >
+                <p:row>
+                    <p:column>
+                        <p:outputLabel value="Numer VIN"/>
+                    </p:column>
+                    <p:column>
+                        <p:inputText value="#{carManagement.car.vinNumber}"/>
+                    </p:column>
+                </p:row>
+                <p:row>
+                    <p:column>
+                        <p:outputLabel value="Marka"/>
+                    </p:column>
+                    <p:column>
+                        <p:inputText value="#{carManagement.car.make}"/>
+                    </p:column>
+                </p:row>
+                <p:row>
+                    <p:column>
+                        <p:outputLabel value="Model"/>
+                    </p:column>
+                    <p:column>
+                        <p:inputText value="#{carManagement.car.model}"/>
+                    </p:column>
+                </p:row>
+                <p:row >
+                    <p:column colspan="2" style="text-align: center">
+                        <p:commandButton  value="Dodaj" action="#{carManagement.addCar()}" update="carManagementForm">
+                        </p:commandButton>
+                    </p:column>
+                </p:row>
+            </p:panelGrid>
+        </ui:component>
+    </div>
+</html>

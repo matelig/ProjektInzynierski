@@ -15,26 +15,44 @@
     </ui:define>
 
     <ui:define name="main">
-        <p:dataTable value="#{routeList.routeList}" var="route" >
-            <p:column headerText="Route ID">
-                <h:outputText value="#{route.idRoute}"/>
-            </p:column>
-            <p:column headerText="Name">
-                <h:outputText value="#{route.useridUser.name}"/>
-            </p:column>
-            <p:column headerText="Surname">
-                <h:outputText value="#{route.useridUser.surname}"/>
-            </p:column>
-            <p:column headerText="Duration">
-                <h:outputText value="#{route.routeDuration}">
-                </h:outputText>
-            </p:column>
-            <p:column style="width: fit-content">
-                <p:commandButton value="C" action="#{routeList.showRouteDetails(route)}">                    
-                </p:commandButton>
-            </p:column>
-            
-        </p:dataTable>
+        <div class="ui-g-1">
+
+        </div>
+        <div class="ui-g-10">
+            <p:dataTable value="#{routeList.routeList}"
+                         rowIndexVar="row"
+                         rowStyleClass="#{row % 2 eq 0 ? 'row-even' : 'row-odd'}"
+                         var="route" >
+                <p:column headerText="ID" style="background-color: inherit;text-align: center;width: 30px;">
+                    <h:outputText value="#{route.idRoute}"/>
+                </p:column>
+                <p:column headerText="Name" style="background-color: inherit;text-align: center">
+                    <h:outputText value="#{route.useridUser.name}"/>
+                </p:column>
+                <p:column headerText="Surname" style="background-color: inherit;text-align: center">
+                    <h:outputText value="#{route.useridUser.surname}"/>
+                </p:column>
+                <p:column headerText="Start date" style="background-color: inherit;text-align: center">
+                    <h:outputText value="#{route.calculatedStartDate}">
+                        <f:convertDateTime pattern="dd.MM.yyyy HH:mm"/>
+                    </h:outputText>
+                </p:column>
+                <p:column headerText="End date" style="background-color: inherit;text-align: center">
+                    <h:outputText value="#{route.calculatedEndDate}">
+                        <f:convertDateTime pattern="dd.MM.yyyy HH:mm"/>
+                    </h:outputText>
+                </p:column>
+                <p:column headerText="Duration" style="background-color: inherit;text-align: center">
+                    <h:outputText value="#{route.routeDuration}">
+                    </h:outputText>
+                </p:column>
+                <p:column style="width: 50px; background-color: inherit;text-align: center">
+                    <p:commandButton icon="fa fa-info-circle" style="width: 30px;height: 30px" action="#{routeList.showRouteDetails(route)}">                    
+                    </p:commandButton>
+                </p:column>
+
+            </p:dataTable>
+        </div>
     </ui:define>
 
 </ui:composition>

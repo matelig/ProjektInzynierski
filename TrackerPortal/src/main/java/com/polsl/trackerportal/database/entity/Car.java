@@ -59,7 +59,7 @@ public class Car implements Serializable {
     @Size(min = 1, max = 45)
     @Column(name = "model")
     private String model;
-    @OneToMany(mappedBy = "caridCar", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "caridCar")
     private Collection<Route> routeCollection;
 
     public Car() {

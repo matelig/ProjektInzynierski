@@ -80,12 +80,12 @@ public class MenuView implements Serializable {
         DefaultSubMenu secondSubmenu = new DefaultSubMenu("Admin managment");
 
         item = new DefaultMenuItem("Users managment");
-        item.setIcon("ui-icon-disk");        
+        item.setIcon("fa fa-users");        
         item.setCommand("user-management.xhtml?faces-redirect=true");
         secondSubmenu.addElement(item);
 
         item = new DefaultMenuItem("Cars managment");
-        item.setIcon("ui-icon-close");
+        item.setIcon("fa fa-car");
         item.setCommand("car-management.xhtml?faces-redirect=true");
         secondSubmenu.addElement(item);
 

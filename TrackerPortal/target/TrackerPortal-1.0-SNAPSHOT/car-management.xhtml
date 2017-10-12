@@ -15,6 +15,8 @@
     </ui:define>
 
     <ui:define name="main">
+        <ui:include src="dialogs/new-car-dialog.xhtml"/>
+        <ui:include src="dialogs/edit-car-dialog.xhtml"/>
         <h:form id="carManagementForm">
             <p:growl autoUpdate="true" id="addUserGrowl" >
 
@@ -48,7 +50,7 @@
                         <p:tooltip for="delete" value="Usuń" />
                     </p:column>
                     <p:column style="width: 50px; background-color: inherit;text-align: center">
-                        <p:commandButton id="edit" style="width: 30px;height: 30px" icon="fa fa-edit">                    
+                        <p:commandButton id="edit" style="width: 30px;height: 30px" icon="fa fa-edit" action="#{carManagement.openEditUserDialog(car)}" update="editCarDialog">                    
                         </p:commandButton>
                         <p:tooltip for="edit" value="Edytuj" />
                     </p:column>
@@ -61,7 +63,7 @@
                     <div class="ui-g-1">
 
                     </div>
-                    <p:commandButton style="width: 150px;height: 40px" value="Dodaj"/>
+                    <p:commandButton style="width: 150px;height: 40px" value="Dodaj" action="#{carManagement.openAddCarDialog()}" update="newCarDialog"/>
                 </div>
             </div>
             <div class="ui-g-1">

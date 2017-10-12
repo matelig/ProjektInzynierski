@@ -217,4 +217,14 @@ public class Route implements Serializable {
         return time;
     }
 
+    public Date getCalculatedStartDate() {
+        long startDate = this.startDate.longValue();
+        return new Date(startDate);
+    }
+    
+    public Date getCalculatedEndDate() {
+        long endDate = this.startDate.longValue();
+        return new Date(endDate);
+    }
+    
 }
