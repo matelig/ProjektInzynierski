@@ -13,11 +13,13 @@ public class TroubleCodesData {
     private long routeId;
     private String code;
     private long timestamp;
-    @Generated(hash = 369829970)
-    public TroubleCodesData(long routeId, String code, long timestamp) {
+    private int state;
+    @Generated(hash = 849108624)
+    public TroubleCodesData(long routeId, String code, long timestamp, int state) {
         this.routeId = routeId;
         this.code = code;
         this.timestamp = timestamp;
+        this.state = state;
     }
     @Generated(hash = 777316854)
     public TroubleCodesData() {
@@ -39,5 +41,11 @@ public class TroubleCodesData {
     }
     public void setTimestamp(long timestamp) {
         this.timestamp = timestamp;
+    }
+    public int getState() {
+        return this.state;
+    }
+    public void setState(int state) {
+        this.state = state;
     }
 }

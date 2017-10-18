@@ -11,6 +11,7 @@ import com.polsl.projektinzynierski.cartrackerapi.Route;
 import com.polsl.projektinzynierski.cartrackerapi.RouteData;
 import com.polsl.projektinzynierski.cartrackerapi.Rpm;
 import com.polsl.projektinzynierski.cartrackerapi.Speed;
+import com.polsl.projektinzynierski.cartrackerapi.TroubleCodes;
 import com.polsl.projektinzynierski.cartrackerapi.User;
 import java.util.List;
 import javax.ejb.Stateless;
@@ -48,10 +49,11 @@ public class RouteFacadeREST extends AbstractFacade<Route> {
         List<Location> locations = entity.getLocationCollection();
         List<Speed> speed = entity.getSpeedCollection();
         List<Rpm> rpm = entity.getRPMCollection();
+        List<TroubleCodes> troubleCodes = entity.getTroubleCodesCollection();
         Route route = new Route();
         List<Car> cars = em.createNamedQuery("Car.findByVinNumber").setParameter("vinNumber", entity.getCarVin()).getResultList();
         //przyda się sprawdzenie, czy istnieje dany samochód, jeśli nie istnieje - stwórz go z jakimiś defaultowymi danymi, które potem administrator może edytować (na stronce)
-        route.setCarvinNumber(cars.get(0));
+        route.setCaridCar(cars.get(0));
         List<User> users = em.createNamedQuery("User.findByIdUser").setParameter("idUser", entity.getIdUser()).getResultList();
         route.setUseridUser(users.get(0));
         route.setEndDate(entity.getEndDate());
@@ -65,6 +67,10 @@ public class RouteFacadeREST extends AbstractFacade<Route> {
         for (Speed s : speed) {
             s.setRouteidRoute(route);
         }
+        for (TroubleCodes tc : troubleCodes) {
+            tc.setRouteidRoute(route);
+        }
+        route.setTroubleCodesCollection(troubleCodes);
         route.setSpeedCollection(speed);
         route.setRpmCollection(rpm);
         route.setLocationCollection(locations);

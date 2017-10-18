@@ -15,11 +15,10 @@ import javax.persistence.metamodel.CollectionAttribute;
 import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.StaticMetamodel;
 
-@Generated(value="EclipseLink-2.5.2.v20140319-rNA", date="2017-09-26T16:42:45")
+@Generated(value="EclipseLink-2.5.2.v20140319-rNA", date="2017-10-18T13:35:16")
 @StaticMetamodel(Route.class)
 public class Route_ { 
 
-    public static volatile SingularAttribute<Route, Car> carvinNumber;
     public static volatile CollectionAttribute<Route, FuelComsumptionRate> fuelComsumptionRateCollection;
     public static volatile CollectionAttribute<Route, TroubleCodes> troubleCodesCollection;
     public static volatile CollectionAttribute<Route, OilTemperature> oilTemperatureCollection;
@@ -28,6 +27,7 @@ public class Route_ {
     public static volatile SingularAttribute<Route, Integer> idRoute;
     public static volatile SingularAttribute<Route, BigInteger> endDate;
     public static volatile CollectionAttribute<Route, Rpm> rpmCollection;
+    public static volatile SingularAttribute<Route, Car> caridCar;
     public static volatile CollectionAttribute<Route, Speed> speedCollection;
     public static volatile CollectionAttribute<Route, Location> locationCollection;
     public static volatile SingularAttribute<Route, BigInteger> startDate;

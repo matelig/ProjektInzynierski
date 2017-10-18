@@ -155,6 +155,7 @@ public class RouteListActivity extends AppCompatActivity {
                 Route route = new Route(r.getStartDate(),r.getEndDate(),r.getUserId(),r.getVinNumber(),r.getLocationDataList());
                 route.setRpmDataList(r.getRpmDataList());
                 route.setSpeedDataList(r.getSpeedDataList());
+                route.setTroubleCodesList(r.getTroubleCodesDataList());
                 String json = new Gson().toJson(route);
                 Call<ResponseBody> call = endpoints.create(route);
                 call.enqueue(new Callback<ResponseBody>() {

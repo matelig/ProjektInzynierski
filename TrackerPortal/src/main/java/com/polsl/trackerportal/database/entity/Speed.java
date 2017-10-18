@@ -3,7 +3,7 @@
 1:1 Realny obraz Twojej firmy
 */
 
-package com.polsl.projektinzynierski.cartrackerapi;
+package com.polsl.trackerportal.database.entity;
 
 import java.io.Serializable;
 import javax.persistence.Basic;
@@ -25,68 +25,68 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Mateusz Ligus <mateusz.ligus@spiid.pl>
  */
 @Entity
-@Table(name = "rpm")
+@Table(name = "speed")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Rpm.findAll", query = "SELECT r FROM Rpm r")
-    , @NamedQuery(name = "Rpm.findByIdrpm", query = "SELECT r FROM Rpm r WHERE r.idrpm = :idrpm")
-    , @NamedQuery(name = "Rpm.findByValue", query = "SELECT r FROM Rpm r WHERE r.value = :value")
-    , @NamedQuery(name = "Rpm.findByTimestamp", query = "SELECT r FROM Rpm r WHERE r.timestamp = :timestamp")})
-public class Rpm implements Serializable {
+    @NamedQuery(name = "Speed.findAll", query = "SELECT s FROM Speed s")
+    , @NamedQuery(name = "Speed.findByIdSpeed", query = "SELECT s FROM Speed s WHERE s.idSpeed = :idSpeed")
+    , @NamedQuery(name = "Speed.findByTimestamp", query = "SELECT s FROM Speed s WHERE s.timestamp = :timestamp")
+    , @NamedQuery(name = "Speed.findByValue", query = "SELECT s FROM Speed s WHERE s.value = :value")})
+public class Speed implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "idrpm")
-    private Integer idrpm;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "value")
-    private int value;
+    @Column(name = "idSpeed")
+    private Integer idSpeed;
     @Basic(optional = false)
     @NotNull
     @Column(name = "timestamp")
-    private long timestamp;
+    private Long timestamp;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "value")
+    private double value;
     @JoinColumn(name = "route_idRoute", referencedColumnName = "idRoute")
     @ManyToOne(optional = false)
     private Route routeidRoute;
 
-    public Rpm() {
+    public Speed() {
     }
 
-    public Rpm(Integer idrpm) {
-        this.idrpm = idrpm;
+    public Speed(Integer idSpeed) {
+        this.idSpeed = idSpeed;
     }
 
-    public Rpm(Integer idrpm, int value, long timestamp) {
-        this.idrpm = idrpm;
-        this.value = value;
+    public Speed(Integer idSpeed, long timestamp, double value) {
+        this.idSpeed = idSpeed;
         this.timestamp = timestamp;
-    }
-
-    public Integer getIdrpm() {
-        return idrpm;
-    }
-
-    public void setIdrpm(Integer idrpm) {
-        this.idrpm = idrpm;
-    }
-
-    public int getValue() {
-        return value;
-    }
-
-    public void setValue(int value) {
         this.value = value;
     }
 
-    public long getTimestamp() {
+    public Integer getIdSpeed() {
+        return idSpeed;
+    }
+
+    public void setIdSpeed(Integer idSpeed) {
+        this.idSpeed = idSpeed;
+    }
+
+    public Long getTimestamp() {
         return timestamp;
     }
 
-    public void setTimestamp(long timestamp) {
+    public void setTimestamp(Long timestamp) {
         this.timestamp = timestamp;
+    }
+
+    public double getValue() {
+        return value;
+    }
+
+    public void setValue(double value) {
+        this.value = value;
     }
 
     public Route getRouteidRoute() {
@@ -100,18 +100,18 @@ public class Rpm implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (idrpm != null ? idrpm.hashCode() : 0);
+        hash += (idSpeed != null ? idSpeed.hashCode() : 0);
         return hash;
     }
 
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Rpm)) {
+        if (!(object instanceof Speed)) {
             return false;
         }
-        Rpm other = (Rpm) object;
-        if ((this.idrpm == null && other.idrpm != null) || (this.idrpm != null && !this.idrpm.equals(other.idrpm))) {
+        Speed other = (Speed) object;
+        if ((this.idSpeed == null && other.idSpeed != null) || (this.idSpeed != null && !this.idSpeed.equals(other.idSpeed))) {
             return false;
         }
         return true;
@@ -119,7 +119,7 @@ public class Rpm implements Serializable {
 
     @Override
     public String toString() {
-        return "com.polsl.projektinzynierski.cartrackerapi.Rpm[ idrpm=" + idrpm + " ]";
+        return "com.polsl.trackerportal.Speed[ idSpeed=" + idSpeed + " ]";
     }
 
 }

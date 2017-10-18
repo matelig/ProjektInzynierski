@@ -3,7 +3,7 @@
 1:1 Realny obraz Twojej firmy
 */
 
-package com.polsl.projektinzynierski.cartrackerapi;
+package com.polsl.trackerportal.database.entity;
 
 import java.io.Serializable;
 import javax.persistence.Basic;
@@ -135,7 +135,7 @@ public class TroubleCodes implements Serializable {
 
     @Override
     public String toString() {
-        return "com.polsl.projektinzynierski.cartrackerapi.TroubleCodes[ idtroubleCodes=" + idtroubleCodes + " ]";
+        return "com.polsl.trackerportal.TroubleCodes[ idtroubleCodes=" + idtroubleCodes + " ]";
     }
 
 }

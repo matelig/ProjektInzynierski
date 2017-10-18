@@ -3,21 +3,20 @@
 1:1 Realny obraz Twojej firmy
 */
 
-package com.polsl.projektinzynierski.cartrackerapi;
+package com.polsl.trackerportal.database.entity;
 
 import java.io.Serializable;
 import java.math.BigInteger;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -25,21 +24,21 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Mateusz Ligus <mateusz.ligus@spiid.pl>
  */
 @Entity
-@Table(name = "oilTemperature")
+@Table(name = "fuelLevel")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "OilTemperature.findAll", query = "SELECT o FROM OilTemperature o")
-    , @NamedQuery(name = "OilTemperature.findByIdoilTemperature", query = "SELECT o FROM OilTemperature o WHERE o.idoilTemperature = :idoilTemperature")
-    , @NamedQuery(name = "OilTemperature.findByValue", query = "SELECT o FROM OilTemperature o WHERE o.value = :value")
-    , @NamedQuery(name = "OilTemperature.findByTimestamp", query = "SELECT o FROM OilTemperature o WHERE o.timestamp = :timestamp")})
-public class OilTemperature implements Serializable {
+    @NamedQuery(name = "FuelLevel.findAll", query = "SELECT f FROM FuelLevel f")
+    , @NamedQuery(name = "FuelLevel.findByIdfuelLevel", query = "SELECT f FROM FuelLevel f WHERE f.idfuelLevel = :idfuelLevel")
+    , @NamedQuery(name = "FuelLevel.findByValue", query = "SELECT f FROM FuelLevel f WHERE f.value = :value")
+    , @NamedQuery(name = "FuelLevel.findByTimestamp", query = "SELECT f FROM FuelLevel f WHERE f.timestamp = :timestamp")})
+public class FuelLevel implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "idoilTemperature")
-    private Integer idoilTemperature;
+    @NotNull
+    @Column(name = "idfuelLevel")
+    private Integer idfuelLevel;
     @Column(name = "value")
     private Integer value;
     @Column(name = "timestamp")
@@ -48,19 +47,19 @@ public class OilTemperature implements Serializable {
     @ManyToOne(optional = false)
     private Route routeidRoute;
 
-    public OilTemperature() {
+    public FuelLevel() {
     }
 
-    public OilTemperature(Integer idoilTemperature) {
-        this.idoilTemperature = idoilTemperature;
+    public FuelLevel(Integer idfuelLevel) {
+        this.idfuelLevel = idfuelLevel;
     }
 
-    public Integer getIdoilTemperature() {
-        return idoilTemperature;
+    public Integer getIdfuelLevel() {
+        return idfuelLevel;
     }
 
-    public void setIdoilTemperature(Integer idoilTemperature) {
-        this.idoilTemperature = idoilTemperature;
+    public void setIdfuelLevel(Integer idfuelLevel) {
+        this.idfuelLevel = idfuelLevel;
     }
 
     public Integer getValue() {
@@ -90,18 +89,18 @@ public class OilTemperature implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (idoilTemperature != null ? idoilTemperature.hashCode() : 0);
+        hash += (idfuelLevel != null ? idfuelLevel.hashCode() : 0);
         return hash;
     }
 
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof OilTemperature)) {
+        if (!(object instanceof FuelLevel)) {
             return false;
         }
-        OilTemperature other = (OilTemperature) object;
-        if ((this.idoilTemperature == null && other.idoilTemperature != null) || (this.idoilTemperature != null && !this.idoilTemperature.equals(other.idoilTemperature))) {
+        FuelLevel other = (FuelLevel) object;
+        if ((this.idfuelLevel == null && other.idfuelLevel != null) || (this.idfuelLevel != null && !this.idfuelLevel.equals(other.idfuelLevel))) {
             return false;
         }
         return true;
@@ -109,7 +108,7 @@ public class OilTemperature implements Serializable {
 
     @Override
     public String toString() {
-        return "com.polsl.projektinzynierski.cartrackerapi.OilTemperature[ idoilTemperature=" + idoilTemperature + " ]";
+        return "com.polsl.trackerportal.FuelLevel[ idfuelLevel=" + idfuelLevel + " ]";
     }
 
 }

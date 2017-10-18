@@ -28,6 +28,7 @@ public class TroubleCodesDataDao extends AbstractDao<TroubleCodesData, Void> {
         public final static Property RouteId = new Property(0, long.class, "routeId", false, "ROUTE_ID");
         public final static Property Code = new Property(1, String.class, "code", false, "CODE");
         public final static Property Timestamp = new Property(2, long.class, "timestamp", false, "TIMESTAMP");
+        public final static Property State = new Property(3, int.class, "state", false, "STATE");
     }
 
     private Query<TroubleCodesData> routeData_TroubleCodesDataListQuery;
@@ -46,7 +47,8 @@ public class TroubleCodesDataDao extends AbstractDao<TroubleCodesData, Void> {
         db.execSQL("CREATE TABLE " + constraint + "\"TROUBLE_CODES_DATA\" (" + //
                 "\"ROUTE_ID\" INTEGER NOT NULL ," + // 0: routeId
                 "\"CODE\" TEXT," + // 1: code
-                "\"TIMESTAMP\" INTEGER NOT NULL );"); // 2: timestamp
+                "\"TIMESTAMP\" INTEGER NOT NULL ," + // 2: timestamp
+                "\"STATE\" INTEGER NOT NULL );"); // 3: state
     }
 
     /** Drops the underlying database table. */
@@ -65,6 +67,7 @@ public class TroubleCodesDataDao extends AbstractDao<TroubleCodesData, Void> {
             stmt.bindString(2, code);
         }
         stmt.bindLong(3, entity.getTimestamp());
+        stmt.bindLong(4, entity.getState());
     }
 
     @Override
@@ -77,6 +80,7 @@ public class TroubleCodesDataDao extends AbstractDao<TroubleCodesData, Void> {
             stmt.bindString(2, code);
         }
         stmt.bindLong(3, entity.getTimestamp());
+        stmt.bindLong(4, entity.getState());
     }
 
     @Override
@@ -89,7 +93,8 @@ public class TroubleCodesDataDao extends AbstractDao<TroubleCodesData, Void> {
         TroubleCodesData entity = new TroubleCodesData( //
             cursor.getLong(offset + 0), // routeId
             cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // code
-            cursor.getLong(offset + 2) // timestamp
+            cursor.getLong(offset + 2), // timestamp
+            cursor.getInt(offset + 3) // state
         );
         return entity;
     }
@@ -99,6 +104,7 @@ public class TroubleCodesDataDao extends AbstractDao<TroubleCodesData, Void> {
         entity.setRouteId(cursor.getLong(offset + 0));
         entity.setCode(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
         entity.setTimestamp(cursor.getLong(offset + 2));
+        entity.setState(cursor.getInt(offset + 3));
      }
     
     @Override

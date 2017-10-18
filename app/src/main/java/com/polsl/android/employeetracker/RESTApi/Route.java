@@ -6,6 +6,7 @@ import com.polsl.android.employeetracker.Entity.LocationData;
 import com.polsl.android.employeetracker.Entity.RPMData;
 import com.polsl.android.employeetracker.Entity.RouteData;
 import com.polsl.android.employeetracker.Entity.SpeedData;
+import com.polsl.android.employeetracker.Entity.TroubleCodesData;
 import com.polsl.android.employeetracker.Entity.User;
 
 import java.util.List;
@@ -24,7 +25,7 @@ public class Route {
     @SerializedName("idUser")
     private Long idUser;
     @Expose
-    private Long carVin;
+    private String carVin;
 
     @SerializedName("locationCollection")
     @Expose
@@ -33,6 +34,15 @@ public class Route {
     @SerializedName("RPMCollection")
     @Expose
     private List<RPMData> rpmDataList;
+
+
+    @SerializedName("speedCollection")
+    @Expose
+    private List<SpeedData> speedDataList;
+
+    @SerializedName("troubleCodesCollection")
+    @Expose
+    private List<TroubleCodesData> troubleCodesList;
 
     public List<RPMData> getRpmDataList() {
         return rpmDataList;
@@ -50,11 +60,6 @@ public class Route {
         this.speedDataList = speedDataList;
     }
 
-    @SerializedName("speedCollection")
-    @Expose
-
-    private List<SpeedData> speedDataList;
-
     public Long getStartDate() {
         return startDate;
     }
@@ -67,7 +72,7 @@ public class Route {
         return endDate;
     }
 
-    public Route(Long startDate, Long endDate, Long idUser, Long carVin, List<LocationData> locationDataList) {
+    public Route(Long startDate, Long endDate, Long idUser, String carVin, List<LocationData> locationDataList) {
         this.startDate = startDate;
         this.endDate = endDate;
         this.idUser = idUser;
@@ -87,11 +92,11 @@ public class Route {
         this.idUser = idUser;
     }
 
-    public Long getCarVin() {
+    public String getCarVin() {
         return carVin;
     }
 
-    public void setCarVin(Long carVin) {
+    public void setCarVin(String carVin) {
         this.carVin = carVin;
     }
 
@@ -101,6 +106,14 @@ public class Route {
 
     public void setLocationDataList(List<LocationData> locationDataList) {
         this.locationDataList = locationDataList;
+    }
+
+    public List<TroubleCodesData> getTroubleCodesList() {
+        return troubleCodesList;
+    }
+
+    public void setTroubleCodesList(List<TroubleCodesData> troubleCodesList) {
+        this.troubleCodesList = troubleCodesList;
     }
 
     public void sendRoute(RouteData routeData) {

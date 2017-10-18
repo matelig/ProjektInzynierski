@@ -29,7 +29,7 @@ public class RouteDataDao extends AbstractDao<RouteData, Long> {
         public final static Property StartDate = new Property(1, Long.class, "startDate", false, "START_DATE");
         public final static Property EndDate = new Property(2, Long.class, "endDate", false, "END_DATE");
         public final static Property UserId = new Property(3, Long.class, "userId", false, "USER_ID");
-        public final static Property VinNumber = new Property(4, Long.class, "vinNumber", false, "VIN_NUMBER");
+        public final static Property VinNumber = new Property(4, String.class, "vinNumber", false, "VIN_NUMBER");
         public final static Property ToSend = new Property(5, boolean.class, "toSend", false, "TO_SEND");
         public final static Property UploadStatus = new Property(6, Integer.class, "uploadStatus", false, "UPLOAD_STATUS");
     }
@@ -55,7 +55,7 @@ public class RouteDataDao extends AbstractDao<RouteData, Long> {
                 "\"START_DATE\" INTEGER," + // 1: startDate
                 "\"END_DATE\" INTEGER," + // 2: endDate
                 "\"USER_ID\" INTEGER," + // 3: userId
-                "\"VIN_NUMBER\" INTEGER," + // 4: vinNumber
+                "\"VIN_NUMBER\" TEXT," + // 4: vinNumber
                 "\"TO_SEND\" INTEGER NOT NULL ," + // 5: toSend
                 "\"UPLOAD_STATUS\" INTEGER);"); // 6: uploadStatus
     }
@@ -90,9 +90,9 @@ public class RouteDataDao extends AbstractDao<RouteData, Long> {
             stmt.bindLong(4, userId);
         }
  
-        Long vinNumber = entity.getVinNumber();
+        String vinNumber = entity.getVinNumber();
         if (vinNumber != null) {
-            stmt.bindLong(5, vinNumber);
+            stmt.bindString(5, vinNumber);
         }
         stmt.bindLong(6, entity.getToSend() ? 1L: 0L);
  
@@ -126,9 +126,9 @@ public class RouteDataDao extends AbstractDao<RouteData, Long> {
             stmt.bindLong(4, userId);
         }
  
-        Long vinNumber = entity.getVinNumber();
+        String vinNumber = entity.getVinNumber();
         if (vinNumber != null) {
-            stmt.bindLong(5, vinNumber);
+            stmt.bindString(5, vinNumber);
         }
         stmt.bindLong(6, entity.getToSend() ? 1L: 0L);
  
@@ -156,7 +156,7 @@ public class RouteDataDao extends AbstractDao<RouteData, Long> {
             cursor.isNull(offset + 1) ? null : cursor.getLong(offset + 1), // startDate
             cursor.isNull(offset + 2) ? null : cursor.getLong(offset + 2), // endDate
             cursor.isNull(offset + 3) ? null : cursor.getLong(offset + 3), // userId
-            cursor.isNull(offset + 4) ? null : cursor.getLong(offset + 4), // vinNumber
+            cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // vinNumber
             cursor.getShort(offset + 5) != 0, // toSend
             cursor.isNull(offset + 6) ? null : uploadStatusConverter.convertToEntityProperty(cursor.getInt(offset + 6)) // uploadStatus
         );
@@ -169,7 +169,7 @@ public class RouteDataDao extends AbstractDao<RouteData, Long> {
         entity.setStartDate(cursor.isNull(offset + 1) ? null : cursor.getLong(offset + 1));
         entity.setEndDate(cursor.isNull(offset + 2) ? null : cursor.getLong(offset + 2));
         entity.setUserId(cursor.isNull(offset + 3) ? null : cursor.getLong(offset + 3));
-        entity.setVinNumber(cursor.isNull(offset + 4) ? null : cursor.getLong(offset + 4));
+        entity.setVinNumber(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
         entity.setToSend(cursor.getShort(offset + 5) != 0);
         entity.setUploadStatus(cursor.isNull(offset + 6) ? null : uploadStatusConverter.convertToEntityProperty(cursor.getInt(offset + 6)));
      }

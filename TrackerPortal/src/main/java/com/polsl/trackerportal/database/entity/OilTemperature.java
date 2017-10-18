@@ -3,7 +3,7 @@
 1:1 Realny obraz Twojej firmy
 */
 
-package com.polsl.projektinzynierski.cartrackerapi;
+package com.polsl.trackerportal.database.entity;
 
 import java.io.Serializable;
 import java.math.BigInteger;
@@ -109,7 +109,7 @@ public class OilTemperature implements Serializable {
 
     @Override
     public String toString() {
-        return "com.polsl.projektinzynierski.cartrackerapi.OilTemperature[ idoilTemperature=" + idoilTemperature + " ]";
+        return "com.polsl.trackerportal.OilTemperature[ idoilTemperature=" + idoilTemperature + " ]";
     }
 
 }

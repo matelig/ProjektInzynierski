@@ -13,13 +13,15 @@ import java.util.List;
  * @author m_lig
  */
 public class RouteData {
+
     private int idUser;
-    private Long carVin;
+    private String carVin;
     private BigInteger startDate;
     private BigInteger endDate;
     private List<Location> locationCollection;
     private List<Speed> speedCollection;
     private List<Rpm> RPMCollection;
+    private List<TroubleCodes> troubleCodesCollection;
 
     public List<Speed> getSpeedCollection() {
         return speedCollection;
@@ -36,7 +38,7 @@ public class RouteData {
     public void setRPMCollection(List<Rpm> RPMCollection) {
         this.RPMCollection = RPMCollection;
     }
- 
+
     public int getIdUser() {
         return idUser;
     }
@@ -45,13 +47,13 @@ public class RouteData {
         this.idUser = userId;
     }
 
-    public Long getCarVin() {
+    public String getCarVin() {
         return carVin;
     }
 
-    public void setCarVin(Long carVin) {
+    public void setCarVin(String carVin) {
         this.carVin = carVin;
-    }   
+    }
 
     public BigInteger getStartDate() {
         return startDate;
@@ -76,4 +78,13 @@ public class RouteData {
     public void setLocationCollection(List<Location> locationCollection) {
         this.locationCollection = locationCollection;
     }
+
+    public List<TroubleCodes> getTroubleCodesCollection() {
+        return troubleCodesCollection;
+    }
+
+    public void setTroubleCodesCollection(List<TroubleCodes> troubleCodesCollection) {
+        this.troubleCodesCollection = troubleCodesCollection;
+    }
+
 }

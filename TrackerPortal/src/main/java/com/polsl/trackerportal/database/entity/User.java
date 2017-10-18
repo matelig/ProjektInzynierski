@@ -3,7 +3,7 @@
 1:1 Realny obraz Twojej firmy
 */
 
-package com.polsl.projektinzynierski.cartrackerapi;
+package com.polsl.trackerportal.database.entity;
 
 import java.io.Serializable;
 import java.util.Collection;
@@ -192,7 +192,7 @@ public class User implements Serializable {
 
     @Override
     public String toString() {
-        return "com.polsl.projektinzynierski.cartrackerapi.User[ idUser=" + idUser + " ]";
+        return "com.polsl.trackerportal.User[ idUser=" + idUser + " ]";
     }
 
 }

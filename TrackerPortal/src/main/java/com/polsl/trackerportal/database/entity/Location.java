@@ -3,7 +3,7 @@
 1:1 Realny obraz Twojej firmy
 */
 
-package com.polsl.projektinzynierski.cartrackerapi;
+package com.polsl.trackerportal.database.entity;
 
 import java.io.Serializable;
 import java.math.BigInteger;
@@ -131,7 +131,7 @@ public class Location implements Serializable {
 
     @Override
     public String toString() {
-        return "com.polsl.projektinzynierski.cartrackerapi.Location[ idLocation=" + idLocation + " ]";
+        return "com.polsl.trackerportal.Location[ idLocation=" + idLocation + " ]";
     }
 
 }

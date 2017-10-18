@@ -3,7 +3,7 @@
 1:1 Realny obraz Twojej firmy
 */
 
-package com.polsl.projektinzynierski.cartrackerapi;
+package com.polsl.trackerportal.database.entity;
 
 import java.io.Serializable;
 import javax.persistence.Basic;
@@ -119,7 +119,7 @@ public class Rpm implements Serializable {
 
     @Override
     public String toString() {
-        return "com.polsl.projektinzynierski.cartrackerapi.Rpm[ idrpm=" + idrpm + " ]";
+        return "com.polsl.trackerportal.Rpm[ idrpm=" + idrpm + " ]";
     }
 
 }

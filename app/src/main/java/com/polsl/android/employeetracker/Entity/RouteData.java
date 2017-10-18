@@ -36,7 +36,7 @@ public class RouteData {
     private Long userId;
     @Expose
     @SerializedName("Car_vinNumber")
-    private Long vinNumber=123L;
+    private String vinNumber="123";
 
     private boolean toSend;
 
@@ -98,11 +98,9 @@ public class RouteData {
     public RouteData() {
     }
 
-
-
-    @Generated(hash = 147681151)
-    public RouteData(Long id, Long startDate, Long endDate, Long userId, Long vinNumber, boolean toSend,
-            UploadStatus uploadStatus) {
+    @Generated(hash = 263333037)
+    public RouteData(Long id, Long startDate, Long endDate, Long userId, String vinNumber,
+            boolean toSend, UploadStatus uploadStatus) {
         this.id = id;
         this.startDate = startDate;
         this.endDate = endDate;
@@ -111,8 +109,6 @@ public class RouteData {
         this.toSend = toSend;
         this.uploadStatus = uploadStatus;
     }
-
-
 
     public void start() {
         setStartDate(System.currentTimeMillis());
@@ -424,11 +420,11 @@ public class RouteData {
         this.uploadStatus = uploadStatus;
     }
 
-    public Long getVinNumber() {
+    public String getVinNumber() {
         return this.vinNumber;
     }
 
-    public void setVinNumber(Long vinNumber) {
+    public void setVinNumber(String vinNumber) {
         this.vinNumber = vinNumber;
     }
 

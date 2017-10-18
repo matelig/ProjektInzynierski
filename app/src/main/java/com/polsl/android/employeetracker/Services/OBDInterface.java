@@ -40,6 +40,7 @@ import com.polsl.android.employeetracker.Entity.RPMDataDao;
 import com.polsl.android.employeetracker.Entity.RouteDataDao;
 import com.polsl.android.employeetracker.Entity.SpeedData;
 import com.polsl.android.employeetracker.Entity.SpeedDataDao;
+import com.polsl.android.employeetracker.Entity.TroubleCodesData;
 import com.polsl.android.employeetracker.Entity.TroubleCodesDataDao;
 import com.polsl.android.employeetracker.commands.ObdSetDefaultCommand;
 
@@ -47,7 +48,10 @@ import org.greenrobot.greendao.database.Database;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 
@@ -98,6 +102,7 @@ public class OBDInterface {
     private OilTemperatureDataDao oilTemperatureDataDao;
     private FuelConsumptionRateDataDao fuelConsumptionRateDataDao;
     private FuelLevelDataDao fuelLevelDataDao;
+    private Set<String> oldCodes;
 
     private int previousFuelLevel;
 
@@ -105,6 +110,7 @@ public class OBDInterface {
     public OBDInterface(Context con, SharedPreferences sharedPref, Long routeId) {
         context = con;
         sharedPreferences = sharedPref;
+        oldCodes = new HashSet<>();
         this.routeId = routeId;
         DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(context, "main-db");
         database = helper.getWritableDb();
@@ -328,9 +334,25 @@ public class OBDInterface {
                             } catch (IndexOutOfBoundsException e) {  }
                             try {
                                 troubleCodesCommand.run(socket.getInputStream(),socket.getOutputStream());
-                                //tutaj trzeba splitowac po enterze i wrzucac trouble codes co bazy
-                                //OBDReadings.putExtra("engineRpm", troubleCodesCommand.getFormattedResult());
-                                goodCodes = true;
+                                String[] splitted = troubleCodesCommand.getCalculatedResult().split("\n");
+                                Set<String> newCodes = new HashSet<>();
+                                Set<String> tempCodes = new HashSet<>();
+                                for (String s : splitted) {
+                                    newCodes.add(s);
+                                    tempCodes.add(s);
+                                }
+                                long timestamp = System.currentTimeMillis();
+                                newCodes.removeAll(oldCodes); // dodajemy nowe do bazy - dodajemy ze stanem 1
+                                for (String s : newCodes) {
+                                    TroubleCodesData tcd = new TroubleCodesData(routeId,s,timestamp,1);
+                                    troubleCodesDataDao.insert(tcd);
+                                }
+                                oldCodes.removeAll(tempCodes); //usuwamy stare z bazy - dodajemy ze stanem 0
+                                for (String s : oldCodes) {
+                                    TroubleCodesData tcd = new TroubleCodesData(routeId,s,timestamp,0);
+                                    troubleCodesDataDao.insert(tcd);
+                                }
+                                oldCodes = new HashSet<>(tempCodes); //przypisujemy nowe
                             }  catch (NoDataException e) {
                             goodCodes = false;
                         } catch (IndexOutOfBoundsException e) {  }

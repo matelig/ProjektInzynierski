@@ -1,17 +1,18 @@
 /*
 (c) Systemy Przetwarzania i Integracji Danych SPIID sp. z o.o.
 1:1 Realny obraz Twojej firmy
-*/
-
-package com.polsl.projektinzynierski.cartrackerapi;
+ */
+package com.polsl.trackerportal.database.entity;
 
 import java.io.Serializable;
 import java.math.BigInteger;
 import java.util.Collection;
+import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -60,7 +61,7 @@ public class Route implements Serializable {
     private User useridUser;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "routeidRoute")
     private Collection<FuelComsumptionRate> fuelComsumptionRateCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "routeidRoute")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "routeidRoute", fetch = FetchType.EAGER)
     private Collection<TroubleCodes> troubleCodesCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "routeidRoute")
     private Collection<Location> locationCollection;
@@ -199,9 +200,31 @@ public class Route implements Serializable {
         return true;
     }
 
+    public String getRouteDuration() {
+        long duration = this.getEndDate().longValue() - this.getStartDate().longValue();
+
+        long second = (duration / 1000) % 60;
+        long minute = (duration / (1000 * 60)) % 60;
+        long hour = (duration / (1000 * 60 * 60)) % 24;
+
+        String time = String.format("%02d:%02d:%02d", hour, minute, second);
+
+        return time;
+    }
+
+    public Date getCalculatedStartDate() {
+        long startDate = this.startDate.longValue();
+        return new Date(startDate);
+    }
+
+    public Date getCalculatedEndDate() {
+        long endDate = this.startDate.longValue();
+        return new Date(endDate);
+    }
+
     @Override
     public String toString() {
-        return "com.polsl.projektinzynierski.cartrackerapi.Route[ idRoute=" + idRoute + " ]";
+        return "com.polsl.trackerportal.Route[ idRoute=" + idRoute + " ]";
     }
 
 }

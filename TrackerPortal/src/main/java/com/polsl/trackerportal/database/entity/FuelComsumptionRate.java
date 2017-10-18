@@ -3,7 +3,7 @@
 1:1 Realny obraz Twojej firmy
 */
 
-package com.polsl.projektinzynierski.cartrackerapi;
+package com.polsl.trackerportal.database.entity;
 
 import java.io.Serializable;
 import javax.persistence.Basic;
@@ -25,21 +25,21 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Mateusz Ligus <mateusz.ligus@spiid.pl>
  */
 @Entity
-@Table(name = "rpm")
+@Table(name = "fuelComsumptionRate")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Rpm.findAll", query = "SELECT r FROM Rpm r")
-    , @NamedQuery(name = "Rpm.findByIdrpm", query = "SELECT r FROM Rpm r WHERE r.idrpm = :idrpm")
-    , @NamedQuery(name = "Rpm.findByValue", query = "SELECT r FROM Rpm r WHERE r.value = :value")
-    , @NamedQuery(name = "Rpm.findByTimestamp", query = "SELECT r FROM Rpm r WHERE r.timestamp = :timestamp")})
-public class Rpm implements Serializable {
+    @NamedQuery(name = "FuelComsumptionRate.findAll", query = "SELECT f FROM FuelComsumptionRate f")
+    , @NamedQuery(name = "FuelComsumptionRate.findByIdfuelComsumptionRate", query = "SELECT f FROM FuelComsumptionRate f WHERE f.idfuelComsumptionRate = :idfuelComsumptionRate")
+    , @NamedQuery(name = "FuelComsumptionRate.findByValue", query = "SELECT f FROM FuelComsumptionRate f WHERE f.value = :value")
+    , @NamedQuery(name = "FuelComsumptionRate.findByTimestamp", query = "SELECT f FROM FuelComsumptionRate f WHERE f.timestamp = :timestamp")})
+public class FuelComsumptionRate implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "idrpm")
-    private Integer idrpm;
+    @Column(name = "idfuelComsumptionRate")
+    private Integer idfuelComsumptionRate;
     @Basic(optional = false)
     @NotNull
     @Column(name = "value")
@@ -52,25 +52,25 @@ public class Rpm implements Serializable {
     @ManyToOne(optional = false)
     private Route routeidRoute;
 
-    public Rpm() {
+    public FuelComsumptionRate() {
     }
 
-    public Rpm(Integer idrpm) {
-        this.idrpm = idrpm;
+    public FuelComsumptionRate(Integer idfuelComsumptionRate) {
+        this.idfuelComsumptionRate = idfuelComsumptionRate;
     }
 
-    public Rpm(Integer idrpm, int value, long timestamp) {
-        this.idrpm = idrpm;
+    public FuelComsumptionRate(Integer idfuelComsumptionRate, int value, long timestamp) {
+        this.idfuelComsumptionRate = idfuelComsumptionRate;
         this.value = value;
         this.timestamp = timestamp;
     }
 
-    public Integer getIdrpm() {
-        return idrpm;
+    public Integer getIdfuelComsumptionRate() {
+        return idfuelComsumptionRate;
     }
 
-    public void setIdrpm(Integer idrpm) {
-        this.idrpm = idrpm;
+    public void setIdfuelComsumptionRate(Integer idfuelComsumptionRate) {
+        this.idfuelComsumptionRate = idfuelComsumptionRate;
     }
 
     public int getValue() {
@@ -100,18 +100,18 @@ public class Rpm implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (idrpm != null ? idrpm.hashCode() : 0);
+        hash += (idfuelComsumptionRate != null ? idfuelComsumptionRate.hashCode() : 0);
         return hash;
     }
 
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Rpm)) {
+        if (!(object instanceof FuelComsumptionRate)) {
             return false;
         }
-        Rpm other = (Rpm) object;
-        if ((this.idrpm == null && other.idrpm != null) || (this.idrpm != null && !this.idrpm.equals(other.idrpm))) {
+        FuelComsumptionRate other = (FuelComsumptionRate) object;
+        if ((this.idfuelComsumptionRate == null && other.idfuelComsumptionRate != null) || (this.idfuelComsumptionRate != null && !this.idfuelComsumptionRate.equals(other.idfuelComsumptionRate))) {
             return false;
         }
         return true;
@@ -119,7 +119,7 @@ public class Rpm implements Serializable {
 
     @Override
     public String toString() {
-        return "com.polsl.projektinzynierski.cartrackerapi.Rpm[ idrpm=" + idrpm + " ]";
+        return "com.polsl.trackerportal.FuelComsumptionRate[ idfuelComsumptionRate=" + idfuelComsumptionRate + " ]";
     }
 
 }
