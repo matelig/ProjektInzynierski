@@ -10,13 +10,16 @@ import com.polsl.trackerportal.database.entity.Location;
 import com.polsl.trackerportal.database.entity.Route;
 import com.polsl.trackerportal.database.entity.Rpm;
 import com.polsl.trackerportal.database.entity.Speed;
+import com.polsl.trackerportal.database.entity.TroubleCodes;
 import com.polsl.trackerportal.util.ChartModeler;
 import com.polsl.trackerportal.util.LoggedUser;
 import java.awt.geom.Point2D;
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
@@ -29,22 +32,27 @@ import javax.persistence.PersistenceContext;
 import org.primefaces.model.chart.Axis;
 import org.primefaces.model.chart.AxisType;
 import org.primefaces.model.chart.CartesianChartModel;
+import org.primefaces.model.chart.DateAxis;
 import org.primefaces.model.chart.LineChartModel;
 import org.primefaces.model.map.DefaultMapModel;
 import org.primefaces.model.map.LatLng;
 import org.primefaces.model.map.LatLngBounds;
 import org.primefaces.model.map.MapModel;
 import org.primefaces.model.map.Polyline;
+import pl.spiid.lib.spiidcharts.models.GanttAmChartModel;
+import pl.spiid.lib.spiidcharts.models.SerialAmChartModel;
 
 /**
  *
  * @author m_lig
  */
-@ManagedBean(name = "routeDetails")
+@ManagedBean(name = "routeDetails", eager = true)
 @ViewScoped
 public class RouteDetails implements Serializable {
 
-    private LineChartModel speedChartModel;
+    private SerialAmChartModel speedChartModel;
+
+    private GanttAmChartModel troubleCodesChartModel;
 
     private LineChartModel rpmChartModel;
 
@@ -61,6 +69,7 @@ public class RouteDetails implements Serializable {
     private List<Speed> speedList;
     private List<Location> locationList;
     private List<Rpm> RPMList;
+    private List<TroubleCodes> troubleCodes;
     private Route route;
     private Car car;
     private String centerOfMap;
@@ -98,21 +107,23 @@ public class RouteDetails implements Serializable {
     }
 
     private void prepareCharts() {
-//       lineModel1 = initLinearModel();
-//        lineModel1.setTitle("Linear Chart");
-//        lineModel1.setLegendPosition("e");
-//        Axis yAxis = lineModel1.getAxis(AxisType.Y);
-//        yAxis.setMin(0);
-//        yAxis.setMax(10);
+        SimpleDateFormat sfd = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        if (speedList.size() > 0) {
+            Collections.sort(speedList, new Comparator<Speed>() {
+                @Override
+                public int compare(Speed t, Speed t1) {
+                    return t.getTimestamp().compareTo(t1.getTimestamp());
+                }
+            });
+        }
         speedChartModel = ChartModeler.initSpeedModel(speedList);
-        speedChartModel.setTitle("Speed");
-        speedChartModel.setLegendPosition("e");
-        Axis xAxis = speedChartModel.getAxis(AxisType.X);
-        xAxis.setTickCount(10);
+
+        troubleCodesChartModel = ChartModeler.initTroubleCodesChartModel(new Date(route.getStartDate().longValue()),troubleCodes);
 
         rpmChartModel = ChartModeler.initRPMModel(RPMList);
         rpmChartModel.setTitle("RPM");
         rpmChartModel.setLegendPosition("e");
+        rpmChartModel.setZoom(true);
         Axis xxAxis = rpmChartModel.getAxis(AxisType.X);
         xxAxis.setTickCount(10);
 
@@ -121,10 +132,6 @@ public class RouteDetails implements Serializable {
     private void createMapModel() {
         mapModel = new DefaultMapModel();
         Polyline polyline = new Polyline();
-//        for (Location l : locationList) {
-//            LatLng coord = new LatLng(l.getLatitude(), l.getLongitude());
-//            polyline.getPaths().add(coord);
-//        }
         for (int i = 0; i < locationList.size(); i++) {
             LatLng coord = new LatLng(locationList.get(i).getLatitude(), locationList.get(i).getLongitude());
             polyline.getPaths().add(coord);
@@ -144,6 +151,7 @@ public class RouteDetails implements Serializable {
         speedList = new ArrayList<>(route.getSpeedCollection());
         locationList = new ArrayList<>(route.getLocationCollection());
         RPMList = new ArrayList(route.getRpmCollection());
+        troubleCodes = new ArrayList<>(route.getTroubleCodesCollection());
         if (locationList.size() > 0) {
             Collections.sort(locationList, new Comparator<Location>() {
                 @Override
@@ -169,11 +177,11 @@ public class RouteDetails implements Serializable {
         return new Point2D.Double(x, y);
     }
 
-    public LineChartModel getSpeedChartModel() {
+    public SerialAmChartModel getSpeedChartModel() {
         return speedChartModel;
     }
 
-    public void setSpeedChartModel(LineChartModel speedChartModel) {
+    public void setSpeedChartModel(SerialAmChartModel speedChartModel) {
         this.speedChartModel = speedChartModel;
     }
 
@@ -199,6 +207,14 @@ public class RouteDetails implements Serializable {
 
     public void setCenterOfMap(String centerOfMap) {
         this.centerOfMap = centerOfMap;
+    }
+
+    public GanttAmChartModel getTroubleCodesChartModel() {
+        return troubleCodesChartModel;
+    }
+
+    public void setTroubleCodesChartModel(GanttAmChartModel troubleCodesChartModel) {
+        this.troubleCodesChartModel = troubleCodesChartModel;
     }
 
 }

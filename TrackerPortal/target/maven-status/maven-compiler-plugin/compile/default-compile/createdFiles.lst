@@ -4,14 +4,17 @@ com\polsl\trackerportal\database\entity\Car.class
 com\polsl\trackerportal\UserManagement.class
 com\polsl\trackerportal\database\entity\User.class
 com\polsl\trackerportal\CarManagement.class
+com\polsl\trackerportal\RouteDetails$2.class
 com\polsl\trackerportal\database\entity\FuelLevel_.class
 com\polsl\trackerportal\database\entity\TroubleCodes.class
 com\polsl\trackerportal\database\entity\Route_.class
 com\polsl\trackerportal\MenuView.class
 com\polsl\trackerportal\database\entity\Speed.class
 com\polsl\trackerportal\database\entity\OilTemperature_.class
+com\polsl\trackerportal\util\IntegerMinMax.class
 com\polsl\trackerportal\database\entity\TroubleCodes_.class
 com\polsl\trackerportal\RouteManagement.class
+com\polsl\trackerportal\util\SerialAmChartBean.class
 com\polsl\trackerportal\database\entity\Location_.class
 com\polsl\trackerportal\util\LoggedUser.class
 com\polsl\trackerportal\CurrentUserSettings.class

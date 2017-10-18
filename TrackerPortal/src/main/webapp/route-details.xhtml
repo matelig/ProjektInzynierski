@@ -3,7 +3,8 @@
                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                 xsi:schemaLocation="http://www.w3.org/1999/xhtml http://www.w3.org/2002/08/xhtml/xhtml1-transitional.xsd"
                 template="/template/template.xhtml"
-                xmlns:p="http://primefaces.org/ui">
+                xmlns:p="http://primefaces.org/ui"
+                 xmlns:w="http://www.spiid.pl/spiidcharts">
 
     <ui:define name="htmlHead">
         <meta name="description" content="Our Company Home Page" />
@@ -17,7 +18,7 @@
     </ui:define>
 
     <ui:define name="main">
-
+        
         <p:dataTable rendered="false"         >
             <p:column headerText="Kolumna">
 
@@ -27,9 +28,10 @@
             <f:viewParam name="routeID" value="#{routeList.clickedRouteId}" />
         </f:metadata>        
         <p:gmap id="gmap" widgetVar="map" center="#{routeDetails.centerOfMap}" zoom="10" type="HYBRID" style="width:100%;height:400px" model="#{routeDetails.mapModel}" />
-        <p:chart type="line" model="#{routeDetails.speedChartModel}" style="width: 100%;height: 300px;" responsive="true"/>
+<!--        <p:chart type="line" model="#{routeDetails.speedChartModel}" style="width: 100%;height: 300px;" responsive="true"/>-->
+        <w:serialAmChart model="#{routeDetails.speedChartModel}" />
         <p:chart type="line" model="#{routeDetails.rpmChartModel}" style="width: 100%;height: 300px;" responsive="true"/>
-
+        <w:ganttAmChart model="#{routeDetails.troubleCodesChartModel}" />
     </ui:define>
 
 </ui:composition>
