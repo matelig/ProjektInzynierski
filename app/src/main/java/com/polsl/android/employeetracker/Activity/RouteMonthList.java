@@ -10,10 +10,12 @@ import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.orhanobut.hawk.Hawk;
 import com.polsl.android.employeetracker.Entity.DaoMaster;
 import com.polsl.android.employeetracker.Entity.DaoSession;
 import com.polsl.android.employeetracker.Entity.RouteData;
 import com.polsl.android.employeetracker.Entity.RouteDataDao;
+import com.polsl.android.employeetracker.Entity.User;
 import com.polsl.android.employeetracker.Helper.ApiHelper;
 import com.polsl.android.employeetracker.R;
 import com.polsl.android.employeetracker.adapter.RouteListAdapter;
@@ -49,8 +51,10 @@ public class RouteMonthList extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_route_month_list);
-        SharedPreferences prefs = getSharedPreferences(getPackageName(), Context.MODE_PRIVATE);
-        Long userId = prefs.getLong(ApiHelper.USER_ID,0);
+//        SharedPreferences prefs = getSharedPreferences(getPackageName(), Context.MODE_PRIVATE);
+//        Long userId = prefs.getLong(ApiHelper.USER_ID,0);
+        User user = Hawk.get(ApiHelper.USER);
+        Long userId = user.getId();
         Intent intent = getIntent();
         year = Integer.parseInt(intent.getStringExtra("year"));
         DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(this, "main-db");

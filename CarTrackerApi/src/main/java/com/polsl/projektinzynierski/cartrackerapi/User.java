@@ -80,6 +80,8 @@ public class User implements Serializable {
     private short administrator;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "useridUser")
     private Collection<Route> routeCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "useridUser")
+    private Collection<CurrentLocation> currentLocationCollection;
 
     public User() {
     }
@@ -168,6 +170,15 @@ public class User implements Serializable {
 
     public void setRouteCollection(Collection<Route> routeCollection) {
         this.routeCollection = routeCollection;
+    }
+
+    @XmlTransient
+    public Collection<CurrentLocation> getCurrentLocationCollection() {
+        return currentLocationCollection;
+    }
+
+    public void setCurrentLocationCollection(Collection<CurrentLocation> currentLocationCollection) {
+        this.currentLocationCollection = currentLocationCollection;
     }
 
     @Override

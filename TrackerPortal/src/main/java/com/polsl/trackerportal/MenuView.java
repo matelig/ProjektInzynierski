@@ -64,6 +64,11 @@ public class MenuView implements Serializable {
         item.setIcon("ui-icon-home");
         firstSubmenu.addElement(item);
         
+        item = new DefaultMenuItem("Locations");
+        item.setCommand("last-known-locations.xhtml?faces-redirect=true");
+        item.setIcon("ui-icon-home");
+        firstSubmenu.addElement(item);
+        
         item = new DefaultMenuItem("Settings");
         item.setCommand("settings.xhtml?faces-redirect=true");
         item.setIcon("ui-icon-home");

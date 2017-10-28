@@ -81,7 +81,6 @@ public class SerialAmChartBean {
             GraphAxes graph = new GraphAxes.GraphAxesBuilder()
                     .setId("v" + j)
                     .setBullet(Graph.Bullet.ROUND)
-                    .sethHideBulletsCount(50)
                     .setLineThickness(2)
                     .setValueField(generator.generateString(10))
                     .setType(type)

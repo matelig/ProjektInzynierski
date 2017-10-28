@@ -5,30 +5,24 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.pm.LauncherApps;
 import android.content.pm.PackageManager;
+import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.View;
-import android.view.Window;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
+import com.orhanobut.hawk.Hawk;
 import com.polsl.android.employeetracker.Entity.User;
 import com.polsl.android.employeetracker.Helper.ApiHelper;
 import com.polsl.android.employeetracker.R;
 import com.polsl.android.employeetracker.RESTApi.RESTServicesEndpoints;
 import com.polsl.android.employeetracker.RESTApi.RetrofitClient;
 
-import org.w3c.dom.Text;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -51,9 +45,13 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
         checkLocationPermission();
-        SharedPreferences prefs = getSharedPreferences(getPackageName(), Context.MODE_PRIVATE);
-        if (!prefs.getString(ApiHelper.USER_PESEL,"").isEmpty()) {
-            Intent intent = new Intent(this,SlideActivityPager.class);
+//        SharedPreferences prefs = getSharedPreferences(getPackageName(), Context.MODE_PRIVATE);
+//        if (!prefs.getString(ApiHelper.USER_PESEL,"").isEmpty()) {
+//            Intent intent = new Intent(this,SlideActivityPager.class);
+//            startActivity(intent);
+//        }
+        if (Hawk.contains(ApiHelper.USER)) {
+            Intent intent = new Intent(this, SlideActivityPager.class);
             startActivity(intent);
         }
     }
@@ -69,16 +67,17 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
                 User loggedUser = response.body();
-                if (loggedUser==null) {
-                    Toast.makeText(context, R.string.wrong_user,Toast.LENGTH_SHORT).show();
+                if (loggedUser == null) {
+                    Toast.makeText(context, R.string.wrong_user, Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(context,"logged as " + loggedUser.getName() + " " + loggedUser.getSurname(),Toast.LENGTH_SHORT).show();
-                    SharedPreferences prefs = getSharedPreferences(getPackageName(), Context.MODE_PRIVATE);
-                    prefs.edit().putString(ApiHelper.USER_NAME, loggedUser.getName()).apply();
-                    prefs.edit().putString(ApiHelper.USER_SURNAME, loggedUser.getSurname()).apply();
-                    prefs.edit().putString(ApiHelper.USER_PESEL, loggedUser.getPesel()).apply();
-                    prefs.edit().putLong(ApiHelper.USER_ID, loggedUser.getId()).apply();
-                    Intent intent = new Intent(context,SlideActivityPager.class);
+                    Toast.makeText(context, "logged as " + loggedUser.getName() + " " + loggedUser.getSurname(), Toast.LENGTH_SHORT).show();
+//                    SharedPreferences prefs = getSharedPreferences(getPackageName(), Context.MODE_PRIVATE);
+//                    prefs.edit().putString(ApiHelper.USER_NAME, loggedUser.getName()).apply();
+//                    prefs.edit().putString(ApiHelper.USER_SURNAME, loggedUser.getSurname()).apply();
+//                    prefs.edit().putString(ApiHelper.USER_PESEL, loggedUser.getPesel()).apply();
+//                    prefs.edit().putLong(ApiHelper.USER_ID, loggedUser.getId()).apply();
+                    Hawk.put(ApiHelper.USER, loggedUser);
+                    Intent intent = new Intent(context, SlideActivityPager.class);
                     startActivity(intent);
                     finish();
                 }
@@ -86,7 +85,7 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<User> call, Throwable t) {
-                Toast.makeText(context, R.string.login_failure,Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, R.string.login_failure, Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -106,7 +105,7 @@ public class LoginActivity extends AppCompatActivity {
                 .setCancelable(false)
                 .setPositiveButton(R.string.yes_button, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        Intent intent = new Intent(context,SlideActivityPager.class);
+                        Intent intent = new Intent(context, SlideActivityPager.class);
                         startActivity(intent);
                         //TODO: Zapamiętanie, że pracujemy offline
                     }
@@ -158,7 +157,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void registerNewUser(View view) {
-        Intent intent = new Intent(this,RegisterActivity.class);
+        Intent intent = new Intent(this, RegisterActivity.class);
         startActivity(intent);
     }
 }

@@ -13,10 +13,12 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.google.android.gms.common.api.Api;
+import com.orhanobut.hawk.Hawk;
 import com.polsl.android.employeetracker.Entity.DaoMaster;
 import com.polsl.android.employeetracker.Entity.DaoSession;
 import com.polsl.android.employeetracker.Entity.RouteData;
 import com.polsl.android.employeetracker.Entity.RouteDataDao;
+import com.polsl.android.employeetracker.Entity.User;
 import com.polsl.android.employeetracker.Helper.ApiHelper;
 import com.polsl.android.employeetracker.R;
 import com.polsl.android.employeetracker.adapter.RouteListAdapter;
@@ -58,8 +60,10 @@ public class RouteListFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_route_list, container, false);
         routeListView = (RecyclerView) rootView.findViewById(R.id.route_recycler);
-        SharedPreferences prefs = getContext().getSharedPreferences(getContext().getPackageName(), Context.MODE_PRIVATE);
-        Long userId = prefs.getLong(ApiHelper.USER_ID,0);
+//        SharedPreferences prefs = getContext().getSharedPreferences(getContext().getPackageName(), Context.MODE_PRIVATE);
+//        Long userId = prefs.getLong(ApiHelper.USER_ID,0);
+        User user = Hawk.get(ApiHelper.USER);
+        Long userId = user.getId();
         Set<Integer> usedYears = new HashSet<>();
 //        setContentView(R.layout.activity_route_list);
         DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(rootView.getContext(), "main-db");

@@ -47,7 +47,7 @@ public class Rpm implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Column(name = "timestamp")
-    private long timestamp;
+    private Long timestamp;
     @JoinColumn(name = "route_idRoute", referencedColumnName = "idRoute")
     @ManyToOne(optional = false)
     private Route routeidRoute;
@@ -81,11 +81,11 @@ public class Rpm implements Serializable {
         this.value = value;
     }
 
-    public long getTimestamp() {
+    public Long getTimestamp() {
         return timestamp;
     }
 
-    public void setTimestamp(long timestamp) {
+    public void setTimestamp(Long timestamp) {
         this.timestamp = timestamp;
     }
 

@@ -36,6 +36,7 @@ import pl.spiid.lib.spiidcharts.models.data.DataMap;
 import pl.spiid.lib.spiidcharts.models.data.DateSegment;
 import pl.spiid.lib.spiidcharts.models.data.GanttDataProvider;
 import pl.spiid.lib.spiidcharts.models.enums.Position;
+import pl.spiid.lib.spiidcharts.models.enums.Time;
 
 /**
  *
@@ -61,24 +62,44 @@ public class ChartModeler {
 
         SimpleDateFormat sfd = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         List<GraphAxes> graphs = new ArrayList<>();
-        GraphAxes graph = new GraphAxes.GraphAxesBuilder()
-                .setId("speed")
-                .setBullet(Graph.Bullet.ROUND)
-                .sethHideBulletsCount(50)
-                .setLineThickness(2)
-                .setValueField("y")
-                .setType(GraphAxes.Type.LINE)
-                .setFillColors(new Color(255, 0, 0))
-                .build();
-        graphs.add(graph);
+        List<DataMap> dataProvider = new ArrayList<>();
+        long lastFrame = 0;
+        for (int i = 0; i < speedData.size(); i++) {
+            long x;
+            if ((x = speedData.get(i).getTimestamp() - lastFrame) > 10000) {
+                GraphAxes graph = new GraphAxes.GraphAxesBuilder()
+                        .setId("speed" + i)
+                        .setLineThickness(2)
+                        .setValueField("y" + i)
+                        .setType(GraphAxes.Type.LINE)  
+                        
+                        .setBalloonText("<span style='font-size:12px;'>[[title]] in [[category]]:<br><span style='font-size:20px;'>[[value]]</span> km/h [[additional]]</span>")
+                        .setFillColors(new Color(255, 0, 0))
+                        .build();
+                graphs.add(graph);
+                
+            }
+            lastFrame = speedData.get(i).getTimestamp();
+            DataMap map = new DataMap();
+            map.put(graphs.get(graphs.size() - 1).getValueField(), speedData.get(i).getValue());
+            Date date = new Date(speedData.get(i).getTimestamp().longValue());
+            map.put("date", sfd.format(date));
+            dataProvider.add(map);
+        }
         SerialAmChartModel model = new SerialAmChartModel.SerialAmChartModelBuilder()
                 .setTheme(AmChart.Theme.LIGHT)
                 .setGraphs(graphs)
                 .setLanguage(Locale.forLanguageTag("pl"))
                 .setDataDateFormat("YYYY-MM-DD HH:NN:SS")
+                .setChartCursor(new ChartCursor.ChartCursorBuilder()
+                        .setValueBalloonsEnabled(Boolean.TRUE)
+                        .setValueLineEnabled(Boolean.TRUE)
+                        .build())
                 .setCategoryField("date")
                 .setCategoryAxes(new CategoryAxis.CategoryAxisBuilder()
                         .setParseDates(Boolean.TRUE)
+                        .setMinorGridEnabled(Boolean.TRUE)
+                        .setMinPeriod(Time.Period.SECONDS)
                         .setMinorGridEnabled(Boolean.TRUE)
                         .build())
                 .setChartScrollbar(new ChartScrollbar.ChartScrollbarBuilder()
@@ -96,29 +117,63 @@ public class ChartModeler {
                         .build())
                 .build();
 
-        List<DataMap> dataProvider = new ArrayList<>();
-        for (int i = 0; i < speedData.size(); i++) {
-            DataMap map = new DataMap();
-            map.put(graphs.get(0).getValueField(), speedData.get(i).getValue());
-            Date date = new Date(speedData.get(i).getTimestamp().longValue());
-            map.put("date", sfd.format(date));
-            dataProvider.add(map);
-        }
         model.updateDataProvider(dataProvider);
 
         return model;
     }
 
-    public static LineChartModel initRPMModel(List<Rpm> rpmData) {
-        LineChartModel model = new LineChartModel();
-
-        LineChartSeries series = new LineChartSeries();
-        series.setLabel("Series 1");
-        for (Rpm s : rpmData) {
-            series.set(s.getTimestamp(), s.getValue());
+    public static SerialAmChartModel initRPMModel(List<Rpm> rpmData) {        
+        SimpleDateFormat sfd = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        List<GraphAxes> graphs = new ArrayList<>();
+        List<DataMap> dataProvider = new ArrayList<>();
+        long lastFrame = 0;
+        for (int i = 0; i < rpmData.size(); i++) {
+            long x;
+            if ((x = rpmData.get(i).getTimestamp() - lastFrame) > 10000) {
+                GraphAxes graph = new GraphAxes.GraphAxesBuilder()
+                        .setId("rpm" + i)
+                        .setLineThickness(2)
+                        .setValueField("y" + i)
+                        .setType(GraphAxes.Type.LINE)
+                        .setFillColors(new Color(255, 0, 0))
+                        .build();
+                graphs.add(graph);
+                
+            }
+            lastFrame = rpmData.get(i).getTimestamp();
+            DataMap map = new DataMap();
+            map.put(graphs.get(graphs.size() - 1).getValueField(), rpmData.get(i).getValue());
+            Date date = new Date(rpmData.get(i).getTimestamp());
+            map.put("date", sfd.format(date));
+            dataProvider.add(map);
         }
+        SerialAmChartModel model = new SerialAmChartModel.SerialAmChartModelBuilder()
+                .setTheme(AmChart.Theme.LIGHT)
+                .setGraphs(graphs)
+                .setLanguage(Locale.forLanguageTag("pl"))
+                .setDataDateFormat("YYYY-MM-DD HH:NN:SS")
+                .setCategoryField("date")
+                .setCategoryAxes(new CategoryAxis.CategoryAxisBuilder()
+                        .setParseDates(Boolean.TRUE)
+                        .setMinorGridEnabled(Boolean.TRUE)
+                        .setMinPeriod(Time.Period.SECONDS)
+                        .build())
+                .setChartScrollbar(new ChartScrollbar.ChartScrollbarBuilder()
+                        .setOffset(15)
+                        .setAutoGridCount(Boolean.TRUE)
+                        .build()
+                )
+                .setValueScrollBar(new ChartScrollbar.ChartScrollbarBuilder()
+                        .setAutoGridCount(Boolean.TRUE)
+                        .setOffset(15)
+                        .build())
+                .setLegend(new Legend.LegendBuilder()
+                        .setAutoMargin(Boolean.TRUE)
+                        .setPosition(Position.simplePosition.BOTTOM).setUseGraphSettings(Boolean.TRUE)
+                        .build())
+                .build();
 
-        model.addSeries(series);
+        model.updateDataProvider(dataProvider);
 
         return model;
     }
@@ -166,7 +221,7 @@ public class ChartModeler {
                         .setAutoGridCount(Boolean.TRUE)
                         .setOffset(15)
                         .build())
-                .setPeriod(GanttAmChartModel.Period.SECONDS)
+                .setPeriod(Time.Period.SECONDS)
                 .setDataProvider(gantDataList)
                 .setGraph(graph)
                 .setValueAxis(new ValueAxis.ValueAxisBuilder()

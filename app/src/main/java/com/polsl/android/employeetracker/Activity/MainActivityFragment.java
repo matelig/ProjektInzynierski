@@ -18,6 +18,8 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.orhanobut.hawk.Hawk;
+import com.polsl.android.employeetracker.Entity.User;
 import com.polsl.android.employeetracker.Helper.ApiHelper;
 import com.polsl.android.employeetracker.R;
 import com.polsl.android.employeetracker.Services.LocationService;
@@ -89,7 +91,15 @@ public class MainActivityFragment extends Fragment {
             serviceTime.setText(engineRpm);
             carConsumption.setText(consumption);
             vinNumber.setText(oil);
-            roadLength.setText(level);
+            //roadLength.setText(level);
+        }
+    };
+
+    private final BroadcastReceiver locationReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Double distance = intent.getDoubleExtra("distance",0.0);
+            roadLength.setText(String.valueOf(distance));
         }
     };
 
@@ -137,6 +147,9 @@ public class MainActivityFragment extends Fragment {
         IntentFilter obdGetReadings = new IntentFilter("OBDReadings");
         getActivity().registerReceiver(OBDReadings,obdGetReadings);
 
+        IntentFilter locationFilter = new IntentFilter("LocationData");
+        getActivity().registerReceiver(locationReceiver,locationFilter);
+
         serviceButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -144,9 +157,10 @@ public class MainActivityFragment extends Fragment {
                 if (serviceButton.getText().equals(startServiceText)) {
                     serviceButton.setText(R.string.stop_service);
                     Intent intent = new Intent(getActivity(), LocationService.class);
-                    SharedPreferences prefs = getContext().getSharedPreferences(getContext().getPackageName(), Context.MODE_PRIVATE);
-                    intent.putExtra(ApiHelper.OBD_DEVICE_ADDRESS,prefs.getString(ApiHelper.OBD_DEVICE_ADDRESS,""));
-                    intent.putExtra(ApiHelper.USER_ID, prefs.getLong(ApiHelper.USER_ID,0));
+//                    SharedPreferences prefs = getContext().getSharedPreferences(getContext().getPackageName(), Context.MODE_PRIVATE);
+                    intent.putExtra(ApiHelper.OBD_DEVICE_ADDRESS, Hawk.get(ApiHelper.OBD_DEVICE_ADDRESS,""));
+                    User user = Hawk.get(ApiHelper.USER);
+                    intent.putExtra(ApiHelper.USER, user);
                     intent.setAction(ApiHelper.START_SERVICE);
                     getActivity().startService(intent);
                 } else {
@@ -178,5 +192,6 @@ public class MainActivityFragment extends Fragment {
         getActivity().unregisterReceiver(bluetoothStateReceiver);
         getActivity().unregisterReceiver(OBDStatusReceiver);
         getActivity().unregisterReceiver(OBDReadings);
+        getActivity().unregisterReceiver(locationReceiver);
     }
 }

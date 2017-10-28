@@ -1,18 +1,16 @@
 package com.polsl.android.employeetracker.Entity;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-
-import org.greenrobot.greendao.annotation.Entity;
-import org.greenrobot.greendao.annotation.Generated;
-import org.greenrobot.greendao.annotation.Id;
-import org.greenrobot.greendao.annotation.NotNull;
 
 /**
  * Created by m_lig on 24.07.2017.
  */
 
-public class User {
+public class User implements Parcelable {
     @Expose
     @SerializedName("idUser")
     private Long id;
@@ -25,9 +23,22 @@ public class User {
     @Expose
     private String password;
 
+    public static final Parcelable.Creator<User> CREATOR =
+            new Creator<User>() {
+                @Override
+                public User createFromParcel(Parcel source) {
+                    return new User(source);
+                }
+
+                @Override
+                public User[] newArray(int size) {
+                    return new User[size];
+                }
+            };
+
 
     public User(Long id, String name, String surname,
-             String pesel, String password) {
+                String pesel, String password) {
         this.id = id;
         this.name = name;
         this.surname = surname;
@@ -80,4 +91,26 @@ public class User {
     }
 
 
+
+    public User(Parcel in) {
+    this.id = in.readLong();
+        this.name = in.readString();
+        this.surname = in.readString();
+        this.pesel = in.readString();
+        this.password = in.readString();
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(this.id);
+        dest.writeString(this.name);
+        dest.writeString(this.surname);
+        dest.writeString(this.pesel);
+        dest.writeString(this.password);
+    }
 }

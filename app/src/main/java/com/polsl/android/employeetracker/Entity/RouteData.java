@@ -37,6 +37,9 @@ public class RouteData {
     @Expose
     @SerializedName("Car_vinNumber")
     private String vinNumber="123";
+    @Expose
+    @SerializedName("roadLength")
+    private Double roadLength;
 
     private boolean toSend;
 
@@ -98,19 +101,21 @@ public class RouteData {
     public RouteData() {
     }
 
-    @Generated(hash = 263333037)
+    @Generated(hash = 1471886068)
     public RouteData(Long id, Long startDate, Long endDate, Long userId, String vinNumber,
-            boolean toSend, UploadStatus uploadStatus) {
+            Double roadLength, boolean toSend, UploadStatus uploadStatus) {
         this.id = id;
         this.startDate = startDate;
         this.endDate = endDate;
         this.userId = userId;
         this.vinNumber = vinNumber;
+        this.roadLength = roadLength;
         this.toSend = toSend;
         this.uploadStatus = uploadStatus;
     }
 
     public void start() {
+        setRoadLength(0.0);
         setStartDate(System.currentTimeMillis());
         setUploadStatus(UploadStatus.NOT_UPLOADED);
         toSend = false;
@@ -426,6 +431,14 @@ public class RouteData {
 
     public void setVinNumber(String vinNumber) {
         this.vinNumber = vinNumber;
+    }
+
+    public Double getRoadLength() {
+        return this.roadLength;
+    }
+
+    public void setRoadLength(Double roadLength) {
+        this.roadLength = roadLength;
     }
 
 }

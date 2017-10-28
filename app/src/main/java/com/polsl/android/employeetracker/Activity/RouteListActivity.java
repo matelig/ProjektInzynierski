@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.orhanobut.hawk.Hawk;
 import com.polsl.android.employeetracker.Entity.DaoMaster;
 import com.polsl.android.employeetracker.Entity.DaoSession;
 import com.polsl.android.employeetracker.Entity.LocationData;
@@ -61,8 +62,10 @@ public class RouteListActivity extends AppCompatActivity {
         Intent intent = getIntent();
         Integer year = intent.getIntExtra("year",0);
         String monthName = intent.getStringExtra("month");
-        SharedPreferences prefs = getSharedPreferences(getPackageName(), Context.MODE_PRIVATE);
-        Long userId = prefs.getLong(ApiHelper.USER_ID,0);
+//        SharedPreferences prefs = getSharedPreferences(getPackageName(), Context.MODE_PRIVATE);
+//        Long userId = prefs.getLong(ApiHelper.USER_ID,0);
+        User user = Hawk.get(ApiHelper.USER);
+        Long userId = user.getId();
         int month = 0;
         for (int i=1;i<=12;i++) {
             if (monthName.equals(ApiHelper.monthNames[i-1])) {

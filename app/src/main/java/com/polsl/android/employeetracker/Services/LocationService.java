@@ -26,14 +26,17 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResult;
+import com.orhanobut.hawk.Hawk;
 import com.polsl.android.employeetracker.Entity.DaoMaster;
 import com.polsl.android.employeetracker.Entity.DaoSession;
 import com.polsl.android.employeetracker.Entity.LocationData;
 import com.polsl.android.employeetracker.Entity.LocationDataDao;
 import com.polsl.android.employeetracker.Entity.RouteData;
 import com.polsl.android.employeetracker.Entity.RouteDataDao;
+import com.polsl.android.employeetracker.Entity.User;
 import com.polsl.android.employeetracker.Helper.ApiHelper;
 import com.polsl.android.employeetracker.R;
+import com.polsl.android.employeetracker.RESTApi.CurrentLocation;
 
 import org.greenrobot.greendao.database.Database;
 
@@ -94,7 +97,8 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
         }
         if (intent.getAction().equals(ApiHelper.START_SERVICE)) {
             Toast.makeText(this, "Serwis uruchomiony", Toast.LENGTH_SHORT).show();
-            userId = intent.getLongExtra(ApiHelper.USER_ID,0);
+            User user = intent.getExtras().getParcelable(ApiHelper.USER);
+            userId = user.getId();
             deviceAddress = intent.getStringExtra(ApiHelper.OBD_DEVICE_ADDRESS);
             Notification notification = new NotificationCompat.Builder(this)
                     .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
@@ -112,7 +116,7 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
             routeDataDao.update(routeData);
             finishLocationReadings();
             finish = true;
-            ODBConnection.finishODBReadings();
+            ODBConnection.finishODBReadings(routeData.getEndDate());
             ODBConnection.disconnect();
             wakeLock.release();
             this.stopSelf();
@@ -128,12 +132,15 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
 
     @Override
     public void onLocationChanged(Location location) {
+        float distance = currentLocation.distanceTo(location);
+        routeData.setRoadLength(routeData.getRoadLength()+distance);
         currentLocation = location;
         double longitude = currentLocation.getLongitude();
         double latitude = currentLocation.getLatitude();
         Intent intent = new Intent("LocationData");
         intent.putExtra("long", longitude);
         intent.putExtra("lat", latitude);
+        intent.putExtra("distance",routeData.getRoadLength());
         sendBroadcast(intent);
         long timestamp = System.currentTimeMillis();
         LocationData locationData = new LocationData();
@@ -142,6 +149,13 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
         locationData.setTimestamp(timestamp);
         locationData.setRouteId(routeData.getId());
         locationDataDao.insert(locationData);
+        CurrentLocation currentLocation = new CurrentLocation();
+        currentLocation.setCarVin(routeData.getVinNumber());
+        currentLocation.setLatitude(latitude);
+        currentLocation.setLongitude(longitude);
+        currentLocation.setTimestamp(timestamp);
+        currentLocation.setUserId(userId);
+        currentLocation.send();
     }
 
 
@@ -216,8 +230,8 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
 
     private void createLocationRequest() {
         locationRequest = new LocationRequest();
-        locationRequest.setInterval(10000);
-        locationRequest.setFastestInterval(5000);
+        locationRequest.setInterval(5000);
+        locationRequest.setFastestInterval(1000);
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
     }
 

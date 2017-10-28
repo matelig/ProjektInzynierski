@@ -60,6 +60,8 @@ public class Car implements Serializable {
     private String model;
     @OneToMany(mappedBy = "caridCar")
     private Collection<Route> routeCollection;
+    @OneToMany(mappedBy = "caridCar")
+    private Collection<CurrentLocation> currentLocationCollection;
 
     public Car() {
     }
@@ -114,6 +116,15 @@ public class Car implements Serializable {
 
     public void setRouteCollection(Collection<Route> routeCollection) {
         this.routeCollection = routeCollection;
+    }
+
+    @XmlTransient
+    public Collection<CurrentLocation> getCurrentLocationCollection() {
+        return currentLocationCollection;
+    }
+
+    public void setCurrentLocationCollection(Collection<CurrentLocation> currentLocationCollection) {
+        this.currentLocationCollection = currentLocationCollection;
     }
 
     @Override

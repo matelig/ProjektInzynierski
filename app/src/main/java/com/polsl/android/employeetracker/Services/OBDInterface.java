@@ -186,8 +186,13 @@ public class OBDInterface {
     /**
      * End reading data
      */
-    public void finishODBReadings() {
+    public void finishODBReadings(long timestamp) {
         readValues = false;
+        for (String s : oldCodes) {
+            TroubleCodesData tdc = new TroubleCodesData(routeId,s,timestamp,0);
+            troubleCodesDataDao.insert(tdc);
+        }
+        oldCodes = new HashSet<>();
     }
 
     /**
@@ -383,7 +388,7 @@ public class OBDInterface {
      * @param message Message that shows on Activity showing the problem
      */
     private void closeConnection(String message) {
-        finishODBReadings();
+        finishODBReadings(System.currentTimeMillis());
         disconnect();
         Intent intent = new Intent("OBDStatus");
         intent.putExtra("message", message);

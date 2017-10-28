@@ -54,7 +54,7 @@ public class RouteDetails implements Serializable {
 
     private GanttAmChartModel troubleCodesChartModel;
 
-    private LineChartModel rpmChartModel;
+    private SerialAmChartModel rpmChartModel;
 
     private MapModel mapModel;
 
@@ -116,16 +116,19 @@ public class RouteDetails implements Serializable {
                 }
             });
         }
+        if (RPMList.size() > 0) {
+            Collections.sort(RPMList, new Comparator<Rpm>() {
+                @Override
+                public int compare(Rpm t, Rpm t1) {
+                    return t.getTimestamp().compareTo(t1.getTimestamp());
+                }
+            });
+        }
         speedChartModel = ChartModeler.initSpeedModel(speedList);
 
-        troubleCodesChartModel = ChartModeler.initTroubleCodesChartModel(new Date(route.getStartDate().longValue()),troubleCodes);
+        troubleCodesChartModel = ChartModeler.initTroubleCodesChartModel(new Date(route.getStartDate().longValue()), troubleCodes);
 
         rpmChartModel = ChartModeler.initRPMModel(RPMList);
-        rpmChartModel.setTitle("RPM");
-        rpmChartModel.setLegendPosition("e");
-        rpmChartModel.setZoom(true);
-        Axis xxAxis = rpmChartModel.getAxis(AxisType.X);
-        xxAxis.setTickCount(10);
 
     }
 
@@ -185,11 +188,11 @@ public class RouteDetails implements Serializable {
         this.speedChartModel = speedChartModel;
     }
 
-    public LineChartModel getRpmChartModel() {
+    public SerialAmChartModel getRpmChartModel() {
         return rpmChartModel;
     }
 
-    public void setRpmChartModel(LineChartModel rpmChartModel) {
+    public void setRpmChartModel(SerialAmChartModel rpmChartModel) {
         this.rpmChartModel = rpmChartModel;
     }
 

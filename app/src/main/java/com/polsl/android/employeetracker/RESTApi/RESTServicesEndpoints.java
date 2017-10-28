@@ -43,4 +43,8 @@ public interface RESTServicesEndpoints {
     @Headers("Content-Type: application/json")
     @POST("route/insert")
     Call<ResponseBody> insert(@Body List<Route> routeData);
+
+    @Headers("Content-Type: application/json")
+    @POST("currentLocation/update")
+    Call<ResponseBody> updateCurrentLocation(@Body CurrentLocation currentLocation);
 }

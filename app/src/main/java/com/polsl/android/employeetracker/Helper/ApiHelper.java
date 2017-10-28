@@ -7,6 +7,7 @@ package com.polsl.android.employeetracker.Helper;
 public class ApiHelper {
     public static final String START_SERVICE = "START";
     public static final String STOP_SERVICE = "STOP";
+    public static final String USER = "user";
     public static final String USER_NAME = "userName";
     public static final String USER_SURNAME = "userSurname";
     public static final String USER_PESEL = "userPesel";

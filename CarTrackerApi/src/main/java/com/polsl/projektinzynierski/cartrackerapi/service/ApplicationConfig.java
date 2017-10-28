@@ -31,6 +31,7 @@ public class ApplicationConfig extends Application {
      */
     private void addRestResourceClasses(Set<Class<?>> resources) {
         resources.add(com.polsl.projektinzynierski.cartrackerapi.service.CarFacadeREST.class);
+        resources.add(com.polsl.projektinzynierski.cartrackerapi.service.CurrentLocationREST.class);
         resources.add(com.polsl.projektinzynierski.cartrackerapi.service.FuelComsumptionRateFacadeREST.class);
         resources.add(com.polsl.projektinzynierski.cartrackerapi.service.FuelLevelFacadeREST.class);
         resources.add(com.polsl.projektinzynierski.cartrackerapi.service.LocationFacadeREST.class);
