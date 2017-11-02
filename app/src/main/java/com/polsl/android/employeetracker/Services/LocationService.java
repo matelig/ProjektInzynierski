@@ -35,6 +35,7 @@ import com.polsl.android.employeetracker.Entity.RouteData;
 import com.polsl.android.employeetracker.Entity.RouteDataDao;
 import com.polsl.android.employeetracker.Entity.User;
 import com.polsl.android.employeetracker.Helper.ApiHelper;
+import com.polsl.android.employeetracker.Helper.Timer;
 import com.polsl.android.employeetracker.R;
 import com.polsl.android.employeetracker.RESTApi.CurrentLocation;
 
@@ -66,7 +67,7 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
      */
     private PowerManager.WakeLock wakeLock;
     private boolean finish = false;
-
+    private Timer timer;
 
     @Override
     public void onCreate() {
@@ -81,7 +82,7 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
         routeDataDao = daoSession.getRouteDataDao();
         locationDataDao = daoSession.getLocationDataDao();
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
-
+        timer = new Timer(this);
 
         buildGoogleApiClient();
         createLocationRequest();
@@ -108,10 +109,11 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
                     .build();
             startForeground(100,
                     notification);
+            timer.startTimer();
 
         } else if (intent.getAction().equals(ApiHelper.STOP_SERVICE)) {
             Toast.makeText(this, "Serwis zatrzymany", Toast.LENGTH_SHORT).show();
-
+            timer.stopTimer();
             routeData.finish();
             routeDataDao.update(routeData);
             finishLocationReadings();

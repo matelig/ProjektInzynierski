@@ -259,11 +259,11 @@ public class OBDInterface {
 
 
                     } catch (IOException e) {
-                        closeConnection("Failed to connect with OBD device");
+                        closeConnection("Failed to connect");
                     } catch (InterruptedException e) {
                         closeConnection("Connection interrupted");
                     } catch (NullPointerException e) {
-                        closeConnection("Something wrong happened while connecting with OBD. Restarting");
+                        closeConnection("Restarting");
                     }
 
                     while (socket.isConnected() && readValues) {
@@ -293,7 +293,7 @@ public class OBDInterface {
                                 goodRPM = true;
                             } catch (NoDataException e) {
 
-                                OBDReadings.putExtra("engineRpm", "NO DATA");
+                                OBDReadings.putExtra("engineRpm", "-");
                                 goodRPM = false;
                             } catch (IndexOutOfBoundsException e) {  }
                             try {
@@ -304,7 +304,7 @@ public class OBDInterface {
                                 goodSpeed = true;
                             } catch (NoDataException e) {
                                 goodSpeed = false;
-                                OBDReadings.putExtra("speed", "NO DATA");
+                                OBDReadings.putExtra("speed", "-");
                             } catch (IndexOutOfBoundsException e) {  }
                             try {
                                 oilTempCommand.run(socket.getInputStream(),socket.getOutputStream());
@@ -314,7 +314,7 @@ public class OBDInterface {
                                 OBDReadings.putExtra("oil",oilTempCommand.getFormattedResult());
                             } catch (NoDataException e) {
                                 goodTemperature = false;
-                                OBDReadings.putExtra("oil", "NO DATA");
+                                OBDReadings.putExtra("oil", "-");
                             } catch (IndexOutOfBoundsException e) {  }
                             try {
                                 fuelLevelCommand.run(socket.getInputStream(),socket.getOutputStream());
@@ -325,7 +325,7 @@ public class OBDInterface {
                             } catch (NoDataException e) {
                                 goodLevel = false;
 
-                                OBDReadings.putExtra("level", "NO DATA");
+                                OBDReadings.putExtra("level", "-");
                             } catch (IndexOutOfBoundsException e) {  }
                             try {
                                 consumptionRateCommand.run(socket.getInputStream(),socket.getOutputStream());
@@ -335,7 +335,7 @@ public class OBDInterface {
                                 goodConsumption = true;
                             } catch (NoDataException e) {
                                 goodConsumption = false;
-                                OBDReadings.putExtra("consumption", "NO DATA");
+                                OBDReadings.putExtra("consumption", "-");
                             } catch (IndexOutOfBoundsException e) {  }
                             try {
                                 troubleCodesCommand.run(socket.getInputStream(),socket.getOutputStream());
@@ -363,16 +363,16 @@ public class OBDInterface {
                         } catch (IndexOutOfBoundsException e) {  }
                             context.sendBroadcast(OBDReadings);
                             if ((!goodCodes) && (!goodRPM) && (!goodSpeed) && (!goodTemperature) && (!goodConsumption) && (!goodLevel)) {
-                                closeConnection("NO DATA received, trying to reconnect with device");
+                                closeConnection("Reconnect");
                             }
                         } catch (IOException e) {
-                            closeConnection("Failed to connect with OBD device");
+                            closeConnection("Failed to connect");
                         } catch (InterruptedException e) {
                             closeConnection("Connection interrupted");
                         } catch (UnableToConnectException e) {
                             closeConnection("Unable to connect");
                         }  catch (NullPointerException e) {
-                            closeConnection("Something wrong happened while connecting with OBD. Restarting");
+                            closeConnection("Restarting");
                         }
                     }
                 }

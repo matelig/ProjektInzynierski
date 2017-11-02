@@ -94,6 +94,7 @@ public class ChartModeler {
                 .setChartCursor(new ChartCursor.ChartCursorBuilder()
                         .setValueBalloonsEnabled(Boolean.TRUE)
                         .setValueLineEnabled(Boolean.TRUE)
+                        .setCategoryBalloonDateFormat("HH:NN:SS ")
                         .build())
                 .setCategoryField("date")
                 .setCategoryAxes(new CategoryAxis.CategoryAxisBuilder()
@@ -116,8 +117,7 @@ public class ChartModeler {
                         .setPosition(Position.simplePosition.BOTTOM).setUseGraphSettings(Boolean.TRUE)
                         .build())
                 .build();
-
-        model.updateDataProvider(dataProvider);
+        model.updateData(dataProvider);
 
         return model;
     }
@@ -135,6 +135,7 @@ public class ChartModeler {
                         .setLineThickness(2)
                         .setValueField("y" + i)
                         .setType(GraphAxes.Type.LINE)
+                        .setBalloonText("<span style='font-size:12px;'>[[title]] in [[category]]:<br><span style='font-size:20px;'>[[value]]</span> RPM [[additional]]</span>")
                         .setFillColors(new Color(255, 0, 0))
                         .build();
                 graphs.add(graph);
@@ -153,6 +154,11 @@ public class ChartModeler {
                 .setLanguage(Locale.forLanguageTag("pl"))
                 .setDataDateFormat("YYYY-MM-DD HH:NN:SS")
                 .setCategoryField("date")
+                .setChartCursor(new ChartCursor.ChartCursorBuilder()
+                        .setValueBalloonsEnabled(Boolean.TRUE)
+                        .setValueLineEnabled(Boolean.TRUE)
+                        .setCategoryBalloonDateFormat("HH:NN:SS ")
+                        .build())
                 .setCategoryAxes(new CategoryAxis.CategoryAxisBuilder()
                         .setParseDates(Boolean.TRUE)
                         .setMinorGridEnabled(Boolean.TRUE)
@@ -161,8 +167,7 @@ public class ChartModeler {
                 .setChartScrollbar(new ChartScrollbar.ChartScrollbarBuilder()
                         .setOffset(15)
                         .setAutoGridCount(Boolean.TRUE)
-                        .build()
-                )
+                        .build()                )
                 .setValueScrollBar(new ChartScrollbar.ChartScrollbarBuilder()
                         .setAutoGridCount(Boolean.TRUE)
                         .setOffset(15)
@@ -173,7 +178,7 @@ public class ChartModeler {
                         .build())
                 .build();
 
-        model.updateDataProvider(dataProvider);
+        model.updateData(dataProvider);
 
         return model;
     }

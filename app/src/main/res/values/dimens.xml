@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="service_button_height">100dp</dimen>
-    <dimen name="service_button_width">170dp</dimen>
+    <dimen name="service_button_height">130dp</dimen>
+    <dimen name="service_button_width">230dp</dimen>
     <dimen name="text_main_padding">10dp</dimen>
 </resources>

@@ -26,6 +26,8 @@ import com.polsl.android.employeetracker.Services.LocationService;
 
 import org.w3c.dom.Text;
 
+import java.text.DecimalFormat;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -50,14 +52,10 @@ public class MainActivityFragment extends Fragment {
     @BindView(R.id.main_time)
     TextView serviceTime;
 
-    @BindView(R.id.fuel_consumption)
-    TextView carConsumption;
-
-    @BindView(R.id.vin_number)
-    TextView vinNumber;
-
     @BindView(R.id.road_length)
     TextView roadLength;
+
+    private DecimalFormat timeFormat = new DecimalFormat("00");
 
     private final BroadcastReceiver bluetoothStateReceiver = new BroadcastReceiver() {
 
@@ -84,14 +82,8 @@ public class MainActivityFragment extends Fragment {
         public void onReceive(Context context, Intent intent) {
             String speed = intent.getStringExtra("speed");
             String engineRpm = intent.getStringExtra("engineRpm");
-            String consumption = intent.getStringExtra("consumption");
-            String level = intent.getStringExtra("level");
-            String oil = intent.getStringExtra("oil");
             carSpeed.setText(speed);
             serviceTime.setText(engineRpm);
-            carConsumption.setText(consumption);
-            vinNumber.setText(oil);
-            //roadLength.setText(level);
         }
     };
 
@@ -99,7 +91,18 @@ public class MainActivityFragment extends Fragment {
         @Override
         public void onReceive(Context context, Intent intent) {
             Double distance = intent.getDoubleExtra("distance",0.0);
-            roadLength.setText(String.valueOf(distance));
+            distance = distance/1000.0;
+            roadLength.setText(String.format("%d",Math.round(distance)));
+        }
+    };
+
+    private final BroadcastReceiver timeReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+            long hour = intent.getLongExtra("hour",0);
+            long minute = intent.getLongExtra("minute",0);
+            serviceTime.setText(timeFormat.format(hour) + ":" + timeFormat.format(minute));
         }
     };
 
@@ -150,6 +153,9 @@ public class MainActivityFragment extends Fragment {
         IntentFilter locationFilter = new IntentFilter("LocationData");
         getActivity().registerReceiver(locationReceiver,locationFilter);
 
+        IntentFilter timeFilter = new IntentFilter("elapsedTime");
+        getActivity().registerReceiver(timeReceiver,timeFilter);
+
         serviceButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -193,5 +199,6 @@ public class MainActivityFragment extends Fragment {
         getActivity().unregisterReceiver(OBDStatusReceiver);
         getActivity().unregisterReceiver(OBDReadings);
         getActivity().unregisterReceiver(locationReceiver);
+        getActivity().unregisterReceiver(timeReceiver);
     }
 }

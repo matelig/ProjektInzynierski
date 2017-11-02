@@ -18,7 +18,6 @@ com\polsl\trackerportal\database\entity\OilTemperature_.class
 com\polsl\trackerportal\util\IntegerMinMax.class
 com\polsl\trackerportal\database\entity\TroubleCodes_.class
 com\polsl\trackerportal\RouteManagement.class
-com\polsl\trackerportal\util\SerialAmChartBean.class
 com\polsl\trackerportal\database\entity\Location_.class
 com\polsl\trackerportal\util\LoggedUser.class
 com\polsl\trackerportal\CurrentUserSettings.class

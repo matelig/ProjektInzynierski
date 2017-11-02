@@ -8,6 +8,8 @@
     <ui:define name="htmlHead">
         <meta name="description" content="Our Company Home Page" />
         <title>Our Company - Home</title>
+        <script src="http://maps.google.com/maps/api/js?key=AIzaSyCoRgBWTUOwc82Jlfiz866dQfyL0YhSIVQ" 
+        type="text/javascript"></script>
     </ui:define>
 
     <ui:define name="navigation">
@@ -15,8 +17,7 @@
     </ui:define>
 
     <ui:define name="main">
-        <ui:include src="dialogs/new-user-dialog.xhtml"/>
-        <ui:include src="dialogs/edit-user-dialog.xhtml"/>
+        <ui:include src="dialogs/current-location-dialog.xhtml"/>
         <h:form id="userManagementForm">
             <p:growl autoUpdate="true" id="addUserGrowl" showDetail="true">
                 
@@ -53,7 +54,7 @@
                     </p:column>
                     
                     <p:column style="width: 50px; background-color: inherit;text-align: center">
-                        <p:commandButton id="edit" style="width: 30px;height: 30px" icon="fa fa-edit" action="#{userManagement.openEditUserDialog(user)}" update="editUserDialog" >                    
+                        <p:commandButton id="edit" style="width: 30px;height: 30px" icon="fa fa-edit" action="#{lastKnowLocations.showLocationDialog(location)}" update="locationDialog">                    
                         </p:commandButton>
                         <p:tooltip for="edit" value="Edytuj" />
                     </p:column>

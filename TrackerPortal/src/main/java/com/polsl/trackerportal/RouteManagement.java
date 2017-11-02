@@ -7,8 +7,10 @@ package com.polsl.trackerportal;
 import com.polsl.trackerportal.database.entity.Route;
 import java.io.Serializable;
 import java.util.List;
+import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.persistence.EntityManager;
 
 /**
  *
@@ -19,5 +21,13 @@ import javax.faces.bean.ViewScoped;
 public class RouteManagement implements Serializable {
 
     private List<Route> routeList;
+    
+    
+    private EntityManager entityManager;
+    
+    @PostConstruct
+    public void init() {
+        routeList = 
+    }
     
 }
