@@ -1,7 +1,6 @@
 package com.polsl.android.employeetracker.RESTApi;
 
-import com.polsl.android.employeetracker.Entity.RouteData;
-import com.polsl.android.employeetracker.Entity.User;
+import com.polsl.android.employeetracker.entity.User;
 
 import java.util.List;
 

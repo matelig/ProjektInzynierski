@@ -6,7 +6,7 @@
     android:orientation="vertical"
     android:paddingLeft="@dimen/horizontal_activity_padding"
     android:paddingRight="@dimen/horizontal_activity_padding"
-    tools:context="com.polsl.android.employeetracker.Activity.LoginActivity">
+    tools:context="com.polsl.android.employeetracker.activity.LoginActivity">
 
     <LinearLayout
         android:layout_marginTop="@dimen/vertical_activity_margin"

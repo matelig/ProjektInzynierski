@@ -5,7 +5,7 @@
     android:orientation="vertical"
     android:paddingEnd="@dimen/horizontal_activity_padding"
     android:paddingStart="@dimen/horizontal_activity_padding"
-    tools:context="com.polsl.android.employeetracker.Activity.MainActivityFragment">
+    tools:context="com.polsl.android.employeetracker.fragment.MainActivityFragment">
 
     <LinearLayout
         android:layout_width="match_parent"

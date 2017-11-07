@@ -9,12 +9,9 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.polsl.android.employeetracker.Activity.RouteMonthList;
-import com.polsl.android.employeetracker.Entity.RouteData;
+import com.polsl.android.employeetracker.activity.RouteMonthList;
 import com.polsl.android.employeetracker.R;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.List;
 
 /**

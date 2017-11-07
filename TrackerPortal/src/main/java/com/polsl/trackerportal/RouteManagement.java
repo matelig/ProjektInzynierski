@@ -27,7 +27,6 @@ public class RouteManagement implements Serializable {
     
     @PostConstruct
     public void init() {
-        routeList = 
     }
     
 }

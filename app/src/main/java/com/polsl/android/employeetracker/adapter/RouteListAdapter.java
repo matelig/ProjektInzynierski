@@ -11,13 +11,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.polsl.android.employeetracker.Activity.MapsActivity;
-import com.polsl.android.employeetracker.Entity.DaoMaster;
-import com.polsl.android.employeetracker.Entity.DaoSession;
-import com.polsl.android.employeetracker.Entity.RouteData;
-import com.polsl.android.employeetracker.Entity.RouteDataDao;
-import com.polsl.android.employeetracker.Helper.ApiHelper;
-import com.polsl.android.employeetracker.Helper.UploadStatus;
+import com.polsl.android.employeetracker.activity.MapsActivity;
+import com.polsl.android.employeetracker.entity.DaoMaster;
+import com.polsl.android.employeetracker.entity.DaoSession;
+import com.polsl.android.employeetracker.entity.RouteData;
+import com.polsl.android.employeetracker.entity.RouteDataDao;
+import com.polsl.android.employeetracker.helper.ApiHelper;
+import com.polsl.android.employeetracker.helper.UploadStatus;
 import com.polsl.android.employeetracker.R;
 
 import org.greenrobot.greendao.database.Database;

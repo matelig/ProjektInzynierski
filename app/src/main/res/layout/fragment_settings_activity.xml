@@ -7,7 +7,7 @@
     android:paddingTop="@dimen/vertical_activity_margin"
     android:paddingBottom="@dimen/vertical_activity_margin"
     android:paddingStart="@dimen/horizontal_activity_padding"
-    tools:context="com.polsl.android.employeetracker.Activity.SettingsActivityFragment">
+    tools:context="com.polsl.android.employeetracker.fragment.SettingsActivityFragment">
 
 
     <TextView

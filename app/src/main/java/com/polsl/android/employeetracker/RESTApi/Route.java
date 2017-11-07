@@ -2,12 +2,11 @@ package com.polsl.android.employeetracker.RESTApi;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-import com.polsl.android.employeetracker.Entity.LocationData;
-import com.polsl.android.employeetracker.Entity.RPMData;
-import com.polsl.android.employeetracker.Entity.RouteData;
-import com.polsl.android.employeetracker.Entity.SpeedData;
-import com.polsl.android.employeetracker.Entity.TroubleCodesData;
-import com.polsl.android.employeetracker.Entity.User;
+import com.polsl.android.employeetracker.entity.LocationData;
+import com.polsl.android.employeetracker.entity.RPMData;
+import com.polsl.android.employeetracker.entity.RouteData;
+import com.polsl.android.employeetracker.entity.SpeedData;
+import com.polsl.android.employeetracker.entity.TroubleCodesData;
 
 import java.util.List;
 
