@@ -5,9 +5,12 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.orhanobut.hawk.Hawk;
@@ -51,8 +54,6 @@ public class RouteMonthList extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_route_month_list);
-//        SharedPreferences prefs = getSharedPreferences(getPackageName(), Context.MODE_PRIVATE);
-//        Long userId = prefs.getLong(ApiHelper.USER_ID,0);
         User user = Hawk.get(ApiHelper.USER);
         Long userId = user.getId();
         Intent intent = getIntent();
@@ -86,56 +87,16 @@ public class RouteMonthList extends AppCompatActivity {
         List<String> monthNames = new ArrayList<>();
         for (int i = 1; i <= 12; i++) {
             if (months.contains(i)) {
-                monthNames.add(ApiHelper.monthNames[i - 1]);
+                monthNames.add(ApiHelper.monthNames[i]);
             }
         }
         routeListView = (RecyclerView) findViewById(R.id.route_recycler);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         routeListView.setLayoutManager(layoutManager);
+        routeListView.addItemDecoration(new DividerItemDecoration(this,DividerItemDecoration.VERTICAL));
         tAdapter = new RouteListMonthAdapter(monthNames, RouteMonthList.this, year);
         routeListView.setAdapter(tAdapter);
         routeListView.invalidate();
     }
 
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        getMenuInflater().inflate(R.menu.list_menu, menu);
-//        return super.onCreateOptionsMenu(menu);
-//    }
-
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        int clickedItemInd = item.getItemId();
-//        switch (clickedItemInd) {
-//            //Info icon
-//            case R.id.btn_info:
-//                Toast.makeText(this, R.string.list_info, Toast.LENGTH_LONG).show();
-//                break;
-//            //Back icon
-//            case android.R.id.home:
-//                NavUtils.navigateUpFromSameTask(this);
-//                break;
-//        }
-//        return true;
-//    }
-
-    //TODO match with actual activity(currently: matching with MainActivity)
-//    public void onMenuItemMapClick(MenuItem w) {
-//        Intent intent = new Intent(RouteListActivity.this, MapActivity.class);
-//        startActivity(intent);
-//    }
-
-    public void onMenuItemListClick(MenuItem w) {
-
-    }
-
-    public void onMenuItemSendClick(MenuItem w) {
-        message = Toast.makeText(this, "Wysle dane", Toast.LENGTH_SHORT);
-        message.show();
-    }
-
-//    public void testClick(MenuItem w) {
-//        Intent intent = new Intent(RouteListActivity.this, ExampleActivity.class);
-//        startActivity(intent);
-//    }
 }

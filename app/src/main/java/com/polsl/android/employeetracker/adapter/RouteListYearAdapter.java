@@ -38,13 +38,11 @@ public class RouteListYearAdapter extends RecyclerView.Adapter<RouteListYearAdap
         RouteListYearAdapter.YearViewHolder viewHolder = new RouteListYearAdapter.YearViewHolder(itemTrack);
         viewHolder.view = itemTrack;
         viewHolder.dateYearView = (TextView) itemTrack.findViewById(R.id.year_text);
-        viewHolder.optionsItemView = (TextView) itemTrack.findViewById(R.id.list_year_options);
         return viewHolder;
     }
 
     @Override
     public void onBindViewHolder(RouteListYearAdapter.YearViewHolder holder, int position) {
-        DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
         String name = years.get(position);
         holder.dateYearView.setText(name);
         holder.position = position;
@@ -53,13 +51,6 @@ public class RouteListYearAdapter extends RecyclerView.Adapter<RouteListYearAdap
             Intent intent = new Intent(context, RouteMonthList.class);
             intent.putExtra("year",years.get(position));
             context.startActivity(intent);
-//            toast = Toast.makeText(context, "You clicked an item " + years.get(position),Toast.LENGTH_SHORT);
-//            toast.show();
-        });
-
-        holder.optionsItemView.setOnClickListener(v -> {
-            toast = Toast.makeText(context, "You clicked an menu of item " + years.get(position), Toast.LENGTH_SHORT);
-            toast.show();
         });
     }
 
@@ -75,7 +66,6 @@ public class RouteListYearAdapter extends RecyclerView.Adapter<RouteListYearAdap
 
     class YearViewHolder extends RecyclerView.ViewHolder {
         TextView dateYearView;
-        TextView optionsItemView;
         View view;
         int position;
 

@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,7 +31,6 @@ import java.util.List;
  */
 
 public class RouteListAdapter extends RecyclerView.Adapter<RouteListAdapter.DataViewHolder>  {
-    String[] mDataset = {"Data", "In", "Adapter"};
     private List<RouteData> tracks;
     private Context context;
     private Toast toast;
@@ -45,10 +45,11 @@ public class RouteListAdapter extends RecyclerView.Adapter<RouteListAdapter.Data
         View itemTrack = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.route_list_item, viewGroup, false);
         DataViewHolder viewHolder = new DataViewHolder(itemTrack);
         viewHolder.view = itemTrack;
+
         viewHolder.dateItemView = (TextView) itemTrack.findViewById(R.id.date_text);
         viewHolder.descriptionItemView = (TextView) itemTrack.findViewById(R.id.description_text);
         viewHolder.durationItemView = (TextView) itemTrack.findViewById(R.id.duration_text);
-        viewHolder.optionsItemView = (TextView) itemTrack.findViewById(R.id.list_options);
+        viewHolder.optionsItemView = (ImageView) itemTrack.findViewById(R.id.list_options);
         viewHolder.checkBox = (CheckBox) itemTrack.findViewById(R.id.checkbox);
         return viewHolder;
     }
@@ -124,7 +125,7 @@ public class RouteListAdapter extends RecyclerView.Adapter<RouteListAdapter.Data
         TextView dateItemView;
         TextView descriptionItemView;
         TextView durationItemView;
-        TextView optionsItemView;
+        ImageView optionsItemView;
         CheckBox checkBox;
         View view;
         int position;

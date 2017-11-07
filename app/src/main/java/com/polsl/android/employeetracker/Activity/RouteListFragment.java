@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -60,12 +61,9 @@ public class RouteListFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_route_list, container, false);
         routeListView = (RecyclerView) rootView.findViewById(R.id.route_recycler);
-//        SharedPreferences prefs = getContext().getSharedPreferences(getContext().getPackageName(), Context.MODE_PRIVATE);
-//        Long userId = prefs.getLong(ApiHelper.USER_ID,0);
         User user = Hawk.get(ApiHelper.USER);
         Long userId = user.getId();
         Set<Integer> usedYears = new HashSet<>();
-//        setContentView(R.layout.activity_route_list);
         DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(rootView.getContext(), "main-db");
         Database db = helper.getWritableDb();
         daoSession = new DaoMaster(db).newSession();
@@ -91,13 +89,11 @@ public class RouteListFragment extends Fragment {
         for (int year : tempYears) {
             usedYearsNames.add(Integer.toString(year));
         }
-//        routeListView = (RecyclerView) findViewById(R.id.route_recycler);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         routeListView.setLayoutManager(layoutManager);
-        //tAdapter = new RouteListAdapter(tracks, rootView.getContext());
+        routeListView.addItemDecoration(new DividerItemDecoration(getContext(),DividerItemDecoration.VERTICAL));
         yearAdapter = new RouteListYearAdapter(usedYearsNames,rootView.getContext());
         routeListView.setAdapter(yearAdapter);
-//        // Inflate the layout for this fragment
         return rootView;
     }
 

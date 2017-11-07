@@ -6,11 +6,14 @@ import android.content.SharedPreferences;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -62,13 +65,11 @@ public class RouteListActivity extends AppCompatActivity {
         Intent intent = getIntent();
         Integer year = intent.getIntExtra("year",0);
         String monthName = intent.getStringExtra("month");
-//        SharedPreferences prefs = getSharedPreferences(getPackageName(), Context.MODE_PRIVATE);
-//        Long userId = prefs.getLong(ApiHelper.USER_ID,0);
         User user = Hawk.get(ApiHelper.USER);
         Long userId = user.getId();
         int month = 0;
         for (int i=1;i<=12;i++) {
-            if (monthName.equals(ApiHelper.monthNames[i-1])) {
+            if (monthName.equals(ApiHelper.monthNames[i])) {
                 month = i;
                 break;
             }
@@ -99,6 +100,7 @@ public class RouteListActivity extends AppCompatActivity {
         routeListView = (RecyclerView) findViewById(R.id.route_recycler);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         routeListView.setLayoutManager(layoutManager);
+        routeListView.addItemDecoration(new DividerItemDecoration(this,DividerItemDecoration.VERTICAL));
         tAdapter = new RouteListAdapter(tracks, RouteListActivity.this);
         routeListView.setAdapter(tAdapter);
         routeListView.invalidate();
@@ -126,7 +128,6 @@ public class RouteListActivity extends AppCompatActivity {
 //        return true;
 //    }
 
-    //TODO match with actual activity(currently: matching with MainActivity)
 //    public void onMenuItemMapClick(MenuItem w) {
 //        Intent intent = new Intent(RouteListActivity.this, MapActivity.class);
 //        startActivity(intent);
@@ -159,14 +160,15 @@ public class RouteListActivity extends AppCompatActivity {
                 route.setRpmDataList(r.getRpmDataList());
                 route.setSpeedDataList(r.getSpeedDataList());
                 route.setTroubleCodesList(r.getTroubleCodesDataList());
-                String json = new Gson().toJson(route);
                 Call<ResponseBody> call = endpoints.create(route);
                 call.enqueue(new Callback<ResponseBody>() {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                         if (response.code()==204) {
                             r.setUploadStatus(UploadStatus.UPLOADED);
-                            Toast.makeText(context,"Wysłano;o",Toast.LENGTH_SHORT).show();
+                            r.setToSend(false);
+                            routeDataDao.update(r);
+                            Toast.makeText(context,"Route "+ r.getId()+" has been send.",Toast.LENGTH_SHORT).show();
                             tAdapter.notifyDataSetChanged();
                         }
                     }

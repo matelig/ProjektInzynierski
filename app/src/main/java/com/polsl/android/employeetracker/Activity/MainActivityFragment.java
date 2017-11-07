@@ -55,6 +55,9 @@ public class MainActivityFragment extends Fragment {
     @BindView(R.id.road_length)
     TextView roadLength;
 
+    @BindView(R.id.car_rpm)
+    TextView carRpm;
+
     private DecimalFormat timeFormat = new DecimalFormat("00");
 
     private final BroadcastReceiver bluetoothStateReceiver = new BroadcastReceiver() {
@@ -83,7 +86,7 @@ public class MainActivityFragment extends Fragment {
             String speed = intent.getStringExtra("speed");
             String engineRpm = intent.getStringExtra("engineRpm");
             carSpeed.setText(speed);
-            serviceTime.setText(engineRpm);
+            carRpm.setText(engineRpm);
         }
     };
 

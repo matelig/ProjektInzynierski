@@ -40,13 +40,11 @@ public class RouteListMonthAdapter extends RecyclerView.Adapter<RouteListMonthAd
         RouteListMonthAdapter.MonthViewHolder viewHolder = new RouteListMonthAdapter.MonthViewHolder(itemTrack);
         viewHolder.view = itemTrack;
         viewHolder.dateMonthView = (TextView) itemTrack.findViewById(R.id.year_text);
-        viewHolder.optionsItemView = (TextView) itemTrack.findViewById(R.id.list_year_options);
         return viewHolder;
     }
 
     @Override
     public void onBindViewHolder(RouteListMonthAdapter.MonthViewHolder holder, int position) {
-        DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
         String name = months.get(position);
         holder.dateMonthView.setText(name);
         holder.position = position;
@@ -56,14 +54,8 @@ public class RouteListMonthAdapter extends RecyclerView.Adapter<RouteListMonthAd
             intent.putExtra("year",year);
             intent.putExtra("month", months.get(position));
             context.startActivity(intent);
-//            toast = Toast.makeText(context, "You clicked an item " + years.get(position),Toast.LENGTH_SHORT);
-//            toast.show();
         });
 
-        holder.optionsItemView.setOnClickListener(v -> {
-            toast = Toast.makeText(context, "You clicked an menu of item " + months.get(position), Toast.LENGTH_SHORT);
-            toast.show();
-        });
     }
 
     @Override
@@ -73,7 +65,6 @@ public class RouteListMonthAdapter extends RecyclerView.Adapter<RouteListMonthAd
 
     class MonthViewHolder extends RecyclerView.ViewHolder {
         TextView dateMonthView;
-        TextView optionsItemView;
         View view;
         int position;
 

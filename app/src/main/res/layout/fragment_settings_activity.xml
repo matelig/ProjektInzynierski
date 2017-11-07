@@ -4,6 +4,8 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:paddingEnd="@dimen/horizontal_activity_padding"
+    android:paddingTop="@dimen/vertical_activity_margin"
+    android:paddingBottom="@dimen/vertical_activity_margin"
     android:paddingStart="@dimen/horizontal_activity_padding"
     tools:context="com.polsl.android.employeetracker.Activity.SettingsActivityFragment">
 
@@ -11,6 +13,8 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textSize="25sp"
+        android:paddingBottom="@dimen/vertical_activity_margin"
         android:gravity="center"
         android:text="@string/logged_as_string" />
 
@@ -23,7 +27,8 @@
             android:id="@+id/user_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="temp" />
+            android:textSize="25sp"
+            android:text="Mateusz" />
 
         <View
             android:layout_width="0dp"
@@ -34,7 +39,8 @@
             android:id="@+id/user_surname"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="temp" />
+            android:textSize="25sp"
+            android:text="Ligus" />
 
 
     </LinearLayout>

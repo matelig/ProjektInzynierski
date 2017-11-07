@@ -289,7 +289,7 @@ public class OBDInterface {
                                 engineRpmCommand.run(socket.getInputStream(), socket.getOutputStream());
                                 RPMData rpmData = new RPMData(routeId,System.currentTimeMillis(),engineRpmCommand.getRPM());
                                 rpmDataDao.insert(rpmData);
-                                OBDReadings.putExtra("engineRpm", engineRpmCommand.getFormattedResult());
+                                OBDReadings.putExtra("engineRpm", String.valueOf(engineRpmCommand.getRPM()));
                                 goodRPM = true;
                             } catch (NoDataException e) {
 
@@ -300,7 +300,7 @@ public class OBDInterface {
                                 speedCommand.run(socket.getInputStream(), socket.getOutputStream());
                                 SpeedData speedData = new SpeedData(routeId,speedCommand.getMetricSpeed(),System.currentTimeMillis());
                                 speedDataDao.insert(speedData);
-                                OBDReadings.putExtra("speed", speedCommand.getFormattedResult());
+                                OBDReadings.putExtra("speed", String.valueOf(speedCommand.getMetricSpeed()));
                                 goodSpeed = true;
                             } catch (NoDataException e) {
                                 goodSpeed = false;

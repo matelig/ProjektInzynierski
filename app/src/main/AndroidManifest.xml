@@ -8,6 +8,7 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:name=".application.CarApp"
@@ -53,6 +54,4 @@
             android:name="io.fabric.ApiKey"
             android:value="e3844b8da3a66d06eb8df8c6e3ec0b2675b3fbda" />
     </application>
-
-    <uses-permission android:name="android.permission.INTERNET" />
 </manifest>
