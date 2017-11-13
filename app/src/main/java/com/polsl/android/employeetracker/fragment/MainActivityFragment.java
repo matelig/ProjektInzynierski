@@ -3,11 +3,14 @@ package com.polsl.android.employeetracker.fragment;
 import android.app.ActivityManager;
 import android.bluetooth.BluetoothAdapter;
 import android.content.BroadcastReceiver;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
+import android.location.LocationManager;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -54,6 +57,9 @@ public class MainActivityFragment extends Fragment {
     @BindView(R.id.car_rpm)
     TextView carRpm;
 
+    @BindView(R.id.location_status)
+    TextView locationStatus;
+
     private DecimalFormat timeFormat = new DecimalFormat("00");
 
     private final BroadcastReceiver bluetoothStateReceiver = new BroadcastReceiver() {
@@ -64,6 +70,18 @@ public class MainActivityFragment extends Fragment {
             final int state = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE, BluetoothAdapter.ERROR);
             if (action.equals(BluetoothAdapter.ACTION_STATE_CHANGED)) {
                 setupBluetoothDeviceState(state);
+            }
+        }
+    };
+
+    private final BroadcastReceiver GPSStateReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            final String action = intent.getAction();
+            if (action.equals(LocationManager.MODE_CHANGED_ACTION)) {
+               ContentResolver contentResolver = getContext().getContentResolver();
+               final int state = Settings.Secure.getInt(contentResolver, Settings.Secure.LOCATION_MODE, Settings.Secure.LOCATION_MODE_OFF);
+               setupGPSState(state);
             }
         }
     };
@@ -116,13 +134,46 @@ public class MainActivityFragment extends Fragment {
                 break;
             case BluetoothAdapter.STATE_ON:
                 bluetoothStatusText.setText(ApiHelper.BluetoothStatus.DEVICE_ON);
-
                 bluetoothStatusText.setTextColor(Color.GREEN);
                 break;
             case BluetoothAdapter.STATE_TURNING_ON:
                 bluetoothStatusText.setText(ApiHelper.BluetoothStatus.TURING_ON);
                 break;
         }
+    }
+
+    private void setupGPSState(int state) {
+        switch (state) {
+            case Settings.Secure.LOCATION_MODE_BATTERY_SAVING:
+                locationStatus.setTextColor(Color.RED);
+                locationStatus.setText("OFF");
+                break;
+            case Settings.Secure.LOCATION_MODE_OFF:
+                locationStatus.setTextColor(Color.RED);
+                locationStatus.setText("OFF");
+                break;
+            case Settings.Secure.LOCATION_MODE_HIGH_ACCURACY:
+                locationStatus.setTextColor(Color.GREEN);
+                locationStatus.setText("ON");
+                break;
+            case Settings.Secure.LOCATION_MODE_SENSORS_ONLY:
+                locationStatus.setTextColor(Color.RED);
+                locationStatus.setText("OFF");
+                break;
+
+        }
+
+        /*
+        if (mode != Settings.Secure.LOCATION_MODE_OFF) {
+      if (mode == Settings.Secure.LOCATION_MODE_HIGH_ACCURACY) {
+        locationMode = "High accuracy. Uses GPS, Wi-Fi, and mobile networks to determine location";
+      } else if (mode == Settings.Secure.LOCATION_MODE_SENSORS_ONLY) {
+          locationMode = "Device only. Uses GPS to determine location";
+      } else if (mode == Settings.Secure.LOCATION_MODE_BATTERY_SAVING) {
+          locationMode = "Battery saving. Uses Wi-Fi and mobile networks to determine location";
+      }
+    }
+         */
     }
 
     @Nullable
@@ -132,8 +183,10 @@ public class MainActivityFragment extends Fragment {
                 R.layout.fragment_activity_main, container, false);
 
         ButterKnife.bind(this, rootView); //jedyne słuszne bindowanie widoku z polami
-
-        int state = BluetoothAdapter.getDefaultAdapter().getState();
+        ContentResolver contentResolver = getContext().getContentResolver();
+        int state = Settings.Secure.getInt(contentResolver, Settings.Secure.LOCATION_MODE, Settings.Secure.LOCATION_MODE_OFF);
+        setupGPSState(state);
+        state = BluetoothAdapter.getDefaultAdapter().getState();
         setupBluetoothDeviceState(state);
 
         if (isServiceRunning(LocationService.class))
@@ -154,6 +207,9 @@ public class MainActivityFragment extends Fragment {
 
         IntentFilter timeFilter = new IntentFilter("elapsedTime");
         getActivity().registerReceiver(timeReceiver,timeFilter);
+
+        IntentFilter gpsFilter = new IntentFilter(LocationManager.MODE_CHANGED_ACTION);
+        getActivity().registerReceiver(GPSStateReceiver,gpsFilter);
 
         serviceButton.setOnClickListener(new View.OnClickListener() {
             @Override

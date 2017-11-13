@@ -195,8 +195,8 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
 
     protected void maintainOBDConnection() {
         new Thread(() -> {
-            ODBConnection.connect_bt(deviceAddress);
-            ODBConnection.startODBReadings();
+//            ODBConnection.connect_bt(deviceAddress);
+//            ODBConnection.startODBReadings();
             while (!finish) {
                 if (!ODBConnection.isConnected()) {
                     ODBConnection.connect_bt(deviceAddress);
