@@ -112,6 +112,7 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
             Toast.makeText(this, "Serwis zatrzymany", Toast.LENGTH_SHORT).show();
             timer.stopTimer();
             routeData.finish();
+            routeData.setVinNumber(ODBConnection.getNumberVIN());
             routeDataDao.update(routeData);
             finishLocationReadings();
             finish = true;

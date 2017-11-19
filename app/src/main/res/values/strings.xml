@@ -31,4 +31,7 @@
     <string name="send">SEND</string>
     <string name="speed_unit">hm/h</string>
     <string name="rpm_unit">RPM</string>
+    <string name="time">Time</string>
+    <string name="distance_km">Distance [km]</string>
+    <string name="on">ON</string>
 </resources>

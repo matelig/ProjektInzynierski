@@ -4,13 +4,19 @@
                 xsi:schemaLocation="http://www.w3.org/1999/xhtml http://www.w3.org/2002/08/xhtml/xhtml1-transitional.xsd"
                 template="/template/template.xhtml"
                 xmlns:p="http://primefaces.org/ui"
-                 xmlns:w="http://www.spiid.pl/spiidcharts">
+                xmlns:w="http://www.spiid.pl/spiidcharts">
 
     <ui:define name="htmlHead">
         <meta name="description" content="Our Company Home Page" />
         <title>Our Company - Home</title>
         <script src="http://maps.google.com/maps/api/js?key=AIzaSyCoRgBWTUOwc82Jlfiz866dQfyL0YhSIVQ" 
         type="text/javascript"></script>
+        <script src="https://www.amcharts.com/lib/3/amcharts.js"></script>
+        <script src="https://www.amcharts.com/lib/3/serial.js"></script>
+        <script src="https://www.amcharts.com/lib/3/gantt.js"></script>
+        <script src="https://www.amcharts.com/lib/3/themes/light.js"></script>
+        <script src="https://www.amcharts.com/lib/3/plugins/export/export.min.js"></script>
+        <link rel="stylesheet" href="https://www.amcharts.com/lib/3/plugins/export/export.css" type="text/css" media="all" />
     </ui:define>
 
     <ui:define name="navigation">
@@ -18,7 +24,7 @@
     </ui:define>
 
     <ui:define name="main">
-        
+
         <p:dataTable rendered="false"         >
             <p:column headerText="Kolumna">
 
@@ -28,10 +34,162 @@
             <f:viewParam name="routeID" value="#{routeList.clickedRouteId}" />
         </f:metadata>        
         <p:gmap id="gmap" widgetVar="map" center="#{routeDetails.centerOfMap}" zoom="10" type="HYBRID" style="width:100%;height:400px" model="#{routeDetails.mapModel}" />
-<!--        <p:chart type="line" model="#{routeDetails.speedChartModel}" style="width: 100%;height: 300px;" responsive="true"/>-->
-        <w:serialAmChart model="#{routeDetails.speedChartModel}" />
-        <w:serialAmChart model="#{routeDetails.rpmChartModel}" />
-        <w:ganttAmChart model="#{routeDetails.troubleCodesChartModel}" />
+        <p:outputPanel rendered="#{0 ne routeDetails.speedChartSeries}">
+            <div id="speedChartDiv" style="height: 400px;width: 100%"></div>	
+        </p:outputPanel>
+        <p:outputPanel rendered="#{0 eq routeDetails.speedChartSeries}">
+            <p:outputLabel value="There are no data about speed" />
+        </p:outputPanel>
+        <p:outputPanel rendered="#{0 ne routeDetails.rpmChartSeries}">
+            <div id="RPMChartDiv" style="height: 400px;width: 100%"></div>	
+        </p:outputPanel>
+        <p:outputPanel rendered="#{0 eq routeDetails.rpmChartSeries}">
+            <p:outputLabel value="There are no data about RPM" />
+        </p:outputPanel>
+        <div id="troubleCodesDiv" style="height: 400px;width: 100%"/>
+
+        <script type="text/javascript">
+            //<![CDATA[
+            var speedChart = AmCharts.makeChart("speedChartDiv",
+                    {
+                        "theme": "light",
+                        "type": "serial",
+                        "legend": {
+                            "position": "bottom",
+                            "autoMargins": true,
+                            "useGraphSettings": true
+                        },
+                        "addClassNames": true,
+                        "language": "pl",
+                        "categoryField": "date",
+                        "chartCursor": {
+                            "valueBalloonsEnabled": true,
+                            "categoryBalloonDateFormat": "HH:NN:SS ",
+                            "valueLineEnable": true
+                        },
+                        "valueScrollbar": {
+                            "offset": 15,
+                            "autoGridCount": true
+                        },
+                        "categoryAxis": {
+                            "minorGridEnabled": true,
+                            "parseDates": true,
+                            "minPeriod": "ss"
+                        },
+                        "dataDateFormat": "YYYY-MM-DD HH:NN:SS",
+                        "chartScrollbar": {
+                            "offset": 15,
+                            "autoGridCount": true
+                        },
+                        "dataProvider": #{routeDetails.speedProvider}
+                    });
+
+
+            var speedGraphsNumber = #{routeDetails.speedChartSeries};
+            for (var i = 1; i <= speedGraphsNumber; i++) {
+                var valueId = "y" + i;
+                var id = "speed" + i;
+                speedChart.graphs.push({
+                    "id": id,
+                    "balloonText": "<span style='font-size:12px;'>[[title]] in [[category]]:<br><span style='font-size:20px;'>[[value]]</span> RPM [[additional]]</span>",
+                    "lineThickness": 2,
+                    "valueField": valueId,
+                    "type": "line",
+                    "fillColors": "#ff0000"
+                }
+                );
+            }
+            ;
+
+            var rpmChart = AmCharts.makeChart("RPMChartDiv",
+                    {
+                        "theme": "light",
+                        "type": "serial",
+                        "legend": {
+                            "position": "bottom",
+                            "autoMargins": true,
+                            "useGraphSettings": true
+                        },
+                        "addClassNames": true,
+                        "language": "pl",
+                        "categoryField": "date",
+                        "chartCursor": {
+                            "valueBalloonsEnabled": true,
+                            "categoryBalloonDateFormat": "HH:NN:SS ",
+                            "valueLineEnable": true
+                        },
+                        "valueScrollbar": {
+                            "offset": 15,
+                            "autoGridCount": true
+                        },
+                        "categoryAxis": {
+                            "minorGridEnabled": true,
+                            "parseDates": true,
+                            "minPeriod": "ss"
+                        },
+                        "dataDateFormat": "YYYY-MM-DD HH:NN:SS",
+                        "chartScrollbar": {
+                            "offset": 15,
+                            "autoGridCount": true
+                        },
+                        "dataProvider": #{routeDetails.rpmProvider}
+                    });
+
+
+            var rpmGraphsNumber = #{routeDetails.rpmChartSeries};
+            for (var i = 1; i <= rpmGraphsNumber; i++) {
+                var valueId = "y" + i;
+                var id = "rpm" + i;
+                rpmChart.graphs.push({
+                    "id": id,
+                    "balloonText": "<span style='font-size:12px;'>[[title]] in [[category]]:<br><span style='font-size:20px;'>[[value]]</span> RPM [[additional]]</span>",
+                    "lineThickness": 2,
+                    "valueField": valueId,
+                    "type": "line",
+                    "fillColors": "#ff0000"
+                }
+                );
+            }
+            ;
+
+            var toubleCodesChart = AmCharts.makeChart("troubleCodesDiv",
+                    {
+                        "theme": "light",
+                        "type": "gantt",
+                        "addClassNames": true,
+                        "categoryField": "category",
+                        "valueScrollbar": {
+                            "offset": 15,
+                            "autoGridCount": true
+                        },
+                        "rotate": true,
+                        "dataDateFormat": "YYYY-MM-DD HH:NN:SS",
+                        "chartScrollbar": {
+                            "offset": 15,
+                            "autoGridCount": true
+                        },
+                        "graph": {
+                            "balloonText": "<b>Przedział</b>: [[open]] - [[value]]",
+                            "fillColorsField": "color",
+                            "fillAlphas": 1,
+                            "lineAlpha": 1,
+                            "lineColor": "#000000",
+                            "dateFormat": "JJ:NN:SS"
+                        },
+                        "period": "ss",
+                        "valueAxis": {
+                            "type": "date"
+                        },
+                        "endDateField": "end",
+                        "startDateField": "start",
+                        "dataProvider": #{routeDetails.troubleCodesProvider},
+                        "columnWidthField": "width",
+                        "segmentsField": "segments",
+                        "colorField": "color",
+                        "durationField": "duration"
+                    });
+            //]]>
+        </script>
     </ui:define>
 
 </ui:composition>

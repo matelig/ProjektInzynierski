@@ -19,28 +19,19 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.SessionScoped;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import org.primefaces.model.chart.Axis;
-import org.primefaces.model.chart.AxisType;
-import org.primefaces.model.chart.CartesianChartModel;
-import org.primefaces.model.chart.DateAxis;
-import org.primefaces.model.chart.LineChartModel;
+import org.json.JSONArray;
 import org.primefaces.model.map.DefaultMapModel;
 import org.primefaces.model.map.LatLng;
-import org.primefaces.model.map.LatLngBounds;
 import org.primefaces.model.map.MapModel;
 import org.primefaces.model.map.Polyline;
-import pl.spiid.lib.spiidcharts.models.GanttAmChartModel;
-import pl.spiid.lib.spiidcharts.models.SerialAmChartModel;
 
 /**
  *
@@ -49,13 +40,6 @@ import pl.spiid.lib.spiidcharts.models.SerialAmChartModel;
 @ManagedBean(name = "routeDetails", eager = true)
 @ViewScoped
 public class RouteDetails implements Serializable {
-
-    private SerialAmChartModel speedChartModel;
-
-    private GanttAmChartModel troubleCodesChartModel;
-
-    private SerialAmChartModel rpmChartModel;
-
     private MapModel mapModel;
 
     @PersistenceContext
@@ -73,6 +57,14 @@ public class RouteDetails implements Serializable {
     private Route route;
     private Car car;
     private String centerOfMap;
+
+    private JSONArray speedProvider;
+    private int speedChartSeries;
+
+    private JSONArray rpmProvider;
+    private int rpmChartSeries;
+    
+    private JSONArray troubleCodesProvider;
 
     @PostConstruct
     public void init() {
@@ -123,13 +115,14 @@ public class RouteDetails implements Serializable {
                     return t.getTimestamp().compareTo(t1.getTimestamp());
                 }
             });
-        }
-        speedChartModel = ChartModeler.initSpeedModel(speedList);
+        }      
+        speedProvider = ChartModeler.initSpeedProvider(speedList);
+        speedChartSeries = ChartModeler.SERIES_COUNT;
 
-        troubleCodesChartModel = ChartModeler.initTroubleCodesChartModel(new Date(route.getStartDate().longValue()), troubleCodes);
-
-        rpmChartModel = ChartModeler.initRPMModel(RPMList);
-
+        rpmProvider = ChartModeler.initRPMProvider(RPMList);
+        rpmChartSeries = ChartModeler.SERIES_COUNT;
+        
+        troubleCodesProvider = ChartModeler.initTroubleCodesProvider(troubleCodes);
     }
 
     private void createMapModel() {
@@ -179,23 +172,7 @@ public class RouteDetails implements Serializable {
 
         return new Point2D.Double(x, y);
     }
-
-    public SerialAmChartModel getSpeedChartModel() {
-        return speedChartModel;
-    }
-
-    public void setSpeedChartModel(SerialAmChartModel speedChartModel) {
-        this.speedChartModel = speedChartModel;
-    }
-
-    public SerialAmChartModel getRpmChartModel() {
-        return rpmChartModel;
-    }
-
-    public void setRpmChartModel(SerialAmChartModel rpmChartModel) {
-        this.rpmChartModel = rpmChartModel;
-    }
-
+ 
     public MapModel getMapModel() {
         return mapModel;
     }
@@ -210,14 +187,46 @@ public class RouteDetails implements Serializable {
 
     public void setCenterOfMap(String centerOfMap) {
         this.centerOfMap = centerOfMap;
+    }  
+
+    public JSONArray getSpeedProvider() {
+        return speedProvider;
     }
 
-    public GanttAmChartModel getTroubleCodesChartModel() {
-        return troubleCodesChartModel;
+    public void setSpeedProvider(JSONArray speedProvider) {
+        this.speedProvider = speedProvider;
     }
 
-    public void setTroubleCodesChartModel(GanttAmChartModel troubleCodesChartModel) {
-        this.troubleCodesChartModel = troubleCodesChartModel;
+    public int getSpeedChartSeries() {
+        return speedChartSeries;
     }
 
+    public void setSpeedChartSeries(int speedChartSeries) {
+        this.speedChartSeries = speedChartSeries;
+    }
+
+    public JSONArray getRpmProvider() {
+        return rpmProvider;
+    }
+
+    public void setRpmProvider(JSONArray rpmProvider) {
+        this.rpmProvider = rpmProvider;
+    }
+
+    public int getRpmChartSeries() {
+        return rpmChartSeries;
+    }
+
+    public void setRpmChartSeries(int rpmChartSeries) {
+        this.rpmChartSeries = rpmChartSeries;
+    }
+
+    public JSONArray getTroubleCodesProvider() {
+        return troubleCodesProvider;
+    }
+
+    public void setTroubleCodesProvider(JSONArray troubleCodesProvider) {
+        this.troubleCodesProvider = troubleCodesProvider;
+    }    
+    
 }

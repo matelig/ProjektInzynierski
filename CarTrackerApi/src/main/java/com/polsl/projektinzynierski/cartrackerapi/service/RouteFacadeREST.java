@@ -52,8 +52,17 @@ public class RouteFacadeREST extends AbstractFacade<Route> {
         List<TroubleCodes> troubleCodes = entity.getTroubleCodesCollection();
         Route route = new Route();
         List<Car> cars = em.createNamedQuery("Car.findByVinNumber").setParameter("vinNumber", entity.getCarVin()).getResultList();
-        //przyda się sprawdzenie, czy istnieje dany samochód, jeśli nie istnieje - stwórz go z jakimiś defaultowymi danymi, które potem administrator może edytować (na stronce)
+        if (cars.isEmpty()) {
+            Car car = new Car();
+            car.setMake("unknown");
+            car.setModel("unknown");
+            car.setVinNumber(entity.getCarVin());
+            em.persist(car);
+        }   
+        cars = em.createNamedQuery("Car.findByVinNumber").setParameter("vinNumber", entity.getCarVin()).getResultList();
         route.setCaridCar(cars.get(0));
+        //przyda się sprawdzenie, czy istnieje dany samochód, jeśli nie istnieje - stwórz go z jakimiś defaultowymi danymi, które potem administrator może edytować (na stronce)
+        
         List<User> users = em.createNamedQuery("User.findByIdUser").setParameter("idUser", entity.getIdUser()).getResultList();
         route.setUseridUser(users.get(0));
         route.setEndDate(entity.getEndDate());

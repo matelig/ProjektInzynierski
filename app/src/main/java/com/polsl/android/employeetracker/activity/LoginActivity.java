@@ -45,11 +45,6 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
         checkLocationPermission();
-//        SharedPreferences prefs = getSharedPreferences(getPackageName(), Context.MODE_PRIVATE);
-//        if (!prefs.getString(ApiHelper.USER_PESEL,"").isEmpty()) {
-//            Intent intent = new Intent(this,SlideActivityPager.class);
-//            startActivity(intent);
-//        }
         if (Hawk.contains(ApiHelper.USER)) {
             Intent intent = new Intent(this, SlideActivityPager.class);
             startActivity(intent);
@@ -71,11 +66,6 @@ public class LoginActivity extends AppCompatActivity {
                     Toast.makeText(context, R.string.wrong_user, Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(context, "logged as " + loggedUser.getName() + " " + loggedUser.getSurname(), Toast.LENGTH_SHORT).show();
-//                    SharedPreferences prefs = getSharedPreferences(getPackageName(), Context.MODE_PRIVATE);
-//                    prefs.edit().putString(ApiHelper.USER_NAME, loggedUser.getName()).apply();
-//                    prefs.edit().putString(ApiHelper.USER_SURNAME, loggedUser.getSurname()).apply();
-//                    prefs.edit().putString(ApiHelper.USER_PESEL, loggedUser.getPesel()).apply();
-//                    prefs.edit().putLong(ApiHelper.USER_ID, loggedUser.getId()).apply();
                     Hawk.put(ApiHelper.USER, loggedUser);
                     Intent intent = new Intent(context, SlideActivityPager.class);
                     startActivity(intent);
@@ -95,11 +85,6 @@ public class LoginActivity extends AppCompatActivity {
     public void offlineModeCLick(View view) {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
                 context);
-
-        //set title
-        //alertDialogBuilder.setTitle("Your Title");
-
-        // set dialog message
         alertDialogBuilder
                 .setMessage(R.string.offline_mode_dialog)
                 .setCancelable(false)

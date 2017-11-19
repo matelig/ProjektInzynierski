@@ -35,7 +35,7 @@ public class RouteData {
     private Long userId;
     @Expose
     @SerializedName("Car_vinNumber")
-    private String vinNumber="123";
+    private String vinNumber="no number detected";
     @Expose
     @SerializedName("roadLength")
     private Double roadLength;
