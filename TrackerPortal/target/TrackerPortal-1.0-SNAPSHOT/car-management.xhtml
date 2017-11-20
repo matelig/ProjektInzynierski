@@ -31,9 +31,6 @@
                     rowIndexVar="row"
                     id="carDataTable"
                     rowStyleClass="#{row % 2 eq 0 ? 'row-even' : 'row-odd'}">
-                    <p:column headerText="ID" style="background-color: inherit;text-align: center">
-                        <h:outputText value="#{car.idCar}"/>
-                    </p:column>
                     <p:column headerText="Numer VIN" style="background-color: inherit;text-align: center">
                         <h:outputText value="#{car.vinNumber}"/>
                     </p:column>
@@ -43,16 +40,20 @@
                     <p:column headerText="Model" style="background-color: inherit;text-align: center">
                         <h:outputText value="#{car.model}"/>
                     </p:column>
-
                     <p:column style="width: 50px; background-color: inherit;text-align: center">
-                        <p:commandButton id="delete" style="width: 30px;height: 30px" icon="fa fa-trash" action="#{carManagement.removeCar(car)}" update="carDataTable" >                    
+                        <p:commandButton id="show" style="width: 30px;height: 30px" icon="fa fa-road" action="#{carManagement.showRouteList(car)}">                    
                         </p:commandButton>
-                        <p:tooltip for="delete" value="Usuń" />
+                        <p:tooltip for="show" value="Pokaż trasy" />
                     </p:column>
                     <p:column style="width: 50px; background-color: inherit;text-align: center">
                         <p:commandButton id="edit" style="width: 30px;height: 30px" icon="fa fa-edit" action="#{carManagement.openEditUserDialog(car)}" update="editCarDialog">                    
                         </p:commandButton>
                         <p:tooltip for="edit" value="Edytuj" />
+                    </p:column>
+                    <p:column style="width: 50px; background-color: inherit;text-align: center">
+                        <p:commandButton id="delete" style="width: 30px;height: 30px" icon="fa fa-trash" action="#{carManagement.removeCar(car)}" update="carDataTable" >                    
+                        </p:commandButton>
+                        <p:tooltip for="delete" value="Usuń" />
                     </p:column>
 
                 </p:dataTable>

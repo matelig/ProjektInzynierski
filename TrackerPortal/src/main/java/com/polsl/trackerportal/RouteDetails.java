@@ -65,6 +65,7 @@ public class RouteDetails implements Serializable {
     private int rpmChartSeries;
     
     private JSONArray troubleCodesProvider;
+    private boolean troubleCodesExists;
 
     @PostConstruct
     public void init() {
@@ -123,6 +124,7 @@ public class RouteDetails implements Serializable {
         rpmChartSeries = ChartModeler.SERIES_COUNT;
         
         troubleCodesProvider = ChartModeler.initTroubleCodesProvider(troubleCodes);
+        troubleCodesExists = !troubleCodes.isEmpty();
     }
 
     private void createMapModel() {
@@ -228,5 +230,15 @@ public class RouteDetails implements Serializable {
     public void setTroubleCodesProvider(JSONArray troubleCodesProvider) {
         this.troubleCodesProvider = troubleCodesProvider;
     }    
+
+    public boolean isTroubleCodesExists() {
+        return troubleCodesExists;
+    }
+
+    public void setTroubleCodesExists(boolean troubleCodesExists) {
+        this.troubleCodesExists = troubleCodesExists;
+    }
+    
+    
     
 }

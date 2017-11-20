@@ -46,7 +46,10 @@
         <p:outputPanel rendered="#{0 eq routeDetails.rpmChartSeries}">
             <p:outputLabel value="There are no data about RPM" />
         </p:outputPanel>
-        <div id="troubleCodesDiv" style="height: 400px;width: 100%"/>
+        <p:outputPanel rendered="#{routeDetails.troubleCodesExists}">
+            <div  id="troubleCodesDiv" style="height: 400px;width: 100%"/>
+        </p:outputPanel>
+        
 
         <script type="text/javascript">
             //<![CDATA[

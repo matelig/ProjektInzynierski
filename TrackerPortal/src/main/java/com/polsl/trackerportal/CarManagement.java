@@ -39,6 +39,8 @@ public class CarManagement implements Serializable {
     private List<Car> carList;
 
     private Car car;
+    
+    private Long clickedCarId;
 
     @PersistenceContext
     EntityManager entityManager;
@@ -98,6 +100,11 @@ public class CarManagement implements Serializable {
         context.execute("PF('editCarDialog').show();");
     }
 
+    public String showRouteList(Car car) {
+        clickedCarId = car.getIdCar();
+        return "route-list-view.xhtml?faces-redirect=true&includeViewParams=true";
+    }
+
     public void addCar() {
         try {
             userTransaction.begin();
@@ -152,5 +159,15 @@ public class CarManagement implements Serializable {
     public void setCar(Car car) {
         this.car = car;
     }
+
+    public Long getClickedCarId() {
+        return clickedCarId;
+    }
+
+    public void setClickedCarId(Long clickedCarId) {
+        this.clickedCarId = clickedCarId;
+    }
+    
+    
 
 }

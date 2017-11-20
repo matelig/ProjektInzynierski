@@ -4,6 +4,7 @@
  */
 package com.polsl.trackerportal;
 
+import com.polsl.trackerportal.database.entity.Route;
 import com.polsl.trackerportal.database.entity.User;
 import com.polsl.trackerportal.util.LoggedUser;
 import java.io.Serializable;
@@ -47,6 +48,8 @@ public class UserManagement implements Serializable {
     private UserTransaction userTransaction;
 
     private User user;
+    
+    private Integer clickedUserId;
 
     @PostConstruct
     public void init() {
@@ -116,6 +119,11 @@ public class UserManagement implements Serializable {
         closeEditDialog();
 
     }
+    
+    public String showRouteList(User user) {
+        clickedUserId = user.getIdUser();
+        return "route-list-view.xhtml?faces-redirect=true&includeViewParams=true";
+    }
 
     private void closeAddDialog() {
         RequestContext context = RequestContext.getCurrentInstance();
@@ -179,5 +187,13 @@ public class UserManagement implements Serializable {
     public void setUser(User user) {
         this.user = user;
     }
+
+    public Integer getClickedUserId() {
+        return clickedUserId;
+    }
+
+    public void setClickedUserId(Integer clickedUserId) {
+        this.clickedUserId = clickedUserId;
+    }  
 
 }

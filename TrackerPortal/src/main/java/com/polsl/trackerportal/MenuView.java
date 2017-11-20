@@ -12,6 +12,7 @@ import org.primefaces.model.menu.DefaultMenuModel;
 import org.primefaces.model.menu.DefaultSubMenu;
 import org.primefaces.model.menu.MenuModel;
 import org.primefaces.model.menu.DefaultMenuItem;
+
 /**
  *
  * @author Mateusz Ligus <mateusz.ligus@spiid.pl>
@@ -56,27 +57,22 @@ public class MenuView implements Serializable {
 
         DefaultMenuItem item = new DefaultMenuItem("Home");
         item.setCommand("index.xhtml?faces-redirect=true");
-        item.setIcon("ui-icon-home");
+        item.setIcon("fa fa-home");
         firstSubmenu.addElement(item);
-        
+
         item = new DefaultMenuItem("Routes");
         item.setCommand("route-list-view.xhtml?faces-redirect=true");
-        item.setIcon("ui-icon-home");
+        item.setIcon("fa fa-road");
         firstSubmenu.addElement(item);
-        
-        item = new DefaultMenuItem("Locations");
-        item.setCommand("last-known-locations.xhtml?faces-redirect=true");
-        item.setIcon("ui-icon-home");
-        firstSubmenu.addElement(item);
-        
+
         item = new DefaultMenuItem("Settings");
         item.setCommand("settings.xhtml?faces-redirect=true");
-        item.setIcon("ui-icon-home");
+        item.setIcon("fa fa-gear");
         firstSubmenu.addElement(item);
-        
+
         item = new DefaultMenuItem("Logout");
         item.setCommand("#{loggedUser.logout}");
-        item.setIcon("ui-icon-home");
+        item.setIcon("fa fa-sign-out");
         firstSubmenu.addElement(item);
 
         model.addElement(firstSubmenu);
@@ -85,8 +81,13 @@ public class MenuView implements Serializable {
         DefaultSubMenu secondSubmenu = new DefaultSubMenu("Admin managment");
 
         item = new DefaultMenuItem("Users managment");
-        item.setIcon("fa fa-users");        
+        item.setIcon("fa fa-users");
         item.setCommand("user-management.xhtml?faces-redirect=true");
+        secondSubmenu.addElement(item);
+
+        item = new DefaultMenuItem("Locations");
+        item.setCommand("last-known-locations.xhtml?faces-redirect=true");
+        item.setIcon("fa fa-location-arrow");
         secondSubmenu.addElement(item);
 
         item = new DefaultMenuItem("Cars managment");
@@ -95,11 +96,11 @@ public class MenuView implements Serializable {
         secondSubmenu.addElement(item);
 
         item = new DefaultMenuItem("Routes managment");
-        item.setIcon("ui-icon-search");
+        item.setIcon("fa fa-road");
         secondSubmenu.addElement(item);
 
         model.addElement(secondSubmenu);
-        
+
     }
 
 }

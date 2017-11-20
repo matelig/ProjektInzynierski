@@ -15,7 +15,6 @@ com\polsl\trackerportal\LastKnowLocations.class
 com\polsl\trackerportal\database\entity\Speed.class
 com\polsl\trackerportal\RouteDetails$3.class
 com\polsl\trackerportal\database\entity\OilTemperature_.class
-com\polsl\trackerportal\util\IntegerMinMax.class
 com\polsl\trackerportal\database\entity\TroubleCodes_.class
 com\polsl\trackerportal\RouteManagement.class
 com\polsl\trackerportal\database\entity\Location_.class

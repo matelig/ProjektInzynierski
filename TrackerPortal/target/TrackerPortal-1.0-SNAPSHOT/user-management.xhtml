@@ -31,9 +31,6 @@
                     rowIndexVar="row"
                     id="usersDataTable"
                     rowStyleClass="#{row % 2 eq 0 ? 'row-even' : 'row-odd'}">
-                    <p:column headerText="ID" style="background-color: inherit;width: 30px;text-align: center">
-                        <h:outputText value="#{user.idUser}"/>
-                    </p:column>
                     <p:column headerText="Imię" style="background-color: inherit;text-align: center">
                         <h:outputText value="#{user.name}"/>
                     </p:column>
@@ -49,19 +46,21 @@
                     <p:column headerText="Numer telefonu" style="background-color: inherit;text-align: center">
                         <h:outputText value="#{user.phoneNumber}"/>
                     </p:column>
-
-
                     <p:column style="width: 50px; background-color: inherit;text-align: center">
-                        <p:commandButton id="delete" style="width: 30px;height: 30px" icon="fa fa-trash" action="#{userManagement.removeUser(user)}" update="usersDataTable" >                    
+                        <p:commandButton id="show" style="width: 30px;height: 30px" icon="fa fa-road" action="#{userManagement.showRouteList(user)}">                    
                         </p:commandButton>
-                        <p:tooltip for="delete" value="Usuń" />
+                        <p:tooltip for="show" value="Pokaż trasy" />
                     </p:column>
                     <p:column style="width: 50px; background-color: inherit;text-align: center">
                         <p:commandButton id="edit" style="width: 30px;height: 30px" icon="fa fa-edit" action="#{userManagement.openEditUserDialog(user)}" update="editUserDialog" >                    
                         </p:commandButton>
                         <p:tooltip for="edit" value="Edytuj" />
                     </p:column>
-
+                    <p:column style="width: 50px; background-color: inherit;text-align: center">
+                        <p:commandButton id="delete" style="width: 30px;height: 30px" icon="fa fa-trash" action="#{userManagement.removeUser(user)}" update="usersDataTable" >                    
+                        </p:commandButton>
+                        <p:tooltip for="delete" value="Usuń" />
+                    </p:column>
                 </p:dataTable>
                 <div class="ui-g-12">
 
@@ -76,7 +75,7 @@
             <div class="ui-g-1">
 
             </div>
-           
+
         </h:form>
     </ui:define>
 

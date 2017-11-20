@@ -16,6 +16,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
@@ -38,13 +39,36 @@ public class RouteList implements Serializable {
     @PostConstruct
     public void init() {
         routeList = entityManager.createNamedQuery("Route.findAll").getResultList();
-        for (int i = routeList.size() - 1; i >= 0; i--) {
-            if (!routeList.get(i).getUseridUser().getPesel().equals(loggedUser.getPesel())) {
-                routeList.remove(i);
+        String userID = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("userID");
+        if (userID == null || userID.isEmpty()) {
+            String carID = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("carID");
+            if (carID == null || carID.isEmpty()) {
+                for (int i = routeList.size() - 1; i >= 0; i--) {
+                    if (!routeList.get(i).getUseridUser().getPesel().equals(loggedUser.getPesel())) {
+                        routeList.remove(i);
+                    }
+                }
+            } else {
+                //pobieramy po aucie
+                Long id = Long.valueOf(carID);
+                for (int i = routeList.size() - 1; i >= 0; i--) {
+                    if (routeList.get(i).getCaridCar()==null || !routeList.get(i).getCaridCar().getIdCar().equals(id)) {
+                        routeList.remove(i);
+                    }
+                }
+            }
+        } else {
+            //pobieramy po ID jakiegos usera
+            int id = Integer.valueOf(userID);
+            for (int i = routeList.size() - 1; i >= 0; i--) {
+                if (!routeList.get(i).getUseridUser().getIdUser().equals(id)) {
+                    routeList.remove(i);
+                }
             }
         }
+
     }
-    
+
     public String showRouteDetails(Route route) {
         clickedRouteId = route.getIdRoute();
         return "route-details.xhtml?faces-redirect=true&includeViewParams=true";
@@ -82,5 +106,4 @@ public class RouteList implements Serializable {
         this.clickedRouteId = clickedRouteId;
     }
 
-    
 }
