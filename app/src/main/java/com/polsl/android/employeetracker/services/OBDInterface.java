@@ -48,6 +48,7 @@ import org.greenrobot.greendao.database.Database;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 
@@ -101,7 +102,7 @@ public class OBDInterface {
     private FuelLevelDataDao fuelLevelDataDao;
     private Set<String> oldCodes;
 
-    private String numberVIN = "no number detected";
+    private String numberVIN;
 
     private int previousFuelLevel;
 
@@ -315,13 +316,17 @@ public class OBDInterface {
                                     long timestamp = System.currentTimeMillis();
                                     newCodes.removeAll(oldCodes); // dodajemy nowe do bazy - dodajemy ze stanem 1
                                     for (String s : newCodes) {
-                                        TroubleCodesData tcd = new TroubleCodesData(routeId, s, timestamp, 1);
-                                        troubleCodesDataDao.insert(tcd);
+                                        if (!s.equals("")) {
+                                            TroubleCodesData tcd = new TroubleCodesData(routeId, s, timestamp, 1);
+                                            troubleCodesDataDao.insert(tcd);
+                                        }
                                     }
                                     oldCodes.removeAll(tempCodes); //usuwamy stare z bazy - dodajemy ze stanem 0
                                     for (String s : oldCodes) {
-                                        TroubleCodesData tcd = new TroubleCodesData(routeId, s, timestamp, 0);
-                                        troubleCodesDataDao.insert(tcd);
+                                        if (!s.equals("")) {
+                                            TroubleCodesData tcd = new TroubleCodesData(routeId, s, timestamp, 0);
+                                            troubleCodesDataDao.insert(tcd);
+                                        }
                                     }
                                     oldCodes.clear();
                                     oldCodes.addAll(tempCodes);

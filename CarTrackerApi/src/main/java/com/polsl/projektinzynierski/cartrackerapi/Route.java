@@ -35,7 +35,8 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Route.findAll", query = "SELECT r FROM Route r")
     , @NamedQuery(name = "Route.findByIdRoute", query = "SELECT r FROM Route r WHERE r.idRoute = :idRoute")
     , @NamedQuery(name = "Route.findByStartDate", query = "SELECT r FROM Route r WHERE r.startDate = :startDate")
-    , @NamedQuery(name = "Route.findByEndDate", query = "SELECT r FROM Route r WHERE r.endDate = :endDate")})
+    , @NamedQuery(name = "Route.findByEndDate", query = "SELECT r FROM Route r WHERE r.endDate = :endDate")
+    , @NamedQuery(name = "Route.findByLength", query = "SELECT r FROM Route r WHERE r.length = :length")})
 public class Route implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -48,6 +49,9 @@ public class Route implements Serializable {
     private BigInteger startDate;
     @Column(name = "endDate")
     private BigInteger endDate;
+    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
+    @Column(name = "length")
+    private Double length;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "routeidRoute")
     private Collection<OilTemperature> oilTemperatureCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "routeidRoute")
@@ -98,6 +102,14 @@ public class Route implements Serializable {
 
     public void setEndDate(BigInteger endDate) {
         this.endDate = endDate;
+    }
+
+    public Double getLength() {
+        return length;
+    }
+
+    public void setLength(Double length) {
+        this.length = length;
     }
 
     @XmlTransient

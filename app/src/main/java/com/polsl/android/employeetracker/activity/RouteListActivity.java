@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.orhanobut.hawk.Hawk;
+import com.polsl.android.employeetracker.application.CarApp;
 import com.polsl.android.employeetracker.entity.DaoMaster;
 import com.polsl.android.employeetracker.entity.DaoSession;
 import com.polsl.android.employeetracker.entity.RouteData;
@@ -67,9 +68,7 @@ public class RouteListActivity extends AppCompatActivity {
                 break;
             }
         }
-        DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(this, "main-db");
-        Database db = helper.getWritableDb();
-        daoSession = new DaoMaster(db).newSession();
+        daoSession = ((CarApp) getApplication()).getDaoSession();
         routeDataDao = daoSession.getRouteDataDao();
         ButterKnife.bind(this);
         tracks = routeDataDao.loadAll();
@@ -153,6 +152,10 @@ public class RouteListActivity extends AppCompatActivity {
                 route.setRpmDataList(r.getRpmDataList());
                 route.setSpeedDataList(r.getSpeedDataList());
                 route.setTroubleCodesList(r.getTroubleCodesDataList());
+                route.setFuelConsumptionRateData(r.getFuelConsumptionRateDataList());
+                route.setFuelLevelData(r.getFuelLevelDataList());
+                route.setOilTemperatureData(r.getOilTemperatureDataList());
+                route.setRoadLength(r.getRoadLength());
                 Call<ResponseBody> call = endpoints.create(route);
                 call.enqueue(new Callback<ResponseBody>() {
                     @Override

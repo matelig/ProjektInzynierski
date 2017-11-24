@@ -1,7 +1,11 @@
 package com.polsl.android.employeetracker.entity;
 
+import android.widget.Toast;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.polsl.android.employeetracker.RESTApi.RESTServicesEndpoints;
+import com.polsl.android.employeetracker.RESTApi.Route;
 import com.polsl.android.employeetracker.helper.UploadStatus;
 import com.polsl.android.employeetracker.helper.UploadStatusPropertyConverter;
 
@@ -15,6 +19,11 @@ import org.greenrobot.greendao.annotation.ToMany;
 import java.util.List;
 import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.DaoException;
+
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by m_lig on 27.07.2017.
@@ -132,6 +141,31 @@ public class RouteData {
         long hours = (ms / (1000 * 60 * 60)) % 24;
         return  String.format("%02d:%02d:%02d", hours, minutes, seconds);
     }
+
+//    public void sendRoute(RESTServicesEndpoints endpoints ) {
+//        Route route = new Route(getStartDate(),getEndDate(),getUserId(),getVinNumber(),getLocationDataList());
+//        route.setRpmDataList(getRpmDataList());
+//        route.setSpeedDataList(getSpeedDataList());
+//        route.setTroubleCodesList(getTroubleCodesDataList());
+//        Call<ResponseBody> call = endpoints.create(route);
+//        call.enqueue(new Callback<ResponseBody>() {
+//            @Override
+//            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+//                if (response.code()==204) {
+//                    setUploadStatus(UploadStatus.UPLOADED);
+//                    r.setToSend(false);
+//                    routeDataDao.update(r);
+//                    Toast.makeText(context,"Route "+ r.getId()+" has been send.",Toast.LENGTH_SHORT).show();
+//                    tAdapter.notifyDataSetChanged();
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(Call<ResponseBody> call, Throwable t) {
+//
+//            }
+//        });
+//    }
 
     public Long getId() {
         return this.id;

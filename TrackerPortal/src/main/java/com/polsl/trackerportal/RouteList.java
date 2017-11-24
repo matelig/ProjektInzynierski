@@ -37,7 +37,7 @@ public class RouteList implements Serializable {
     private LoggedUser loggedUser;
 
     @PostConstruct
-    public void init() {
+    public void init() {        
         routeList = entityManager.createNamedQuery("Route.findAll").getResultList();
         String userID = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("userID");
         if (userID == null || userID.isEmpty()) {

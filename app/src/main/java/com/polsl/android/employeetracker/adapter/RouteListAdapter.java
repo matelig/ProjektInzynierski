@@ -12,6 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.polsl.android.employeetracker.activity.MapsActivity;
+import com.polsl.android.employeetracker.application.CarApp;
 import com.polsl.android.employeetracker.entity.DaoMaster;
 import com.polsl.android.employeetracker.entity.DaoSession;
 import com.polsl.android.employeetracker.entity.RouteData;
@@ -71,9 +72,7 @@ public class RouteListAdapter extends RecyclerView.Adapter<RouteListAdapter.Data
         holder.checkBox.setChecked(tracks.get(position).getToSend());
         holder.checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
             tracks.get(position).setToSend(isChecked);
-            DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(context, "main-db");
-            Database db = helper.getWritableDb();
-            DaoSession daoSession = new DaoMaster(db).newSession();
+            DaoSession daoSession = ((CarApp) context.getApplicationContext()).getDaoSession();
             RouteDataDao routeDataDao = daoSession.getRouteDataDao();
             routeDataDao.update(tracks.get(position));
         });

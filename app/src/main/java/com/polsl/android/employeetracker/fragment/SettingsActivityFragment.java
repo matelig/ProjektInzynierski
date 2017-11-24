@@ -18,10 +18,29 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.orhanobut.hawk.Hawk;
+import com.polsl.android.employeetracker.R;
 import com.polsl.android.employeetracker.activity.LoginActivity;
+import com.polsl.android.employeetracker.application.CarApp;
+import com.polsl.android.employeetracker.entity.DaoSession;
+import com.polsl.android.employeetracker.entity.FuelConsumptionRateData;
+import com.polsl.android.employeetracker.entity.FuelConsumptionRateDataDao;
+import com.polsl.android.employeetracker.entity.FuelLevelData;
+import com.polsl.android.employeetracker.entity.FuelLevelDataDao;
+import com.polsl.android.employeetracker.entity.LocationData;
+import com.polsl.android.employeetracker.entity.LocationDataDao;
+import com.polsl.android.employeetracker.entity.OilTemperatureData;
+import com.polsl.android.employeetracker.entity.OilTemperatureDataDao;
+import com.polsl.android.employeetracker.entity.RPMData;
+import com.polsl.android.employeetracker.entity.RPMDataDao;
+import com.polsl.android.employeetracker.entity.RouteData;
+import com.polsl.android.employeetracker.entity.RouteDataDao;
+import com.polsl.android.employeetracker.entity.SpeedData;
+import com.polsl.android.employeetracker.entity.SpeedDataDao;
+import com.polsl.android.employeetracker.entity.TroubleCodesData;
+import com.polsl.android.employeetracker.entity.TroubleCodesDataDao;
 import com.polsl.android.employeetracker.entity.User;
 import com.polsl.android.employeetracker.helper.ApiHelper;
-import com.polsl.android.employeetracker.R;
+import com.polsl.android.employeetracker.helper.UploadStatus;
 
 import java.util.ArrayList;
 import java.util.Set;
@@ -49,6 +68,9 @@ public class SettingsActivityFragment extends Fragment {
     @BindView(R.id.logout_button)
     Button logoutButton;
 
+    @BindView(R.id.test)
+    Button test;
+
     public SettingsActivityFragment() {
     }
 
@@ -60,29 +82,28 @@ public class SettingsActivityFragment extends Fragment {
                 R.layout.fragment_settings_activity, container, false);
 
         ButterKnife.bind(this, rootView); //jedyne słuszne bindowanie widoku z polami
-//
-//        SharedPreferences prefs = getContext().getSharedPreferences(getContext().getPackageName(), Context.MODE_PRIVATE);
         if (Hawk.contains(ApiHelper.USER)) {
             User user = Hawk.get(ApiHelper.USER);
             userName.setText(user.getName());
             userSurname.setText(user.getSurname());
-
         }
 
-        obdDeviceName.setText(Hawk.get(ApiHelper.OBD_DEVICE_ADDRESS,""));
+        obdDeviceName.setText(Hawk.get(ApiHelper.OBD_DEVICE_ADDRESS, ""));
 
         logoutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                SharedPreferences prefs = getContext().getSharedPreferences(getContext().getPackageName(), Context.MODE_PRIVATE);
-//                prefs.edit().putString(ApiHelper.USER_NAME, "").apply();
-//                prefs.edit().putString(ApiHelper.USER_SURNAME, "").apply();
-//                prefs.edit().putString(ApiHelper.USER_PESEL, "").apply();
-//                prefs.edit().putLong(ApiHelper.USER_ID, 0).apply();
                 Hawk.deleteAll();
-                Intent intent = new Intent (getActivity(),LoginActivity.class);
+                Intent intent = new Intent(getActivity(), LoginActivity.class);
                 getActivity().startActivity(intent);
                 getActivity().finish();
+            }
+        });
+
+        test.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addToDatabase();
             }
         });
 
@@ -120,11 +141,8 @@ public class SettingsActivityFragment extends Fragment {
                         public void onClick(DialogInterface dialog, int which) {
                             dialog.dismiss();
                             int position = ((android.app.AlertDialog) dialog).getListView().getCheckedItemPosition();
-//                            SharedPreferences prefs = getContext().getSharedPreferences(getContext().getPackageName(), Context.MODE_PRIVATE);
-//                            prefs.edit().putString(ApiHelper.OBD_DEVICE_ADDRESS, devices.get(position)).apply();
-//                            prefs.edit().putString(ApiHelper.OBD_DEVICE_NAME, deviceStrs.get(position)).apply();
-                            Hawk.put(ApiHelper.OBD_DEVICE_ADDRESS,devices.get(position));
-                            Hawk.put(ApiHelper.OBD_DEVICE_NAME,deviceStrs.get(position));
+                            Hawk.put(ApiHelper.OBD_DEVICE_ADDRESS, devices.get(position));
+                            Hawk.put(ApiHelper.OBD_DEVICE_NAME, deviceStrs.get(position));
                             obdDeviceName.setText(devices.get(position));
                         }
                     });
@@ -135,6 +153,54 @@ public class SettingsActivityFragment extends Fragment {
         });
 
         return rootView;
+    }
+
+    private void addToDatabase() {
+        User user = Hawk.get(ApiHelper.USER);
+        DaoSession daoSession = ((CarApp) getActivity().getApplication()).getDaoSession();
+        RouteDataDao routeDataDao = daoSession.getRouteDataDao();
+        RouteData routeData = new RouteData();
+        routeData.setUserId(user.getId());
+        routeData.setStartDate(System.currentTimeMillis());
+        routeData.setRoadLength(2410.2154);
+        routeData.setVinNumber("123");
+
+        routeData.setUploadStatus(UploadStatus.READY_TO_UPLOAD);
+        routeDataDao.insert(routeData);
+
+
+        LocationDataDao locationDataDao = daoSession.getLocationDataDao();
+        LocationData locationData = new LocationData(System.currentTimeMillis(), 11.12, 12.11, routeData.getId());
+        locationDataDao.insert(locationData);
+
+        FuelConsumptionRateDataDao fuelConsumptionRateDataDao = daoSession.getFuelConsumptionRateDataDao();
+        FuelConsumptionRateData fuelConsumptionRateData = new FuelConsumptionRateData(routeData.getId(), 12.5f, System.currentTimeMillis());
+        fuelConsumptionRateDataDao.insert(fuelConsumptionRateData);
+
+        FuelLevelDataDao fuelLevelDataDao = daoSession.getFuelLevelDataDao();
+        FuelLevelData fuelLevelData = new FuelLevelData(routeData.getId(),87.5f,System.currentTimeMillis());
+        fuelLevelDataDao.insert(fuelLevelData);
+
+        OilTemperatureDataDao oilTemperatureDataDao = daoSession.getOilTemperatureDataDao();
+        OilTemperatureData oilTemperatureData = new OilTemperatureData(routeData.getId(),37.5f,System.currentTimeMillis());
+        oilTemperatureDataDao.insert(oilTemperatureData);
+
+        RPMDataDao rpmDataDao = daoSession.getRPMDataDao();
+        RPMData rpmData = new RPMData(routeData.getId(),System.currentTimeMillis(),987);
+        rpmDataDao.insert(rpmData);
+
+        SpeedDataDao speedDataDao = daoSession.getSpeedDataDao();
+        SpeedData speedData = new SpeedData(routeData.getId(),15,System.currentTimeMillis());
+        speedDataDao.insert(speedData);
+
+        TroubleCodesDataDao troubleCodesDataDao = daoSession.getTroubleCodesDataDao();
+        TroubleCodesData troubleCodesData = new TroubleCodesData(routeData.getId(),"15",System.currentTimeMillis(),1);
+        troubleCodesDataDao.insert(troubleCodesData);
+        troubleCodesData = new TroubleCodesData(routeData.getId(),"15",System.currentTimeMillis()+10000,0);
+        troubleCodesDataDao.insert(troubleCodesData);
+
+        routeData.setEndDate(System.currentTimeMillis()+100000);
+        routeDataDao.update(routeData);
     }
 
 }

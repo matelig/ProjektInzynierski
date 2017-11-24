@@ -119,7 +119,7 @@ public class Rpm implements Serializable {
 
     @Override
     public String toString() {
-        return "com.polsl.trackerportal.Rpm[ idrpm=" + idrpm + " ]";
+        return "com.polsl.trackerportal.database.entity.Rpm[ idrpm=" + idrpm + " ]";
     }
 
 }

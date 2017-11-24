@@ -42,9 +42,6 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "User.findByAdministrator", query = "SELECT u FROM User u WHERE u.administrator = :administrator")})
 public class User implements Serializable {
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "useridUser")
-    private Collection<CurrentLocation> currentLocationCollection;
-
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -83,6 +80,8 @@ public class User implements Serializable {
     private short administrator;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "useridUser")
     private Collection<Route> routeCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "useridUser")
+    private Collection<CurrentLocation> currentLocationCollection;
 
     public User() {
     }
@@ -173,6 +172,15 @@ public class User implements Serializable {
         this.routeCollection = routeCollection;
     }
 
+    @XmlTransient
+    public Collection<CurrentLocation> getCurrentLocationCollection() {
+        return currentLocationCollection;
+    }
+
+    public void setCurrentLocationCollection(Collection<CurrentLocation> currentLocationCollection) {
+        this.currentLocationCollection = currentLocationCollection;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -195,16 +203,7 @@ public class User implements Serializable {
 
     @Override
     public String toString() {
-        return "com.polsl.trackerportal.User[ idUser=" + idUser + " ]";
-    }
-
-    @XmlTransient
-    public Collection<CurrentLocation> getCurrentLocationCollection() {
-        return currentLocationCollection;
-    }
-
-    public void setCurrentLocationCollection(Collection<CurrentLocation> currentLocationCollection) {
-        this.currentLocationCollection = currentLocationCollection;
+        return "com.polsl.trackerportal.database.entity.User[ idUser=" + idUser + " ]";
     }
 
 }

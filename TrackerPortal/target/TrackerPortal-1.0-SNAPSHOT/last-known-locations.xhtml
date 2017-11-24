@@ -46,14 +46,7 @@
                         <h:outputText value="#{location.calculatedDate}">
                             <f:convertDateTime pattern="dd.MM.yyyy HH:mm"/>
                         </h:outputText>
-                    </p:column>
-                    <p:column headerText="Long" style="background-color: inherit;text-align: center">
-                        <h:outputText value="#{location.latitude}"/>
-                    </p:column>
-                    <p:column headerText="Lat" style="background-color: inherit;text-align: center">
-                        <h:outputText value="#{location.longitude}"/>
-                    </p:column>
-                    
+                    </p:column>                    
                     <p:column style="width: 50px; background-color: inherit;text-align: center">
                         <p:commandButton id="edit" style="width: 30px;height: 30px" icon="fa fa-edit" action="#{lastKnowLocations.showLocationDialog(location)}" update="locationDialog">                    
                         </p:commandButton>

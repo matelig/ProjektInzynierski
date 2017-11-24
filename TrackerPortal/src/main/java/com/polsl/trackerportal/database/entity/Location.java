@@ -131,7 +131,7 @@ public class Location implements Serializable {
 
     @Override
     public String toString() {
-        return "com.polsl.trackerportal.Location[ idLocation=" + idLocation + " ]";
+        return "com.polsl.trackerportal.database.entity.Location[ idLocation=" + idLocation + " ]";
     }
 
 }

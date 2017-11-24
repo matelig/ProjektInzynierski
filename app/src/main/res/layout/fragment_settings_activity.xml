@@ -60,6 +60,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/obd_set_button" />
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/test"
+            android:text="dodaj trase testowa"/>
     </LinearLayout>
 
     <View

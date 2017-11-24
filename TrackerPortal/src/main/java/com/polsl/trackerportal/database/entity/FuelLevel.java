@@ -10,13 +10,14 @@ import java.math.BigInteger;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -35,12 +36,13 @@ public class FuelLevel implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @NotNull
     @Column(name = "idfuelLevel")
     private Integer idfuelLevel;
+    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(name = "value")
-    private Integer value;
+    private Double value;
     @Column(name = "timestamp")
     private BigInteger timestamp;
     @JoinColumn(name = "route_idRoute", referencedColumnName = "idRoute")
@@ -62,11 +64,11 @@ public class FuelLevel implements Serializable {
         this.idfuelLevel = idfuelLevel;
     }
 
-    public Integer getValue() {
+    public Double getValue() {
         return value;
     }
 
-    public void setValue(Integer value) {
+    public void setValue(Double value) {
         this.value = value;
     }
 
@@ -108,7 +110,7 @@ public class FuelLevel implements Serializable {
 
     @Override
     public String toString() {
-        return "com.polsl.trackerportal.FuelLevel[ idfuelLevel=" + idfuelLevel + " ]";
+        return "com.polsl.trackerportal.database.entity.FuelLevel[ idfuelLevel=" + idfuelLevel + " ]";
     }
 
 }

@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.widget.Toast;
 
 import com.orhanobut.hawk.Hawk;
+import com.polsl.android.employeetracker.application.CarApp;
 import com.polsl.android.employeetracker.entity.DaoMaster;
 import com.polsl.android.employeetracker.entity.DaoSession;
 import com.polsl.android.employeetracker.entity.RouteData;
@@ -51,9 +52,7 @@ public class RouteMonthList extends AppCompatActivity {
         Long userId = user.getId();
         Intent intent = getIntent();
         year = Integer.parseInt(intent.getStringExtra("year"));
-        DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(this, "main-db");
-        Database db = helper.getWritableDb();
-        daoSession = new DaoMaster(db).newSession();
+        daoSession = ((CarApp) getApplication()).getDaoSession();
         routeDataDao = daoSession.getRouteDataDao();
         ButterKnife.bind(this);
         tracks = routeDataDao.loadAll();

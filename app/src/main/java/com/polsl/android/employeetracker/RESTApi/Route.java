@@ -2,7 +2,10 @@ package com.polsl.android.employeetracker.RESTApi;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.polsl.android.employeetracker.entity.FuelConsumptionRateData;
+import com.polsl.android.employeetracker.entity.FuelLevelData;
 import com.polsl.android.employeetracker.entity.LocationData;
+import com.polsl.android.employeetracker.entity.OilTemperatureData;
 import com.polsl.android.employeetracker.entity.RPMData;
 import com.polsl.android.employeetracker.entity.RouteData;
 import com.polsl.android.employeetracker.entity.SpeedData;
@@ -34,7 +37,6 @@ public class Route {
     @Expose
     private List<RPMData> rpmDataList;
 
-
     @SerializedName("speedCollection")
     @Expose
     private List<SpeedData> speedDataList;
@@ -42,6 +44,22 @@ public class Route {
     @SerializedName("troubleCodesCollection")
     @Expose
     private List<TroubleCodesData> troubleCodesList;
+
+    @SerializedName("fuelConsumptionCollection")
+    @Expose
+    private List<FuelConsumptionRateData> fuelConsumptionRateData;
+
+    @SerializedName("fuelLevelCollection")
+    @Expose
+    private List<FuelLevelData> fuelLevelData;
+
+    @SerializedName("oilTemperatureCollection")
+    @Expose
+    private List<OilTemperatureData> oilTemperatureData;
+
+    @SerializedName("roadLength")
+    @Expose
+    private Double roadLength;
 
     public List<RPMData> getRpmDataList() {
         return rpmDataList;
@@ -119,4 +137,35 @@ public class Route {
         //najlepiej to zaimplementować tutaj
     }
 
+    public List<FuelConsumptionRateData> getFuelConsumptionRateData() {
+        return fuelConsumptionRateData;
+    }
+
+    public void setFuelConsumptionRateData(List<FuelConsumptionRateData> fuelConsumptionRateData) {
+        this.fuelConsumptionRateData = fuelConsumptionRateData;
+    }
+
+    public List<FuelLevelData> getFuelLevelData() {
+        return fuelLevelData;
+    }
+
+    public void setFuelLevelData(List<FuelLevelData> fuelLevelData) {
+        this.fuelLevelData = fuelLevelData;
+    }
+
+    public List<OilTemperatureData> getOilTemperatureData() {
+        return oilTemperatureData;
+    }
+
+    public void setOilTemperatureData(List<OilTemperatureData> oilTemperatureData) {
+        this.oilTemperatureData = oilTemperatureData;
+    }
+
+    public Double getRoadLength() {
+        return roadLength;
+    }
+
+    public void setRoadLength(Double roadLength) {
+        this.roadLength = roadLength;
+    }
 }

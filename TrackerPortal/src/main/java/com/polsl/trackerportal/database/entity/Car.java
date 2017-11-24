@@ -37,9 +37,6 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Car.findByModel", query = "SELECT c FROM Car c WHERE c.model = :model")})
 public class Car implements Serializable {
 
-    @OneToMany(mappedBy = "caridCar")
-    private Collection<CurrentLocation> currentLocationCollection;
-
     private static final long serialVersionUID = 1L;
     @Basic(optional = false)
     @NotNull
@@ -63,6 +60,8 @@ public class Car implements Serializable {
     private String model;
     @OneToMany(mappedBy = "caridCar")
     private Collection<Route> routeCollection;
+    @OneToMany(mappedBy = "caridCar")
+    private Collection<CurrentLocation> currentLocationCollection;
 
     public Car() {
     }
@@ -119,6 +118,15 @@ public class Car implements Serializable {
         this.routeCollection = routeCollection;
     }
 
+    @XmlTransient
+    public Collection<CurrentLocation> getCurrentLocationCollection() {
+        return currentLocationCollection;
+    }
+
+    public void setCurrentLocationCollection(Collection<CurrentLocation> currentLocationCollection) {
+        this.currentLocationCollection = currentLocationCollection;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -141,16 +149,7 @@ public class Car implements Serializable {
 
     @Override
     public String toString() {
-        return "com.polsl.trackerportal.Car[ idCar=" + idCar + " ]";
-    }
-
-    @XmlTransient
-    public Collection<CurrentLocation> getCurrentLocationCollection() {
-        return currentLocationCollection;
-    }
-
-    public void setCurrentLocationCollection(Collection<CurrentLocation> currentLocationCollection) {
-        this.currentLocationCollection = currentLocationCollection;
+        return "com.polsl.trackerportal.database.entity.Car[ idCar=" + idCar + " ]";
     }
 
 }

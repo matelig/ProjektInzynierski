@@ -6,14 +6,20 @@
 package com.polsl.projektinzynierski.cartrackerapi.service;
 
 import com.polsl.projektinzynierski.cartrackerapi.Car;
+import com.polsl.projektinzynierski.cartrackerapi.FuelComsumptionRate;
+import com.polsl.projektinzynierski.cartrackerapi.FuelLevel;
 import com.polsl.projektinzynierski.cartrackerapi.Location;
+import com.polsl.projektinzynierski.cartrackerapi.OilTemperature;
 import com.polsl.projektinzynierski.cartrackerapi.Route;
 import com.polsl.projektinzynierski.cartrackerapi.RouteData;
 import com.polsl.projektinzynierski.cartrackerapi.Rpm;
 import com.polsl.projektinzynierski.cartrackerapi.Speed;
 import com.polsl.projektinzynierski.cartrackerapi.TroubleCodes;
+import com.polsl.projektinzynierski.cartrackerapi.TroubleCodesNames;
 import com.polsl.projektinzynierski.cartrackerapi.User;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -49,9 +55,29 @@ public class RouteFacadeREST extends AbstractFacade<Route> {
         List<Location> locations = entity.getLocationCollection();
         List<Speed> speed = entity.getSpeedCollection();
         List<Rpm> rpm = entity.getRPMCollection();
+        List<FuelComsumptionRate> fuelComsumptionRates = entity.getFuelConsumptionCollection();
+        List<FuelLevel> fuelLevels = entity.getFuelLevelCollection();
+        List<OilTemperature> oilTemperatures = entity.getOilTemperatureCollection();
         List<TroubleCodes> troubleCodes = entity.getTroubleCodesCollection();
+        Set<String> names = new HashSet<>();
+        for (TroubleCodes tc : troubleCodes) {
+            names.add(tc.getCode());
+        }
         Route route = new Route();
         List<Car> cars = em.createNamedQuery("Car.findByVinNumber").setParameter("vinNumber", entity.getCarVin()).getResultList();
+        List<TroubleCodesNames> troubleCodesNames = em.createNamedQuery("TroubleCodesNames.findAll").getResultList();
+        Set<String> troubleCodesSet = new HashSet<>();
+        for (TroubleCodesNames tcn : troubleCodesNames) {
+            troubleCodesSet.add(tcn.getCode());
+        }
+        for (String s : names) {
+            if (!troubleCodesSet.contains(s)) {
+                TroubleCodesNames tcn = new TroubleCodesNames();
+                tcn.setCode(s);
+                tcn.setDescription("No information about this trouble code");
+                em.persist(tcn);
+            }
+        }
         if (cars.isEmpty()) {
             Car car = new Car();
             car.setMake("unknown");
@@ -59,14 +85,15 @@ public class RouteFacadeREST extends AbstractFacade<Route> {
             car.setVinNumber(entity.getCarVin());
             em.persist(car);
         }   
+        
         cars = em.createNamedQuery("Car.findByVinNumber").setParameter("vinNumber", entity.getCarVin()).getResultList();
         route.setCaridCar(cars.get(0));
-        //przyda się sprawdzenie, czy istnieje dany samochód, jeśli nie istnieje - stwórz go z jakimiś defaultowymi danymi, które potem administrator może edytować (na stronce)
-        
+
         List<User> users = em.createNamedQuery("User.findByIdUser").setParameter("idUser", entity.getIdUser()).getResultList();
         route.setUseridUser(users.get(0));
         route.setEndDate(entity.getEndDate());
         route.setStartDate(entity.getStartDate());
+        route.setLength(entity.getRoadLength());
         for (Location l : locations) {
             l.setRouteidRoute(route);
         }
@@ -79,9 +106,21 @@ public class RouteFacadeREST extends AbstractFacade<Route> {
         for (TroubleCodes tc : troubleCodes) {
             tc.setRouteidRoute(route);
         }
+        for (FuelComsumptionRate fcr : fuelComsumptionRates) {
+            fcr.setRouteidRoute(route);
+        }
+        for (FuelLevel fl : fuelLevels) {
+            fl.setRouteidRoute(route);
+        }
+        for (OilTemperature ot : oilTemperatures) {
+            ot.setRouteidRoute(route);
+        }
         route.setTroubleCodesCollection(troubleCodes);
         route.setSpeedCollection(speed);
         route.setRpmCollection(rpm);
+        route.setOilTemperatureCollection(oilTemperatures);
+        route.setFuelComsumptionRateCollection(fuelComsumptionRates);
+        route.setFuelLevelCollection(fuelLevels);
         route.setLocationCollection(locations);
         super.create(route);
     }

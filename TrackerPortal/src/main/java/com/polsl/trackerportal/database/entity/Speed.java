@@ -119,7 +119,7 @@ public class Speed implements Serializable {
 
     @Override
     public String toString() {
-        return "com.polsl.trackerportal.Speed[ idSpeed=" + idSpeed + " ]";
+        return "com.polsl.trackerportal.database.entity.Speed[ idSpeed=" + idSpeed + " ]";
     }
 
 }

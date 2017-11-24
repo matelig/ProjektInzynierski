@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.orhanobut.hawk.Hawk;
+import com.polsl.android.employeetracker.application.CarApp;
 import com.polsl.android.employeetracker.entity.DaoMaster;
 import com.polsl.android.employeetracker.entity.DaoSession;
 import com.polsl.android.employeetracker.entity.RouteData;
@@ -58,9 +59,7 @@ public class RouteListFragment extends Fragment {
         User user = Hawk.get(ApiHelper.USER);
         Long userId = user.getId();
         Set<Integer> usedYears = new HashSet<>();
-        DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(rootView.getContext(), "main-db");
-        Database db = helper.getWritableDb();
-        daoSession = new DaoMaster(db).newSession();
+        daoSession = ((CarApp) getActivity().getApplication()).getDaoSession();
         routeDataDao = daoSession.getRouteDataDao();
         ButterKnife.bind(rootView);
         tracks = routeDataDao.loadAll();

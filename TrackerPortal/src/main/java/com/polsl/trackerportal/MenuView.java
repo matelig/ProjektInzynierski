@@ -85,18 +85,14 @@ public class MenuView implements Serializable {
         item.setCommand("user-management.xhtml?faces-redirect=true");
         secondSubmenu.addElement(item);
 
-        item = new DefaultMenuItem("Locations");
-        item.setCommand("last-known-locations.xhtml?faces-redirect=true");
-        item.setIcon("fa fa-location-arrow");
-        secondSubmenu.addElement(item);
-
         item = new DefaultMenuItem("Cars managment");
         item.setIcon("fa fa-car");
         item.setCommand("car-management.xhtml?faces-redirect=true");
         secondSubmenu.addElement(item);
 
-        item = new DefaultMenuItem("Routes managment");
-        item.setIcon("fa fa-road");
+        item = new DefaultMenuItem("Locations");
+        item.setCommand("last-known-locations.xhtml?faces-redirect=true");
+        item.setIcon("fa fa-location-arrow");
         secondSubmenu.addElement(item);
 
         model.addElement(secondSubmenu);

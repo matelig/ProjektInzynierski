@@ -135,7 +135,7 @@ public class TroubleCodes implements Serializable {
 
     @Override
     public String toString() {
-        return "com.polsl.trackerportal.TroubleCodes[ idtroubleCodes=" + idtroubleCodes + " ]";
+        return "com.polsl.trackerportal.database.entity.TroubleCodes[ idtroubleCodes=" + idtroubleCodes + " ]";
     }
 
 }

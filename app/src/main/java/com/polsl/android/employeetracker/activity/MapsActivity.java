@@ -14,6 +14,7 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.polsl.android.employeetracker.application.CarApp;
 import com.polsl.android.employeetracker.entity.DaoMaster;
 import com.polsl.android.employeetracker.entity.DaoSession;
 import com.polsl.android.employeetracker.entity.LocationData;
@@ -48,10 +49,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         Intent intent = getIntent();
         Long routeId = intent.getLongExtra(ApiHelper.ROUTE_ID,0);
-
-        DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(this, "main-db");
-        Database db = helper.getWritableDb();
-        daoSession = new DaoMaster(db).newSession();
+        daoSession = ((CarApp) getApplication()).getDaoSession();
         routeDataDao = daoSession.getRouteDataDao();
         routeData = routeDataDao.load(routeId);
         locationData = routeData.getLocationDataList();

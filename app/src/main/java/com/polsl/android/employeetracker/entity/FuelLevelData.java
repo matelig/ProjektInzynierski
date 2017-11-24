@@ -1,5 +1,7 @@
 package com.polsl.android.employeetracker.entity;
 
+import com.google.gson.annotations.Expose;
+
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Generated;
 
@@ -10,7 +12,9 @@ import org.greenrobot.greendao.annotation.Generated;
 public class FuelLevelData {
 
     private Long routeId;
+    @Expose
     private float value;
+    @Expose
     private Long timestamp;
     @Generated(hash = 1087796204)
     public FuelLevelData(Long routeId, float value, Long timestamp) {

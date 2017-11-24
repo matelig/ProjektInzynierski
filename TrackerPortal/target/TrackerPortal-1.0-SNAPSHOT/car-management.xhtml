@@ -31,13 +31,13 @@
                     rowIndexVar="row"
                     id="carDataTable"
                     rowStyleClass="#{row % 2 eq 0 ? 'row-even' : 'row-odd'}">
-                    <p:column headerText="Numer VIN" style="background-color: inherit;text-align: center">
+                    <p:column headerText="Numer VIN" style="background-color: inherit;text-align: center" sortBy="#{car.vinNumber}" filterBy="#{car.vinNumber}">
                         <h:outputText value="#{car.vinNumber}"/>
                     </p:column>
-                    <p:column headerText="Marka" style="background-color: inherit;text-align: center">
+                    <p:column headerText="Marka" style="background-color: inherit;text-align: center" sortBy="#{car.make}" filterBy="#{car.make}">
                         <h:outputText value="#{car.make}"/>
                     </p:column>
-                    <p:column headerText="Model" style="background-color: inherit;text-align: center">
+                    <p:column headerText="Model" style="background-color: inherit;text-align: center" sortBy="#{car.model}" filterBy="#{car.model}">
                         <h:outputText value="#{car.model}"/>
                     </p:column>
                     <p:column style="width: 50px; background-color: inherit;text-align: center">

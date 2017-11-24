@@ -44,11 +44,11 @@ public class CurrentLocation implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Column(name = "latitude")
-    private Double latitude;
+    private double latitude;
     @Basic(optional = false)
     @NotNull
     @Column(name = "longitude")
-    private Double longitude;
+    private double longitude;
     @Basic(optional = false)
     @NotNull
     @Column(name = "timestamp")
@@ -67,7 +67,7 @@ public class CurrentLocation implements Serializable {
         this.idcurrentLocation = idcurrentLocation;
     }
 
-    public CurrentLocation(Integer idcurrentLocation, Double latitude, Double longitude, long timestamp) {
+    public CurrentLocation(Integer idcurrentLocation, double latitude, double longitude, long timestamp) {
         this.idcurrentLocation = idcurrentLocation;
         this.latitude = latitude;
         this.longitude = longitude;
@@ -82,19 +82,19 @@ public class CurrentLocation implements Serializable {
         this.idcurrentLocation = idcurrentLocation;
     }
 
-    public Double getLatitude() {
+    public double getLatitude() {
         return latitude;
     }
 
-    public void setLatitude(Double latitude) {
+    public void setLatitude(double latitude) {
         this.latitude = latitude;
     }
 
-    public Double getLongitude() {
+    public double getLongitude() {
         return longitude;
     }
 
-    public void setLongitude(Double longitude) {
+    public void setLongitude(double longitude) {
         this.longitude = longitude;
     }
 

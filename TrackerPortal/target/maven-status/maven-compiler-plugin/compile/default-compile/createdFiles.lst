@@ -1,5 +1,6 @@
 com\polsl\trackerportal\database\entity\FuelLevel.class
 com\polsl\trackerportal\database\entity\FuelComsumptionRate.class
+com\polsl\trackerportal\util\DateController.class
 com\polsl\trackerportal\database\entity\Car.class
 com\polsl\trackerportal\UserManagement.class
 com\polsl\trackerportal\database\entity\User.class
@@ -7,6 +8,7 @@ com\polsl\trackerportal\CarManagement.class
 com\polsl\trackerportal\database\entity\CurrentLocation.class
 com\polsl\trackerportal\RouteDetails$2.class
 com\polsl\trackerportal\database\entity\FuelLevel_.class
+com\polsl\trackerportal\database\entity\TroubleCodesNames_.class
 com\polsl\trackerportal\database\entity\TroubleCodes.class
 com\polsl\trackerportal\database\entity\Route_.class
 com\polsl\trackerportal\MenuView.class
@@ -29,6 +31,7 @@ com\polsl\trackerportal\database\entity\Route.class
 com\polsl\trackerportal\RouteList.class
 com\polsl\trackerportal\RouteDetails$1.class
 com\polsl\trackerportal\database\entity\Location.class
+com\polsl\trackerportal\database\entity\TroubleCodesNames.class
 com\polsl\trackerportal\util\ChartModeler.class
 com\polsl\trackerportal\database\entity\User_.class
 com\polsl\trackerportal\util\ResourceFilter.class

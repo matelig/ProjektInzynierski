@@ -1,7 +1,8 @@
 /*
 (c) Systemy Przetwarzania i Integracji Danych SPIID sp. z o.o.
 1:1 Realny obraz Twojej firmy
- */
+*/
+
 package com.polsl.trackerportal.database.entity;
 
 import java.io.Serializable;
@@ -12,7 +13,6 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -36,7 +36,8 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Route.findAll", query = "SELECT r FROM Route r")
     , @NamedQuery(name = "Route.findByIdRoute", query = "SELECT r FROM Route r WHERE r.idRoute = :idRoute")
     , @NamedQuery(name = "Route.findByStartDate", query = "SELECT r FROM Route r WHERE r.startDate = :startDate")
-    , @NamedQuery(name = "Route.findByEndDate", query = "SELECT r FROM Route r WHERE r.endDate = :endDate")})
+    , @NamedQuery(name = "Route.findByEndDate", query = "SELECT r FROM Route r WHERE r.endDate = :endDate")
+    , @NamedQuery(name = "Route.findByLength", query = "SELECT r FROM Route r WHERE r.length = :length")})
 public class Route implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -49,6 +50,9 @@ public class Route implements Serializable {
     private BigInteger startDate;
     @Column(name = "endDate")
     private BigInteger endDate;
+    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
+    @Column(name = "length")
+    private Double length;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "routeidRoute")
     private Collection<OilTemperature> oilTemperatureCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "routeidRoute")
@@ -61,7 +65,7 @@ public class Route implements Serializable {
     private User useridUser;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "routeidRoute")
     private Collection<FuelComsumptionRate> fuelComsumptionRateCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "routeidRoute", fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "routeidRoute")
     private Collection<TroubleCodes> troubleCodesCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "routeidRoute")
     private Collection<Location> locationCollection;
@@ -99,6 +103,14 @@ public class Route implements Serializable {
 
     public void setEndDate(BigInteger endDate) {
         this.endDate = endDate;
+    }
+
+    public Double getLength() {
+        return length;
+    }
+
+    public void setLength(Double length) {
+        this.length = length;
     }
 
     @XmlTransient
@@ -199,8 +211,8 @@ public class Route implements Serializable {
         }
         return true;
     }
-
-    public String getRouteDuration() {
+    
+      public String getRouteDuration() {
         long duration = this.getEndDate().longValue() - this.getStartDate().longValue();
 
         long second = (duration / 1000) % 60;
@@ -224,7 +236,7 @@ public class Route implements Serializable {
 
     @Override
     public String toString() {
-        return "com.polsl.trackerportal.Route[ idRoute=" + idRoute + " ]";
+        return "com.polsl.trackerportal.database.entity.Route[ idRoute=" + idRoute + " ]";
     }
 
 }

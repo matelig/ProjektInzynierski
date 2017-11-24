@@ -43,7 +43,7 @@ public class FuelComsumptionRate implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Column(name = "value")
-    private int value;
+    private double value;
     @Basic(optional = false)
     @NotNull
     @Column(name = "timestamp")
@@ -59,7 +59,7 @@ public class FuelComsumptionRate implements Serializable {
         this.idfuelComsumptionRate = idfuelComsumptionRate;
     }
 
-    public FuelComsumptionRate(Integer idfuelComsumptionRate, int value, long timestamp) {
+    public FuelComsumptionRate(Integer idfuelComsumptionRate, double value, long timestamp) {
         this.idfuelComsumptionRate = idfuelComsumptionRate;
         this.value = value;
         this.timestamp = timestamp;
@@ -73,11 +73,11 @@ public class FuelComsumptionRate implements Serializable {
         this.idfuelComsumptionRate = idfuelComsumptionRate;
     }
 
-    public int getValue() {
+    public double getValue() {
         return value;
     }
 
-    public void setValue(int value) {
+    public void setValue(double value) {
         this.value = value;
     }
 
@@ -119,7 +119,7 @@ public class FuelComsumptionRate implements Serializable {
 
     @Override
     public String toString() {
-        return "com.polsl.trackerportal.FuelComsumptionRate[ idfuelComsumptionRate=" + idfuelComsumptionRate + " ]";
+        return "com.polsl.trackerportal.database.entity.FuelComsumptionRate[ idfuelComsumptionRate=" + idfuelComsumptionRate + " ]";
     }
 
 }

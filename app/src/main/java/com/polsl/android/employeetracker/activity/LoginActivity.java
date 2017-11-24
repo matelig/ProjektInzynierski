@@ -83,31 +83,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void offlineModeCLick(View view) {
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
-                context);
-        alertDialogBuilder
-                .setMessage(R.string.offline_mode_dialog)
-                .setCancelable(false)
-                .setPositiveButton(R.string.yes_button, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        Intent intent = new Intent(context, SlideActivityPager.class);
-                        startActivity(intent);
-                        //TODO: Zapamiętanie, że pracujemy offline
-                    }
-                })
-                .setNegativeButton(R.string.no_button, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        // if this button is clicked, just close
-                        // the dialog box and do nothing
-                        dialog.cancel();
-                    }
-                });
 
-        // create alert dialog
-        AlertDialog alertDialog = alertDialogBuilder.create();
-
-        // show it
-        alertDialog.show();
     }
 
     public boolean checkLocationPermission() {

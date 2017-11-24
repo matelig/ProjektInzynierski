@@ -3,6 +3,7 @@ com\polsl\projektinzynierski\cartrackerapi\service\RpmFacadeREST.class
 com\polsl\projektinzynierski\cartrackerapi\OilTemperature_.class
 com\polsl\projektinzynierski\cartrackerapi\User.class
 com\polsl\projektinzynierski\cartrackerapi\service\OilTemperatureFacadeREST.class
+com\polsl\projektinzynierski\cartrackerapi\TroubleCodesNames.class
 com\polsl\projektinzynierski\cartrackerapi\Car.class
 com\polsl\projektinzynierski\cartrackerapi\FuelLevel_.class
 com\polsl\projektinzynierski\cartrackerapi\OilTemperature.class
@@ -26,6 +27,7 @@ com\polsl\projektinzynierski\cartrackerapi\CurrentLocation.class
 com\polsl\projektinzynierski\cartrackerapi\Car_.class
 com\polsl\projektinzynierski\cartrackerapi\User_.class
 com\polsl\projektinzynierski\cartrackerapi\Location_.class
+com\polsl\projektinzynierski\cartrackerapi\TroubleCodesNames_.class
 com\polsl\projektinzynierski\cartrackerapi\service\AbstractFacade.class
 com\polsl\projektinzynierski\cartrackerapi\TroubleCodes.class
 com\polsl\projektinzynierski\cartrackerapi\service\FuelLevelFacadeREST.class

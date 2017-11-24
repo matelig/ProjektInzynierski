@@ -40,8 +40,9 @@ public class OilTemperature implements Serializable {
     @Basic(optional = false)
     @Column(name = "idoilTemperature")
     private Integer idoilTemperature;
+    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(name = "value")
-    private Integer value;
+    private Double value;
     @Column(name = "timestamp")
     private BigInteger timestamp;
     @JoinColumn(name = "route_idRoute", referencedColumnName = "idRoute")
@@ -63,11 +64,11 @@ public class OilTemperature implements Serializable {
         this.idoilTemperature = idoilTemperature;
     }
 
-    public Integer getValue() {
+    public Double getValue() {
         return value;
     }
 
-    public void setValue(Integer value) {
+    public void setValue(Double value) {
         this.value = value;
     }
 

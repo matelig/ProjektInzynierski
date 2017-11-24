@@ -6,13 +6,13 @@ import javax.annotation.Generated;
 import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.StaticMetamodel;
 
-@Generated(value="EclipseLink-2.5.2.v20140319-rNA", date="2017-11-17T21:17:42")
+@Generated(value="EclipseLink-2.5.2.v20140319-rNA", date="2017-11-24T17:02:33")
 @StaticMetamodel(OilTemperature.class)
 public class OilTemperature_ { 
 
     public static volatile SingularAttribute<OilTemperature, Integer> idoilTemperature;
     public static volatile SingularAttribute<OilTemperature, Route> routeidRoute;
-    public static volatile SingularAttribute<OilTemperature, Integer> value;
+    public static volatile SingularAttribute<OilTemperature, Double> value;
     public static volatile SingularAttribute<OilTemperature, BigInteger> timestamp;
 
 }

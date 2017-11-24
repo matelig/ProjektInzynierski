@@ -18,10 +18,14 @@ public class RouteData {
     private String carVin;
     private BigInteger startDate;
     private BigInteger endDate;
+    private Double roadLength;
     private List<Location> locationCollection;
     private List<Speed> speedCollection;
     private List<Rpm> RPMCollection;
     private List<TroubleCodes> troubleCodesCollection;
+    private List<FuelComsumptionRate> fuelConsumptionCollection;
+    private List<FuelLevel> fuelLevelCollection;
+    private List<OilTemperature> oilTemperatureCollection;
 
     public List<Speed> getSpeedCollection() {
         return speedCollection;
@@ -86,5 +90,39 @@ public class RouteData {
     public void setTroubleCodesCollection(List<TroubleCodes> troubleCodesCollection) {
         this.troubleCodesCollection = troubleCodesCollection;
     }
+
+    public Double getRoadLength() {
+        return roadLength;
+    }
+
+    public void setRoadLength(Double roadLength) {
+        this.roadLength = roadLength;
+    }
+
+    public List<FuelComsumptionRate> getFuelConsumptionCollection() {
+        return fuelConsumptionCollection;
+    }
+
+    public void setFuelConsumptionCollection(List<FuelComsumptionRate> fuelConsumptionCollection) {
+        this.fuelConsumptionCollection = fuelConsumptionCollection;
+    }
+
+    public List<FuelLevel> getFuelLevelCollection() {
+        return fuelLevelCollection;
+    }
+
+    public void setFuelLevelCollection(List<FuelLevel> fuelLevelCollection) {
+        this.fuelLevelCollection = fuelLevelCollection;
+    }
+
+    public List<OilTemperature> getOilTemperatureCollection() {
+        return oilTemperatureCollection;
+    }
+
+    public void setOilTemperatureCollection(List<OilTemperature> oilTemperatureCollection) {
+        this.oilTemperatureCollection = oilTemperatureCollection;
+    }
+    
+    
 
 }

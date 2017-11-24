@@ -24,6 +24,9 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResult;
+import com.polsl.android.employeetracker.R;
+import com.polsl.android.employeetracker.RESTApi.CurrentLocation;
+import com.polsl.android.employeetracker.application.CarApp;
 import com.polsl.android.employeetracker.entity.DaoMaster;
 import com.polsl.android.employeetracker.entity.DaoSession;
 import com.polsl.android.employeetracker.entity.LocationData;
@@ -33,8 +36,6 @@ import com.polsl.android.employeetracker.entity.RouteDataDao;
 import com.polsl.android.employeetracker.entity.User;
 import com.polsl.android.employeetracker.helper.ApiHelper;
 import com.polsl.android.employeetracker.helper.Timer;
-import com.polsl.android.employeetracker.R;
-import com.polsl.android.employeetracker.RESTApi.CurrentLocation;
 
 import org.greenrobot.greendao.database.Database;
 
@@ -73,9 +74,7 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
         wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,
                 "MyWakelockTag");
         wakeLock.acquire();
-        DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(this, "main-db");
-        database = helper.getWritableDb();
-        daoSession = new DaoMaster(database).newSession();
+        daoSession = ((CarApp) getApplication()).getDaoSession();
         routeDataDao = daoSession.getRouteDataDao();
         locationDataDao = daoSession.getLocationDataDao();
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
@@ -112,7 +111,11 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
             Toast.makeText(this, "Serwis zatrzymany", Toast.LENGTH_SHORT).show();
             timer.stopTimer();
             routeData.finish();
-            routeData.setVinNumber(ODBConnection.getNumberVIN());
+            if (ODBConnection.getNumberVIN() == null || ODBConnection.getNumberVIN().isEmpty()) {
+                routeData.setVinNumber("no number detected");
+            } else {
+                routeData.setVinNumber(ODBConnection.getNumberVIN());
+            }
             routeDataDao.update(routeData);
             finishLocationReadings();
             finish = true;
@@ -133,14 +136,14 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
     @Override
     public void onLocationChanged(Location location) {
         float distance = currentLocation.distanceTo(location);
-        routeData.setRoadLength(routeData.getRoadLength()+distance);
+        routeData.setRoadLength(routeData.getRoadLength() + distance);
         currentLocation = location;
         double longitude = currentLocation.getLongitude();
         double latitude = currentLocation.getLatitude();
         Intent intent = new Intent("LocationData");
         intent.putExtra("long", longitude);
         intent.putExtra("lat", latitude);
-        intent.putExtra("distance",routeData.getRoadLength());
+        intent.putExtra("distance", routeData.getRoadLength());
         sendBroadcast(intent);
         long timestamp = System.currentTimeMillis();
         LocationData locationData = new LocationData();
@@ -196,8 +199,6 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
 
     protected void maintainOBDConnection() {
         new Thread(() -> {
-//            ODBConnection.connect_bt(deviceAddress);
-//            ODBConnection.startODBReadings();
             while (!finish) {
                 if (!ODBConnection.isConnected()) {
                     ODBConnection.connect_bt(deviceAddress);

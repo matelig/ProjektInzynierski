@@ -31,19 +31,19 @@
                     rowIndexVar="row"
                     id="usersDataTable"
                     rowStyleClass="#{row % 2 eq 0 ? 'row-even' : 'row-odd'}">
-                    <p:column headerText="Imię" style="background-color: inherit;text-align: center">
+                    <p:column headerText="Imię" style="background-color: inherit;text-align: center" sortBy="#{user.name}" filterBy="#{user.name}">
                         <h:outputText value="#{user.name}"/>
                     </p:column>
-                    <p:column headerText="Nazwisko" style="background-color: inherit;text-align: center">
+                    <p:column headerText="Nazwisko" style="background-color: inherit;text-align: center" sortBy="#{user.surname}" filterBy="#{user.surname}">
                         <h:outputText value="#{user.surname}"/>
                     </p:column>
-                    <p:column headerText="Pesel" style="background-color: inherit;text-align: center">
+                    <p:column headerText="Pesel" style="background-color: inherit;text-align: center" sortBy="#{user.pesel}" filterBy="#{user.pesel}">
                         <h:outputText value="#{user.pesel}"/>
                     </p:column>
-                    <p:column headerText="Adres e-mail" style="background-color: inherit;text-align: center">
+                    <p:column headerText="Adres e-mail" style="background-color: inherit;text-align: center" sortBy="#{user.email}" filterBy="#{user.email}">
                         <h:outputText value="#{user.email}"/>
                     </p:column>
-                    <p:column headerText="Numer telefonu" style="background-color: inherit;text-align: center">
+                    <p:column headerText="Numer telefonu" style="background-color: inherit;text-align: center" sortBy="#{user.phoneNumber}" filterBy="#{user.phoneNumber}">
                         <h:outputText value="#{user.phoneNumber}"/>
                     </p:column>
                     <p:column style="width: 50px; background-color: inherit;text-align: center">
