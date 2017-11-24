@@ -1,11 +1,11 @@
 /*
 (c) Systemy Przetwarzania i Integracji Danych SPIID sp. z o.o.
 1:1 Realny obraz Twojej firmy
-*/
-
+ */
 package com.polsl.trackerportal.database.entity;
 
 import java.io.Serializable;
+import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -140,6 +140,9 @@ public class CurrentLocation implements Serializable {
             return false;
         }
         return true;
+    }
+    public Date getCalculatedDate() {
+        return new Date(timestamp);
     }
 
     @Override
