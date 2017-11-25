@@ -44,7 +44,7 @@ public class TroubleCodes implements Serializable {
     private Integer idtroubleCodes;
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 10)
+    @Size(min = 0, max = 10)
     @Column(name = "code")
     private String code;
     @Basic(optional = false)

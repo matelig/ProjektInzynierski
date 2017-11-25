@@ -21,3 +21,19 @@
     width: 30px;
     height: 30px;
 }
+
+.ui-datatable.borderless thead th,
+.ui-datatable.borderless tbody,
+.ui-datatable.borderless tbody tr,
+.ui-datatable.borderless tbody td {
+    border-style: none;
+}
+
+.borderless-background {
+    background-color: inherit !important
+}
+
+.ui-datatable.header-background thead {
+    display: none;
+}
+

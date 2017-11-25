@@ -6,7 +6,6 @@ com\polsl\trackerportal\UserManagement.class
 com\polsl\trackerportal\database\entity\User.class
 com\polsl\trackerportal\CarManagement.class
 com\polsl\trackerportal\database\entity\CurrentLocation.class
-com\polsl\trackerportal\RouteDetails$2.class
 com\polsl\trackerportal\database\entity\FuelLevel_.class
 com\polsl\trackerportal\database\entity\TroubleCodesNames_.class
 com\polsl\trackerportal\database\entity\TroubleCodes.class
@@ -15,7 +14,6 @@ com\polsl\trackerportal\MenuView.class
 com\polsl\trackerportal\database\entity\CurrentLocation_.class
 com\polsl\trackerportal\LastKnowLocations.class
 com\polsl\trackerportal\database\entity\Speed.class
-com\polsl\trackerportal\RouteDetails$3.class
 com\polsl\trackerportal\database\entity\OilTemperature_.class
 com\polsl\trackerportal\database\entity\TroubleCodes_.class
 com\polsl\trackerportal\RouteManagement.class
@@ -29,7 +27,6 @@ com\polsl\trackerportal\database\entity\Speed_.class
 com\polsl\trackerportal\database\entity\Rpm.class
 com\polsl\trackerportal\database\entity\Route.class
 com\polsl\trackerportal\RouteList.class
-com\polsl\trackerportal\RouteDetails$1.class
 com\polsl\trackerportal\database\entity\Location.class
 com\polsl\trackerportal\database\entity\TroubleCodesNames.class
 com\polsl\trackerportal\util\ChartModeler.class

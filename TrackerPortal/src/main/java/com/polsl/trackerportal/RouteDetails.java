@@ -6,11 +6,15 @@
 package com.polsl.trackerportal;
 
 import com.polsl.trackerportal.database.entity.Car;
+import com.polsl.trackerportal.database.entity.FuelComsumptionRate;
+import com.polsl.trackerportal.database.entity.FuelLevel;
 import com.polsl.trackerportal.database.entity.Location;
+import com.polsl.trackerportal.database.entity.OilTemperature;
 import com.polsl.trackerportal.database.entity.Route;
 import com.polsl.trackerportal.database.entity.Rpm;
 import com.polsl.trackerportal.database.entity.Speed;
 import com.polsl.trackerportal.database.entity.TroubleCodes;
+import com.polsl.trackerportal.database.entity.TroubleCodesNames;
 import com.polsl.trackerportal.util.ChartModeler;
 import com.polsl.trackerportal.util.LoggedUser;
 import java.awt.geom.Point2D;
@@ -19,7 +23,9 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
@@ -40,6 +46,7 @@ import org.primefaces.model.map.Polyline;
 @ManagedBean(name = "routeDetails", eager = true)
 @ViewScoped
 public class RouteDetails implements Serializable {
+
     private MapModel mapModel;
 
     @PersistenceContext
@@ -54,6 +61,10 @@ public class RouteDetails implements Serializable {
     private List<Location> locationList;
     private List<Rpm> RPMList;
     private List<TroubleCodes> troubleCodes;
+    private List<FuelLevel> fuelList;
+    private List<FuelComsumptionRate> fuelComsumptionRate;
+    private List<OilTemperature> oilTemperature;
+    private List<TroubleCodesNames> troubleCodesNames;
     private Route route;
     private Car car;
     private String centerOfMap;
@@ -63,9 +74,18 @@ public class RouteDetails implements Serializable {
 
     private JSONArray rpmProvider;
     private int rpmChartSeries;
-    
+
     private JSONArray troubleCodesProvider;
     private boolean troubleCodesExists;
+
+    private JSONArray fuelLevelProvider;
+    private int fuelLevelSeries;
+
+    private JSONArray fuelConsumptionRateProvider;
+    private int fuelConsumptionRateSeries;
+
+    private JSONArray oilTemperatureProvider;
+    private int oilTemperatureSeries;
 
     @PostConstruct
     public void init() {
@@ -102,29 +122,41 @@ public class RouteDetails implements Serializable {
     private void prepareCharts() {
         SimpleDateFormat sfd = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         if (speedList.size() > 0) {
-            Collections.sort(speedList, new Comparator<Speed>() {
-                @Override
-                public int compare(Speed t, Speed t1) {
-                    return t.getTimestamp().compareTo(t1.getTimestamp());
-                }
-            });
+            Collections.sort(speedList, (Speed t, Speed t1) -> t.getTimestamp().compareTo(t1.getTimestamp()));
         }
         if (RPMList.size() > 0) {
-            Collections.sort(RPMList, new Comparator<Rpm>() {
-                @Override
-                public int compare(Rpm t, Rpm t1) {
-                    return t.getTimestamp().compareTo(t1.getTimestamp());
-                }
+            Collections.sort(RPMList, (Rpm t, Rpm t1) -> t.getTimestamp().compareTo(t1.getTimestamp()));
+        }
+        if (!fuelList.isEmpty()) {
+            Collections.sort(fuelList, (FuelLevel t, FuelLevel t1) -> t.getTimestamp().compareTo(t1.getTimestamp()));
+        }
+        if (!fuelComsumptionRate.isEmpty()) {
+            Collections.sort(fuelComsumptionRate, (FuelComsumptionRate t, FuelComsumptionRate t1) -> {
+                Long tt = t.getTimestamp();
+                Long tt1 = t1.getTimestamp();
+                return tt.compareTo(tt1);
             });
-        }      
+        }
+        if (!oilTemperature.isEmpty()) {
+            Collections.sort(oilTemperature, (OilTemperature t, OilTemperature t1) -> t.getTimestamp().compareTo(t1.getTimestamp()));
+        }
         speedProvider = ChartModeler.initSpeedProvider(speedList);
         speedChartSeries = ChartModeler.SERIES_COUNT;
 
         rpmProvider = ChartModeler.initRPMProvider(RPMList);
         rpmChartSeries = ChartModeler.SERIES_COUNT;
-        
+
         troubleCodesProvider = ChartModeler.initTroubleCodesProvider(troubleCodes);
         troubleCodesExists = !troubleCodes.isEmpty();
+
+        fuelLevelProvider = ChartModeler.initFuelLevelProvider(fuelList);
+        fuelLevelSeries = ChartModeler.SERIES_COUNT;
+
+        fuelConsumptionRateProvider = ChartModeler.initFuelConsumptionProvider(fuelComsumptionRate);
+        fuelConsumptionRateSeries = ChartModeler.SERIES_COUNT;
+
+        oilTemperatureProvider = ChartModeler.initOilTemperatureProvider(oilTemperature);
+        oilTemperatureSeries = ChartModeler.SERIES_COUNT;
     }
 
     private void createMapModel() {
@@ -145,18 +177,29 @@ public class RouteDetails implements Serializable {
 
     private void initData() {
         route = (Route) entityManager.createNamedQuery("Route.findByIdRoute").setParameter("idRoute", Integer.valueOf(routeId)).getSingleResult();
+        car = route.getCaridCar();
         //route = temp.get(0);
         speedList = new ArrayList<>(route.getSpeedCollection());
         locationList = new ArrayList<>(route.getLocationCollection());
         RPMList = new ArrayList(route.getRpmCollection());
         troubleCodes = new ArrayList<>(route.getTroubleCodesCollection());
+        fuelList = new ArrayList<>(route.getFuelLevelCollection());
+        fuelComsumptionRate = new ArrayList<>(route.getFuelComsumptionRateCollection());
+        oilTemperature = new ArrayList<>(route.getOilTemperatureCollection());
         if (locationList.size() > 0) {
-            Collections.sort(locationList, new Comparator<Location>() {
-                @Override
-                public int compare(Location o1, Location o2) {
-                    return o1.getTimestamp().compareTo(o2.getTimestamp());
-                }
-            });
+            Collections.sort(locationList, (Location o1, Location o2) -> o1.getTimestamp().compareTo(o2.getTimestamp()));
+        }
+        Set<String> codeNames = new HashSet<>();
+        troubleCodes.forEach((tc) -> {
+            codeNames.add(tc.getCode());
+        });
+        troubleCodesNames = new ArrayList<>();
+        for (String code : codeNames) {
+            TroubleCodesNames tcn = (TroubleCodesNames) entityManager.createNamedQuery("TroubleCodesNames.findByCode").setParameter("code", code).getSingleResult();
+            TroubleCodesNames copy = new TroubleCodesNames();
+            copy.setCode(code);
+            copy.setDescription(tcn.getDescription());
+            troubleCodesNames.add(copy);
         }
     }
 
@@ -174,7 +217,7 @@ public class RouteDetails implements Serializable {
 
         return new Point2D.Double(x, y);
     }
- 
+
     public MapModel getMapModel() {
         return mapModel;
     }
@@ -189,7 +232,7 @@ public class RouteDetails implements Serializable {
 
     public void setCenterOfMap(String centerOfMap) {
         this.centerOfMap = centerOfMap;
-    }  
+    }
 
     public JSONArray getSpeedProvider() {
         return speedProvider;
@@ -229,7 +272,7 @@ public class RouteDetails implements Serializable {
 
     public void setTroubleCodesProvider(JSONArray troubleCodesProvider) {
         this.troubleCodesProvider = troubleCodesProvider;
-    }    
+    }
 
     public boolean isTroubleCodesExists() {
         return troubleCodesExists;
@@ -238,7 +281,69 @@ public class RouteDetails implements Serializable {
     public void setTroubleCodesExists(boolean troubleCodesExists) {
         this.troubleCodesExists = troubleCodesExists;
     }
-    
-    
-    
+
+    public JSONArray getFuelLevelProvider() {
+        return fuelLevelProvider;
+    }
+
+    public void setFuelLevelProvider(JSONArray fuelLevelProvider) {
+        this.fuelLevelProvider = fuelLevelProvider;
+    }
+
+    public int getFuelLevelSeries() {
+        return fuelLevelSeries;
+    }
+
+    public void setFuelLevelSeries(int fuelLevelSeries) {
+        this.fuelLevelSeries = fuelLevelSeries;
+    }
+
+    public JSONArray getFuelConsumptionRateProvider() {
+        return fuelConsumptionRateProvider;
+    }
+
+    public void setFuelConsumptionRateProvider(JSONArray fuelConsumptionRateProvider) {
+        this.fuelConsumptionRateProvider = fuelConsumptionRateProvider;
+    }
+
+    public int getFuelConsumptionRateSeries() {
+        return fuelConsumptionRateSeries;
+    }
+
+    public void setFuelConsumptionRateSeries(int fuelConsumptionRateSeries) {
+        this.fuelConsumptionRateSeries = fuelConsumptionRateSeries;
+    }
+
+    public JSONArray getOilTemperatureProvider() {
+        return oilTemperatureProvider;
+    }
+
+    public void setOilTemperatureProvider(JSONArray oilTemperatureProvider) {
+        this.oilTemperatureProvider = oilTemperatureProvider;
+    }
+
+    public int getOilTemperatureSeries() {
+        return oilTemperatureSeries;
+    }
+
+    public void setOilTemperatureSeries(int oilTemperatureSeries) {
+        this.oilTemperatureSeries = oilTemperatureSeries;
+    }
+
+    public List<TroubleCodesNames> getTroubleCodesNames() {
+        return troubleCodesNames;
+    }
+
+    public void setTroubleCodesNames(List<TroubleCodesNames> troubleCodesNames) {
+        this.troubleCodesNames = troubleCodesNames;
+    }
+
+    public Car getCar() {
+        return car;
+    }
+
+    public void setCar(Car car) {
+        this.car = car;
+    }
+
 }

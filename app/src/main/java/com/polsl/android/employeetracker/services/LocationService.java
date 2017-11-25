@@ -2,6 +2,7 @@ package com.polsl.android.employeetracker.services;
 
 import android.Manifest;
 import android.app.Notification;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -26,6 +27,7 @@ import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResult;
 import com.polsl.android.employeetracker.R;
 import com.polsl.android.employeetracker.RESTApi.CurrentLocation;
+import com.polsl.android.employeetracker.activity.SlideActivityPager;
 import com.polsl.android.employeetracker.application.CarApp;
 import com.polsl.android.employeetracker.entity.DaoMaster;
 import com.polsl.android.employeetracker.entity.DaoSession;
@@ -97,11 +99,13 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
             User user = intent.getExtras().getParcelable(ApiHelper.USER);
             userId = user.getId();
             deviceAddress = intent.getStringExtra(ApiHelper.OBD_DEVICE_ADDRESS);
+            PendingIntent contentIntent =
+                    PendingIntent.getActivity(this, 0, new Intent(this, SlideActivityPager.class), 0);
             Notification notification = new NotificationCompat.Builder(this)
                     .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
                     .setSmallIcon(R.drawable.common_google_signin_btn_icon_dark)
-
-                    .setContentTitle("Road Tracker is running")
+                    .setContentIntent(contentIntent)
+                    .setContentTitle("Car Tracker is running")
                     .build();
             startForeground(100,
                     notification);

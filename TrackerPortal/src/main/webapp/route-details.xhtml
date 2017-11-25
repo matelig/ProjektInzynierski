@@ -24,32 +24,111 @@
     </ui:define>
 
     <ui:define name="main">
+        <div class="ui-g-1">
 
-        <p:dataTable rendered="false"         >
-            <p:column headerText="Kolumna">
-
-            </p:column>
-        </p:dataTable>
+        </div>
         <f:metadata>
             <f:viewParam name="routeID" value="#{routeList.clickedRouteId}" />
-        </f:metadata>        
-        <p:gmap id="gmap" widgetVar="map" center="#{routeDetails.centerOfMap}" zoom="10" type="HYBRID" style="width:100%;height:400px" model="#{routeDetails.mapModel}" />
-        <p:outputPanel rendered="#{0 ne routeDetails.speedChartSeries}">
-            <div id="speedChartDiv" style="height: 400px;width: 100%"></div>	
-        </p:outputPanel>
-        <p:outputPanel rendered="#{0 eq routeDetails.speedChartSeries}">
-            <p:outputLabel value="There are no data about speed" />
-        </p:outputPanel>
-        <p:outputPanel rendered="#{0 ne routeDetails.rpmChartSeries}">
-            <div id="RPMChartDiv" style="height: 400px;width: 100%"></div>	
-        </p:outputPanel>
-        <p:outputPanel rendered="#{0 eq routeDetails.rpmChartSeries}">
-            <p:outputLabel value="There are no data about RPM" />
-        </p:outputPanel>
-        <p:outputPanel rendered="#{routeDetails.troubleCodesExists}">
-            <div  id="troubleCodesDiv" style="height: 400px;width: 100%"/>
-        </p:outputPanel>
-        
+        </f:metadata>    
+        <div class="ui-g-10">
+            <p:outputPanel>
+                <p:gmap id="gmap" widgetVar="map" center="#{routeDetails.centerOfMap}" zoom="10" type="HYBRID" style="width:100%;height:400px;margin-bottom: 20px;" model="#{routeDetails.mapModel}" />
+            </p:outputPanel>
+            <p:outputPanel>
+                <div class="row">
+                    <div class="ui-g-4" style="text-align: center">
+                        <p:outputLabel value="VIN: #{routeDetails.car.vinNumber}"/>
+                    </div>
+                    <div class="ui-g-4" style="text-align: center">
+                        <p:outputLabel value="Make: #{routeDetails.car.make}"/>
+                    </div>
+                    <div class="ui-g-4" style="text-align: center">
+                        <p:outputLabel value="Model: #{routeDetails.car.model}"/>
+                    </div>
+                </div>
+            </p:outputPanel>
+            <p:outputPanel rendered="#{0 ne routeDetails.speedChartSeries}">
+                <div class="row">
+                    <div class="ui-g-1"/>
+                    <p:outputLabel style="font-size: 20px;font-weight: bold" value="Speed"/>
+                </div>
+                <div id="speedChartDiv" style="height: 400px;width: 100%"></div>	
+            </p:outputPanel>
+            <p:outputPanel rendered="#{0 eq routeDetails.speedChartSeries}">
+                <p:outputLabel value="There are no data about speed" />
+            </p:outputPanel>
+            <p:outputPanel rendered="#{0 ne routeDetails.rpmChartSeries}">
+                <div class="row">
+                    <div class="ui-g-1"/>
+                    <p:outputLabel style="font-size: 20px;font-weight: bold" value="Revolutions per minute"/>
+                </div>
+                <div id="RPMChartDiv" style="height: 400px;width: 100%"></div>	
+            </p:outputPanel>
+            <p:outputPanel rendered="#{0 eq routeDetails.rpmChartSeries}">
+                <p:outputLabel value="There are no data about RPM" />
+            </p:outputPanel>
+
+            <p:outputPanel rendered="#{0 ne routeDetails.fuelLevelSeries}">
+                <div class="row">
+                    <div class="ui-g-1"/>
+                    <p:outputLabel style="font-size: 20px;font-weight: bold" value="Fuel level"/>
+                </div>
+                <div id="fuelLevelChartDiv" style="height: 400px;width: 100%"></div>	
+            </p:outputPanel>
+            <p:outputPanel rendered="#{0 eq routeDetails.fuelLevelSeries}">
+                <p:outputLabel value="There are no data about fuel level" />
+            </p:outputPanel>
+
+            <p:outputPanel rendered="#{0 ne routeDetails.fuelConsumptionRateSeries}">
+                <div class="row">
+                    <div class="ui-g-1"/>
+                    <p:outputLabel style="font-size: 20px;font-weight: bold" value="Fuel consumption rate"/>
+                </div>
+                <div id="fuelConsumptionRateChartDiv" style="height: 400px;width: 100%"></div>	
+            </p:outputPanel>
+            <p:outputPanel rendered="#{0 eq routeDetails.fuelConsumptionRateSeries}">
+                <p:outputLabel value="There are no data about fuel consumption rate" />
+            </p:outputPanel>
+
+            <p:outputPanel rendered="#{0 ne routeDetails.oilTemperatureSeries}">
+                <div class="row">
+                    <div class="ui-g-1"/>
+                    <p:outputLabel style="font-size: 20px;font-weight: bold" value="Oil temperature"/>
+                </div>
+                <div id="oilTemperatureChartDiv" style="height: 400px;width: 100%"></div>	
+            </p:outputPanel>
+            <p:outputPanel rendered="#{0 eq routeDetails.oilTemperatureSeries}">
+                <p:outputLabel value="There are no data about oil temperature" />
+            </p:outputPanel>
+
+            <p:outputPanel rendered="#{routeDetails.troubleCodesExists}">
+                <div class="row">
+                    <div class="ui-g-1"/>
+                    <p:outputLabel style="font-size: 20px;font-weight: bold" value="Diagnostic trouble codes"/>
+                </div>
+
+                <div  id="troubleCodesDiv" style="height: 400px;width: 100%;margin-bottom: 20px"/>
+                <div class="ui-g-1">
+
+                </div>
+                <div class="ui-g-10">
+                    <p:dataTable value="#{routeDetails.troubleCodesNames}" var="troubleCode" styleClass="borderless borderless-background header-background" >
+                        <p:column style="background-color: inherit;width: 20%">
+                            <p:outputLabel value="#{troubleCode.code}"/>
+                        </p:column>
+                        <p:column style="background-color: inherit">
+                            <p:outputLabel value="#{troubleCode.description}"/>
+                        </p:column>
+                    </p:dataTable>
+                </div>
+                <div class="ui-g-1">
+
+                </div>
+            </p:outputPanel>
+        </div>
+        <div class="ui-g-1">
+
+        </div>
 
         <script type="text/javascript">
             //<![CDATA[
@@ -144,6 +223,159 @@
                 var valueId = "y" + i;
                 var id = "rpm" + i;
                 rpmChart.graphs.push({
+                    "id": id,
+                    "balloonText": "<span style='font-size:12px;'>[[title]] in [[category]]:<br><span style='font-size:20px;'>[[value]]</span> RPM [[additional]]</span>",
+                    "lineThickness": 2,
+                    "valueField": valueId,
+                    "type": "line",
+                    "fillColors": "#ff0000"
+                }
+                );
+            }
+            ;
+
+            var fuelLevelChart = AmCharts.makeChart("fuelLevelChartDiv",
+                    {
+                        "theme": "light",
+                        "type": "serial",
+                        "legend": {
+                            "position": "bottom",
+                            "autoMargins": true,
+                            "useGraphSettings": true
+                        },
+                        "addClassNames": true,
+                        "language": "pl",
+                        "categoryField": "date",
+                        "chartCursor": {
+                            "valueBalloonsEnabled": true,
+                            "categoryBalloonDateFormat": "HH:NN:SS ",
+                            "valueLineEnable": true
+                        },
+                        "valueScrollbar": {
+                            "offset": 15,
+                            "autoGridCount": true
+                        },
+                        "categoryAxis": {
+                            "minorGridEnabled": true,
+                            "parseDates": true,
+                            "minPeriod": "ss"
+                        },
+                        "dataDateFormat": "YYYY-MM-DD HH:NN:SS",
+                        "chartScrollbar": {
+                            "offset": 15,
+                            "autoGridCount": true
+                        },
+                        "dataProvider": #{routeDetails.fuelLevelProvider}
+                    });
+
+
+            var fuelLevelGraphsNumber = #{routeDetails.fuelLevelSeries};
+            for (var i = 1; i <= fuelLevelGraphsNumber; i++) {
+                var valueId = "y" + i;
+                var id = "fuelLevel" + i;
+                fuelLevelChart.graphs.push({
+                    "id": id,
+                    "balloonText": "<span style='font-size:12px;'>[[title]] in [[category]]:<br><span style='font-size:20px;'>[[value]]</span> RPM [[additional]]</span>",
+                    "lineThickness": 2,
+                    "valueField": valueId,
+                    "type": "line",
+                    "fillColors": "#ff0000"
+                }
+                );
+            }
+            ;
+
+            var fuelConsumptionChart = AmCharts.makeChart("fuelConsumptionRateChartDiv",
+                    {
+                        "theme": "light",
+                        "type": "serial",
+                        "legend": {
+                            "position": "bottom",
+                            "autoMargins": true,
+                            "useGraphSettings": true
+                        },
+                        "addClassNames": true,
+                        "language": "pl",
+                        "categoryField": "date",
+                        "chartCursor": {
+                            "valueBalloonsEnabled": true,
+                            "categoryBalloonDateFormat": "HH:NN:SS ",
+                            "valueLineEnable": true
+                        },
+                        "valueScrollbar": {
+                            "offset": 15,
+                            "autoGridCount": true
+                        },
+                        "categoryAxis": {
+                            "minorGridEnabled": true,
+                            "parseDates": true,
+                            "minPeriod": "ss"
+                        },
+                        "dataDateFormat": "YYYY-MM-DD HH:NN:SS",
+                        "chartScrollbar": {
+                            "offset": 15,
+                            "autoGridCount": true
+                        },
+                        "dataProvider": #{routeDetails.fuelConsumptionRateProvider}
+                    });
+
+
+            var fuelConsumptionRateGraphsNumber = #{routeDetails.fuelConsumptionRateSeries};
+            for (var i = 1; i <= fuelConsumptionRateGraphsNumber; i++) {
+                var valueId = "y" + i;
+                var id = "fuelConsumptionRate" + i;
+                fuelConsumptionChart.graphs.push({
+                    "id": id,
+                    "balloonText": "<span style='font-size:12px;'>[[title]] in [[category]]:<br><span style='font-size:20px;'>[[value]]</span> RPM [[additional]]</span>",
+                    "lineThickness": 2,
+                    "valueField": valueId,
+                    "type": "line",
+                    "fillColors": "#ff0000"
+                }
+                );
+            }
+            ;
+
+            var oilTemperatureChart = AmCharts.makeChart("oilTemperatureChartDiv",
+                    {
+                        "theme": "light",
+                        "type": "serial",
+                        "legend": {
+                            "position": "bottom",
+                            "autoMargins": true,
+                            "useGraphSettings": true
+                        },
+                        "addClassNames": true,
+                        "language": "pl",
+                        "categoryField": "date",
+                        "chartCursor": {
+                            "valueBalloonsEnabled": true,
+                            "categoryBalloonDateFormat": "HH:NN:SS ",
+                            "valueLineEnable": true
+                        },
+                        "valueScrollbar": {
+                            "offset": 15,
+                            "autoGridCount": true
+                        },
+                        "categoryAxis": {
+                            "minorGridEnabled": true,
+                            "parseDates": true,
+                            "minPeriod": "ss"
+                        },
+                        "dataDateFormat": "YYYY-MM-DD HH:NN:SS",
+                        "chartScrollbar": {
+                            "offset": 15,
+                            "autoGridCount": true
+                        },
+                        "dataProvider": #{routeDetails.oilTemperatureProvider}
+                    });
+
+
+            var oilTemperatureGraphsNumber = #{routeDetails.oilTemperatureSeries};
+            for (var i = 1; i <= oilTemperatureGraphsNumber; i++) {
+                var valueId = "y" + i;
+                var id = "oilTemperature" + i;
+                oilTemperatureChart.graphs.push({
                     "id": id,
                     "balloonText": "<span style='font-size:12px;'>[[title]] in [[category]]:<br><span style='font-size:20px;'>[[value]]</span> RPM [[additional]]</span>",
                     "lineThickness": 2,

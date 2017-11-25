@@ -5,6 +5,9 @@
  */
 package com.polsl.trackerportal.util;
 
+import com.polsl.trackerportal.database.entity.FuelComsumptionRate;
+import com.polsl.trackerportal.database.entity.FuelLevel;
+import com.polsl.trackerportal.database.entity.OilTemperature;
 import com.polsl.trackerportal.database.entity.Rpm;
 import com.polsl.trackerportal.database.entity.Speed;
 import com.polsl.trackerportal.database.entity.TroubleCodes;
@@ -95,4 +98,67 @@ public class ChartModeler {
 
         return provider;
     }    
+    
+    public static JSONArray initFuelLevelProvider(List<FuelLevel> fuelLevels) {
+        SimpleDateFormat sfd = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        JSONArray dataProvider = new JSONArray();
+        long lastFrame = 0;
+        int graphID = 0;
+        for (int i = 0; i < fuelLevels.size(); i++) {
+            long x;
+            if ((x = fuelLevels.get(i).getTimestamp().longValue() - lastFrame) > 10000) {
+                graphID++;
+            }
+            lastFrame = fuelLevels.get(i).getTimestamp().longValue();
+            JSONObject singleObject = new JSONObject();
+            Date date = new Date(fuelLevels.get(i).getTimestamp().longValue());
+            singleObject.put("date", sfd.format(date));
+            singleObject.put("y" + graphID, fuelLevels.get(i).getValue());
+            dataProvider.put(singleObject);
+        }
+        SERIES_COUNT = graphID;
+        return dataProvider;
+    }
+    
+    public static JSONArray initFuelConsumptionProvider(List<FuelComsumptionRate> fuelComsumptionRates) {
+        SimpleDateFormat sfd = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        JSONArray dataProvider = new JSONArray();
+        long lastFrame = 0;
+        int graphID = 0;
+        for (int i = 0; i < fuelComsumptionRates.size(); i++) {
+            long x;
+            if ((x = fuelComsumptionRates.get(i).getTimestamp() - lastFrame) > 10000) {
+                graphID++;
+            }
+            lastFrame = fuelComsumptionRates.get(i).getTimestamp();
+            JSONObject singleObject = new JSONObject();
+            Date date = new Date(fuelComsumptionRates.get(i).getTimestamp());
+            singleObject.put("date", sfd.format(date));
+            singleObject.put("y" + graphID, fuelComsumptionRates.get(i).getValue());
+            dataProvider.put(singleObject);
+        }
+        SERIES_COUNT = graphID;
+        return dataProvider;
+    }
+    
+    public static JSONArray initOilTemperatureProvider(List<OilTemperature> oilTemperatures) {
+        SimpleDateFormat sfd = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        JSONArray dataProvider = new JSONArray();
+        long lastFrame = 0;
+        int graphID = 0;
+        for (int i = 0; i < oilTemperatures.size(); i++) {
+            long x;
+            if ((x = oilTemperatures.get(i).getTimestamp().longValue() - lastFrame) > 10000) {
+                graphID++;
+            }
+            lastFrame = oilTemperatures.get(i).getTimestamp().longValue();
+            JSONObject singleObject = new JSONObject();
+            Date date = new Date(oilTemperatures.get(i).getTimestamp().longValue());
+            singleObject.put("date", sfd.format(date));
+            singleObject.put("y" + graphID, oilTemperatures.get(i).getValue().doubleValue());
+            dataProvider.put(singleObject);
+        }
+        SERIES_COUNT = graphID;
+        return dataProvider;
+    }
 }

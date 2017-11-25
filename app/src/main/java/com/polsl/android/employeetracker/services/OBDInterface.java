@@ -48,7 +48,6 @@ import org.greenrobot.greendao.database.Database;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 
@@ -104,7 +103,7 @@ public class OBDInterface {
 
     private String numberVIN;
 
-    private int previousFuelLevel;
+    private float previousFuelLevel = 0;
 
 
     public OBDInterface(Context con, SharedPreferences sharedPref, Long routeId) {
@@ -196,8 +195,10 @@ public class OBDInterface {
     public void finishODBReadings(long timestamp) {
         readValues = false;
         for (String s : oldCodes) {
-            TroubleCodesData tdc = new TroubleCodesData(routeId, s, timestamp, 0);
-            troubleCodesDataDao.insert(tdc);
+            if (s!=null && !s.equals("")) {
+                TroubleCodesData tdc = new TroubleCodesData(routeId, s, timestamp, 0);
+                troubleCodesDataDao.insert(tdc);
+            }
         }
         oldCodes = new HashSet<>();
     }
@@ -281,9 +282,10 @@ public class OBDInterface {
                                         VinCommand vinCommand = new VinCommand();
                                         vinCommand.setResponseTimeDelay(responseDelay);
                                         vinCommand.run(socket.getInputStream(), socket.getOutputStream());
-                                        numberVIN = vinCommand.getCalculatedResult();
+                                        numberVIN = vinCommand.getFormattedResult();
 
-                                    } catch (NoDataException | IndexOutOfBoundsException e) {
+                                    } catch (NoDataException | IndexOutOfBoundsException | UnsupportedCommandException | NumberFormatException e) {
+                                        Log.v("OBD vin", "nie otrzymano");
                                     }
                                 }
 
@@ -369,8 +371,12 @@ public class OBDInterface {
                                 }
                                 try {
                                     fuelLevelCommand.run(socket.getInputStream(), socket.getOutputStream());
-                                    FuelLevelData fuelLevelData = new FuelLevelData(routeId, fuelLevelCommand.getFuelLevel(), System.currentTimeMillis());
-                                    fuelLevelDataDao.insert(fuelLevelData);
+                                    float currentFuelLevel = fuelLevelCommand.getFuelLevel();
+                                    if (previousFuelLevel!=currentFuelLevel) {
+                                        FuelLevelData fuelLevelData = new FuelLevelData(routeId, currentFuelLevel, System.currentTimeMillis());
+                                        fuelLevelDataDao.insert(fuelLevelData);
+                                        previousFuelLevel = currentFuelLevel;
+                                    }
                                     OBDReadings.putExtra("level", fuelLevelCommand.getFormattedResult());
                                     goodLevel = true;
                                 } catch (NoDataException e) {
