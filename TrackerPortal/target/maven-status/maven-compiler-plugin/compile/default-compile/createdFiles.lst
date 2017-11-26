@@ -29,6 +29,7 @@ com\polsl\trackerportal\database\entity\Route.class
 com\polsl\trackerportal\RouteList.class
 com\polsl\trackerportal\database\entity\Location.class
 com\polsl\trackerportal\database\entity\TroubleCodesNames.class
+com\polsl\trackerportal\UserStatistics.class
 com\polsl\trackerportal\util\ChartModeler.class
 com\polsl\trackerportal\database\entity\User_.class
 com\polsl\trackerportal\util\ResourceFilter.class

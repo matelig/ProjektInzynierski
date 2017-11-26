@@ -5,5 +5,5 @@ package com.polsl.android.employeetracker.helper;
  */
 
 public class Constants {
-    public static final String URL = "http://192.168.1.2:8080/CarTrackerApi/rest/";
+    public static final String URL = "http://80.211.198.101:8080/CarTrackerApi/rest/";
 }

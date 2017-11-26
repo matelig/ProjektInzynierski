@@ -9,10 +9,33 @@
         <meta name="description" content="Our Company Home Page" />
         <title>Our Company - Home</title>
     </ui:define>
-    
-    
+
+
     <ui:define name="main">
-        TU BĘDĄ STATYSTYKI
+        <div align="center">
+            <h:form>
+                <p:panelGrid columns="2">
+                    <p:outputLabel for="routeNumber" value="Roads recorded: " />
+                    <p:outputLabel id="routeNumber" value="#{userStatistics.numberOfRoads}"/>
+
+                    <p:outputLabel for="timeSpend" value="Time in application: " />
+                    <p:outputLabel id="timeSpend" value="#{userStatistics.routeDuration}"/>
+
+                    <p:outputLabel for="totalLength" value="Total road length: " />
+                    <p:outputLabel id="totalLength" value="#{userStatistics.totalLength} km"/>
+
+                    <p:outputLabel for="numberOfCars" value="Number of used cars: " />
+                    <p:outputLabel id="numberOfCars" value="#{userStatistics.numberOfCars}"/>
+
+                    <p:outputLabel for="mostCommonCar" value="Most common car: " />
+                    <p:outputLabel id="mostCommonCar" value="#{userStatistics.mostCommonCar}"/>
+
+                    <p:outputLabel for="averageSpeed" value="Average speed: " />
+                    <p:outputLabel id="averageSpeed" value="#{userStatistics.averageSpeed} km/h"/>
+
+                </p:panelGrid>
+            </h:form>
+        </div>
     </ui:define>
 
 </ui:composition>

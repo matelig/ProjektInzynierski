@@ -22,6 +22,7 @@ import javax.transaction.SystemException;
 import javax.transaction.UserTransaction;
 import javax.validation.ConstraintViolationException;
 import org.primefaces.context.RequestContext;
+import org.primefaces.event.map.StateChangeEvent;
 import org.primefaces.model.map.DefaultMapModel;
 import org.primefaces.model.map.LatLng;
 import org.primefaces.model.map.Marker;
@@ -45,6 +46,8 @@ public class LastKnowLocations implements Serializable {
 
     @Resource
     private UserTransaction userTransaction;
+    
+    private String zoomLevel = "13";
 
     @PostConstruct
     public void init() {
@@ -81,10 +84,14 @@ public class LastKnowLocations implements Serializable {
                     .setParameter("idcurrentLocation", selectedUserLocation.getIdcurrentLocation())
                     .getSingleResult();
             mapModel.getMarkers().clear();
-            centerOfMap = selectedUserLocation.getLatitude() + "," + selectedUserLocation.getLongitude();
             LatLng latlng = new LatLng(selectedUserLocation.getLatitude(), selectedUserLocation.getLongitude());
             mapModel.addOverlay(new Marker(latlng));
         }
+    }
+    
+    public void onStateChange(StateChangeEvent event) {
+        centerOfMap = event.getCenter().getLat() +"," + event.getCenter().getLng();
+        zoomLevel = String.valueOf(event.getZoomLevel());
     }
 
     private void closeAddDialog() {
@@ -131,5 +138,14 @@ public class LastKnowLocations implements Serializable {
     public void setMapModel(DefaultMapModel mapModel) {
         this.mapModel = mapModel;
     }
+
+    public String getZoomLevel() {
+        return zoomLevel;
+    }
+
+    public void setZoomLevel(String zoomLevel) {
+        this.zoomLevel = zoomLevel;
+    }
+    
 
 }

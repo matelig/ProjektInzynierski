@@ -24,111 +24,118 @@
     </ui:define>
 
     <ui:define name="main">
-        <div class="ui-g-1">
+        <h:form>
+            <div class="ui-g-1">
 
-        </div>
-        <f:metadata>
-            <f:viewParam name="routeID" value="#{routeList.clickedRouteId}" />
-        </f:metadata>    
-        <div class="ui-g-10">
-            <p:outputPanel>
-                <p:gmap id="gmap" widgetVar="map" center="#{routeDetails.centerOfMap}" zoom="10" type="HYBRID" style="width:100%;height:400px;margin-bottom: 20px;" model="#{routeDetails.mapModel}" />
-            </p:outputPanel>
-            <p:outputPanel>
-                <div class="row">
-                    <div class="ui-g-4" style="text-align: center">
-                        <p:outputLabel value="VIN: #{routeDetails.car.vinNumber}"/>
+            </div>
+            <f:metadata>
+                <f:viewParam name="routeID" value="#{routeList.clickedRouteId}" />
+            </f:metadata>    
+            <div class="ui-g-10">
+                <p:outputPanel>
+                    <p:gmap id="gmap" widgetVar="map" center="#{routeDetails.centerOfMap}" zoom="10" type="HYBRID" style="width:100%;height:400px;margin-bottom: 20px;" model="#{routeDetails.mapModel}" />                    
+                </p:outputPanel>
+                <p:outputPanel rendered="#{routeDetails.car ne null}">
+                    <div class="row">
+                        <div class="ui-g-4" style="text-align: center">
+                            <p:outputLabel value="VIN: #{routeDetails.car.vinNumber}"/>
+                        </div>
+                        <div class="ui-g-4" style="text-align: center">
+                            <p:outputLabel value="Make: #{routeDetails.car.make}"/>
+                        </div>
+                        <div class="ui-g-4" style="text-align: center">
+                            <p:outputLabel value="Model: #{routeDetails.car.model}"/>
+                        </div>
                     </div>
-                    <div class="ui-g-4" style="text-align: center">
-                        <p:outputLabel value="Make: #{routeDetails.car.make}"/>
+                </p:outputPanel>
+                <p:outputPanel rendered="#{routeDetails.car eq null}">
+                    <p:outputLabel value="No car has been detected" />
+                </p:outputPanel>
+                <p:outputPanel rendered="#{0 ne routeDetails.speedChartSeries}">
+                    <div class="row">
+                        <div class="ui-g-1"/>
+                        <p:outputLabel style="font-size: 20px;font-weight: bold" value="Speed"/>
                     </div>
-                    <div class="ui-g-4" style="text-align: center">
-                        <p:outputLabel value="Model: #{routeDetails.car.model}"/>
+                    <div id="speedChartDiv" style="height: 400px;width: 100%"></div>	
+                </p:outputPanel>
+                <p:outputPanel rendered="#{0 eq routeDetails.speedChartSeries}">
+                    <p:outputLabel value="There are no data about speed" />
+                </p:outputPanel>
+                <p:outputPanel rendered="#{0 ne routeDetails.rpmChartSeries}">
+                    <div class="row">
+                        <div class="ui-g-1"/>
+                        <p:outputLabel style="font-size: 20px;font-weight: bold" value="Revolutions per minute"/>
                     </div>
-                </div>
-            </p:outputPanel>
-            <p:outputPanel rendered="#{0 ne routeDetails.speedChartSeries}">
-                <div class="row">
-                    <div class="ui-g-1"/>
-                    <p:outputLabel style="font-size: 20px;font-weight: bold" value="Speed"/>
-                </div>
-                <div id="speedChartDiv" style="height: 400px;width: 100%"></div>	
-            </p:outputPanel>
-            <p:outputPanel rendered="#{0 eq routeDetails.speedChartSeries}">
-                <p:outputLabel value="There are no data about speed" />
-            </p:outputPanel>
-            <p:outputPanel rendered="#{0 ne routeDetails.rpmChartSeries}">
-                <div class="row">
-                    <div class="ui-g-1"/>
-                    <p:outputLabel style="font-size: 20px;font-weight: bold" value="Revolutions per minute"/>
-                </div>
-                <div id="RPMChartDiv" style="height: 400px;width: 100%"></div>	
-            </p:outputPanel>
-            <p:outputPanel rendered="#{0 eq routeDetails.rpmChartSeries}">
-                <p:outputLabel value="There are no data about RPM" />
-            </p:outputPanel>
+                    <div id="RPMChartDiv" style="height: 400px;width: 100%"></div>	
+                </p:outputPanel>
+                <p:outputPanel rendered="#{0 eq routeDetails.rpmChartSeries}">
+                    <p:outputLabel value="There are no data about RPM" />
+                </p:outputPanel>
 
-            <p:outputPanel rendered="#{0 ne routeDetails.fuelLevelSeries}">
-                <div class="row">
-                    <div class="ui-g-1"/>
-                    <p:outputLabel style="font-size: 20px;font-weight: bold" value="Fuel level"/>
-                </div>
-                <div id="fuelLevelChartDiv" style="height: 400px;width: 100%"></div>	
-            </p:outputPanel>
-            <p:outputPanel rendered="#{0 eq routeDetails.fuelLevelSeries}">
-                <p:outputLabel value="There are no data about fuel level" />
-            </p:outputPanel>
+                <p:outputPanel rendered="#{0 ne routeDetails.fuelLevelSeries}">
+                    <div class="row">
+                        <div class="ui-g-1"/>
+                        <p:outputLabel style="font-size: 20px;font-weight: bold" value="Fuel level"/>
+                    </div>
+                    <div id="fuelLevelChartDiv" style="height: 400px;width: 100%"></div>	
+                </p:outputPanel>
+                <p:outputPanel rendered="#{0 eq routeDetails.fuelLevelSeries}">
+                    <p:outputLabel value="There are no data about fuel level" />
+                </p:outputPanel>
 
-            <p:outputPanel rendered="#{0 ne routeDetails.fuelConsumptionRateSeries}">
-                <div class="row">
-                    <div class="ui-g-1"/>
-                    <p:outputLabel style="font-size: 20px;font-weight: bold" value="Fuel consumption rate"/>
-                </div>
-                <div id="fuelConsumptionRateChartDiv" style="height: 400px;width: 100%"></div>	
-            </p:outputPanel>
-            <p:outputPanel rendered="#{0 eq routeDetails.fuelConsumptionRateSeries}">
-                <p:outputLabel value="There are no data about fuel consumption rate" />
-            </p:outputPanel>
+                <p:outputPanel rendered="#{0 ne routeDetails.fuelConsumptionRateSeries}">
+                    <div class="row">
+                        <div class="ui-g-1"/>
+                        <p:outputLabel style="font-size: 20px;font-weight: bold" value="Fuel consumption rate"/>
+                    </div>
+                    <div id="fuelConsumptionRateChartDiv" style="height: 400px;width: 100%"></div>	
+                </p:outputPanel>
+                <p:outputPanel rendered="#{0 eq routeDetails.fuelConsumptionRateSeries}">
+                    <p:outputLabel value="There are no data about fuel consumption rate" />
+                </p:outputPanel>
 
-            <p:outputPanel rendered="#{0 ne routeDetails.oilTemperatureSeries}">
-                <div class="row">
-                    <div class="ui-g-1"/>
-                    <p:outputLabel style="font-size: 20px;font-weight: bold" value="Oil temperature"/>
-                </div>
-                <div id="oilTemperatureChartDiv" style="height: 400px;width: 100%"></div>	
-            </p:outputPanel>
-            <p:outputPanel rendered="#{0 eq routeDetails.oilTemperatureSeries}">
-                <p:outputLabel value="There are no data about oil temperature" />
-            </p:outputPanel>
+                <p:outputPanel rendered="#{0 ne routeDetails.oilTemperatureSeries}">
+                    <div class="row">
+                        <div class="ui-g-1"/>
+                        <p:outputLabel style="font-size: 20px;font-weight: bold" value="Oil temperature"/>
+                    </div>
+                    <div id="oilTemperatureChartDiv" style="height: 400px;width: 100%"></div>	
+                </p:outputPanel>
+                <p:outputPanel rendered="#{0 eq routeDetails.oilTemperatureSeries}">
+                    <p:outputLabel value="There are no data about oil temperature" />
+                </p:outputPanel>
 
-            <p:outputPanel rendered="#{routeDetails.troubleCodesExists}">
-                <div class="row">
-                    <div class="ui-g-1"/>
-                    <p:outputLabel style="font-size: 20px;font-weight: bold" value="Diagnostic trouble codes"/>
-                </div>
+                <p:outputPanel rendered="#{routeDetails.troubleCodesExists}">
+                    <div class="row">
+                        <div class="ui-g-1"/>
+                        <p:outputLabel style="font-size: 20px;font-weight: bold" value="Diagnostic trouble codes"/>
+                    </div>
 
-                <div  id="troubleCodesDiv" style="height: 400px;width: 100%;margin-bottom: 20px"/>
-                <div class="ui-g-1">
+                    <div  id="troubleCodesDiv" style="height: 400px;width: 100%;margin-bottom: 20px"/>
+                    <div class="ui-g-1">
 
-                </div>
-                <div class="ui-g-10">
-                    <p:dataTable value="#{routeDetails.troubleCodesNames}" var="troubleCode" styleClass="borderless borderless-background header-background" >
-                        <p:column style="background-color: inherit;width: 20%">
-                            <p:outputLabel value="#{troubleCode.code}"/>
-                        </p:column>
-                        <p:column style="background-color: inherit">
-                            <p:outputLabel value="#{troubleCode.description}"/>
-                        </p:column>
-                    </p:dataTable>
-                </div>
-                <div class="ui-g-1">
+                    </div>
+                    <div class="ui-g-10">
+                        <p:dataTable value="#{routeDetails.troubleCodesNames}" var="troubleCode" styleClass="borderless borderless-background header-background" >
+                            <p:column style="background-color: inherit;width: 20%">
+                                <p:outputLabel value="#{troubleCode.code}"/>
+                            </p:column>
+                            <p:column style="background-color: inherit">
+                                <p:outputLabel value="#{troubleCode.description}"/>
+                            </p:column>
+                        </p:dataTable>
+                    </div>
+                    <div class="ui-g-1">
 
-                </div>
-            </p:outputPanel>
-        </div>
-        <div class="ui-g-1">
+                    </div>
+                </p:outputPanel>
+            </div>
+            <div class="ui-g-1">
 
-        </div>
+            </div>
+
+
+        </h:form>
 
         <script type="text/javascript">
             //<![CDATA[

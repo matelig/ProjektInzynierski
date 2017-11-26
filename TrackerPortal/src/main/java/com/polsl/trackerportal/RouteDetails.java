@@ -23,6 +23,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -34,9 +35,11 @@ import javax.faces.context.FacesContext;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import org.json.JSONArray;
+import org.primefaces.event.SlideEndEvent;
 import org.primefaces.model.map.DefaultMapModel;
 import org.primefaces.model.map.LatLng;
 import org.primefaces.model.map.MapModel;
+import org.primefaces.model.map.Marker;
 import org.primefaces.model.map.Polyline;
 
 /**
@@ -86,6 +89,8 @@ public class RouteDetails implements Serializable {
 
     private JSONArray oilTemperatureProvider;
     private int oilTemperatureSeries;
+    
+    private int sliderValue;
 
     @PostConstruct
     public void init() {
@@ -160,6 +165,7 @@ public class RouteDetails implements Serializable {
     }
 
     private void createMapModel() {
+        SimpleDateFormat sfd = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         mapModel = new DefaultMapModel();
         Polyline polyline = new Polyline();
         for (int i = 0; i < locationList.size(); i++) {
@@ -172,6 +178,10 @@ public class RouteDetails implements Serializable {
         Point2D.Double center = calculateCentroid(polyline.getPaths());
         centerOfMap = center.getX() + "," + center.getY();
         mapModel.addOverlay(polyline);
+        Date startDate = new Date(locationList.get(0).getTimestamp().longValue());
+        Date endDate = new Date(locationList.get(locationList.size()-1).getTimestamp().longValue());
+        mapModel.addOverlay(new Marker(new LatLng(locationList.get(0).getLatitude(), locationList.get(0).getLongitude()), "Start \n" + sfd.format(startDate)));
+        mapModel.addOverlay(new Marker(new LatLng(locationList.get(locationList.size()-1).getLatitude(), locationList.get(locationList.size()-1).getLongitude()), "End \n" + sfd.format(endDate)));
 
     }
 
@@ -216,6 +226,10 @@ public class RouteDetails implements Serializable {
         y = y / pointCount;
 
         return new Point2D.Double(x, y);
+    }
+    
+    public void markerPositionChanged() {
+        System.out.println(getSliderValue());        
     }
 
     public MapModel getMapModel() {
@@ -346,4 +360,13 @@ public class RouteDetails implements Serializable {
         this.car = car;
     }
 
+    public int getSliderValue() {
+        return sliderValue;
+    }
+
+    public void setSliderValue(int sliderValue) {
+        this.sliderValue = sliderValue;
+    }
+
+    
 }

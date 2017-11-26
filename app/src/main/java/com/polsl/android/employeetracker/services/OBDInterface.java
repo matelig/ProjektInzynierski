@@ -25,6 +25,7 @@ import com.github.pires.obd.commands.protocol.TimeoutCommand;
 import com.github.pires.obd.enums.ObdProtocols;
 import com.github.pires.obd.exceptions.MisunderstoodCommandException;
 import com.github.pires.obd.exceptions.NoDataException;
+import com.github.pires.obd.exceptions.NonNumericResponseException;
 import com.github.pires.obd.exceptions.UnableToConnectException;
 import com.github.pires.obd.exceptions.UnsupportedCommandException;
 import com.polsl.android.employeetracker.commands.ObdSetDefaultCommand;
@@ -334,7 +335,7 @@ public class OBDInterface {
                                     oldCodes.addAll(tempCodes);
                                 } catch (NoDataException e) {
                                     goodCodes = false;
-                                } catch (IndexOutOfBoundsException | UnsupportedCommandException e) {
+                                } catch (IndexOutOfBoundsException | UnsupportedCommandException | NonNumericResponseException e) {
                                 }
                                 try {
                                     engineRpmCommand.run(socket.getInputStream(), socket.getOutputStream());
@@ -345,7 +346,7 @@ public class OBDInterface {
                                 } catch (NoDataException e) {
                                     OBDReadings.putExtra("engineRpm", "-");
                                     goodRPM = false;
-                                } catch (IndexOutOfBoundsException | UnsupportedCommandException e) {
+                                } catch (IndexOutOfBoundsException | UnsupportedCommandException | NonNumericResponseException e) {
                                 }
                                 try {
                                     speedCommand.run(socket.getInputStream(), socket.getOutputStream());
@@ -356,7 +357,7 @@ public class OBDInterface {
                                 } catch (NoDataException e) {
                                     goodSpeed = false;
                                     OBDReadings.putExtra("speed", "-");
-                                } catch (IndexOutOfBoundsException | UnsupportedCommandException e) {
+                                } catch (IndexOutOfBoundsException | UnsupportedCommandException | NonNumericResponseException e) {
                                 }
                                 try {
                                     oilTempCommand.run(socket.getInputStream(), socket.getOutputStream());
@@ -367,7 +368,7 @@ public class OBDInterface {
                                 } catch (NoDataException e) {
                                     goodTemperature = false;
                                     OBDReadings.putExtra("oil", "-");
-                                } catch (IndexOutOfBoundsException | UnsupportedCommandException e) {
+                                } catch (IndexOutOfBoundsException | UnsupportedCommandException | NonNumericResponseException e) {
                                 }
                                 try {
                                     fuelLevelCommand.run(socket.getInputStream(), socket.getOutputStream());
@@ -383,7 +384,7 @@ public class OBDInterface {
                                     goodLevel = false;
 
                                     OBDReadings.putExtra("level", "-");
-                                } catch (IndexOutOfBoundsException | UnsupportedCommandException e) {
+                                } catch (IndexOutOfBoundsException | UnsupportedCommandException | NonNumericResponseException e) {
                                 }
                                 try {
                                     consumptionRateCommand.run(socket.getInputStream(), socket.getOutputStream());
@@ -394,7 +395,7 @@ public class OBDInterface {
                                 } catch (NoDataException e) {
                                     goodConsumption = false;
                                     OBDReadings.putExtra("consumption", "-");
-                                } catch (IndexOutOfBoundsException | UnsupportedCommandException e) {
+                                } catch (IndexOutOfBoundsException | UnsupportedCommandException | NonNumericResponseException e) {
                                 }
 
                                 context.sendBroadcast(OBDReadings);

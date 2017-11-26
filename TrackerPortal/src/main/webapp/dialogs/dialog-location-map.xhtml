@@ -10,7 +10,9 @@
             <p:poll interval="5" listener="#{lastKnowLocations.updateMarkerLocation()}" update="gmap">
 
             </p:poll>
-            <p:gmap id="gmap" widgetVar="map" center="#{lastKnowLocations.centerOfMap}" zoom="13" type="HYBRID" style="width:100%;height:400px" model="#{lastKnowLocations.mapModel}" />
+            <p:gmap id="gmap" widgetVar="map" center="#{lastKnowLocations.centerOfMap}" zoom="#{lastKnowLocations.zoomLevel}" type="HYBRID" style="width:100%;height:400px" model="#{lastKnowLocations.mapModel}">
+                <p:ajax event="stateChange" listener="#{lastKnowLocations.onStateChange}"/>
+            </p:gmap>
         </ui:component>
     </div>
 </html>
