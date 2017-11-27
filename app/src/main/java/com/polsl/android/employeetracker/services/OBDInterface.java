@@ -271,7 +271,7 @@ public class OBDInterface {
                             closeConnection("Failed to connect");
                         } catch (InterruptedException e) {
                             closeConnection("Connection interrupted");
-                        } catch (NullPointerException e) {
+                        } catch (NullPointerException | NonNumericResponseException e) {
                             closeConnection("Restarting");
                         }
 
@@ -285,7 +285,7 @@ public class OBDInterface {
                                         vinCommand.run(socket.getInputStream(), socket.getOutputStream());
                                         numberVIN = vinCommand.getFormattedResult();
 
-                                    } catch (NoDataException | IndexOutOfBoundsException | UnsupportedCommandException | NumberFormatException e) {
+                                    } catch (NoDataException | IndexOutOfBoundsException | UnsupportedCommandException | NumberFormatException | NonNumericResponseException e) {
                                         Log.v("OBD vin", "nie otrzymano");
                                     }
                                 }

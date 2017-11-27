@@ -68,8 +68,9 @@ public class SettingsActivityFragment extends Fragment {
     @BindView(R.id.logout_button)
     Button logoutButton;
 
-    @BindView(R.id.test)
-    Button test;
+//    @BindView(R.id.test)
+//    Button test;
+
 
     public SettingsActivityFragment() {
     }
@@ -88,7 +89,7 @@ public class SettingsActivityFragment extends Fragment {
             userSurname.setText(user.getSurname());
         }
 
-        obdDeviceName.setText(Hawk.get(ApiHelper.OBD_DEVICE_ADDRESS, ""));
+        obdDeviceName.setText("Current address:\n" + Hawk.get(ApiHelper.OBD_DEVICE_ADDRESS, ""));
 
         logoutButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -100,12 +101,12 @@ public class SettingsActivityFragment extends Fragment {
             }
         });
 
-        test.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                addToDatabase();
-            }
-        });
+//        test.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                addToDatabase();
+//            }
+//        });
 
         obdButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -143,7 +144,7 @@ public class SettingsActivityFragment extends Fragment {
                             int position = ((android.app.AlertDialog) dialog).getListView().getCheckedItemPosition();
                             Hawk.put(ApiHelper.OBD_DEVICE_ADDRESS, devices.get(position));
                             Hawk.put(ApiHelper.OBD_DEVICE_NAME, deviceStrs.get(position));
-                            obdDeviceName.setText(devices.get(position));
+                            obdDeviceName.setText("Current address:\n" + devices.get(position));
                         }
                     });
                     alertDialog.setTitle("Choose Bluetooth device");
@@ -178,28 +179,28 @@ public class SettingsActivityFragment extends Fragment {
         fuelConsumptionRateDataDao.insert(fuelConsumptionRateData);
 
         FuelLevelDataDao fuelLevelDataDao = daoSession.getFuelLevelDataDao();
-        FuelLevelData fuelLevelData = new FuelLevelData(routeData.getId(),87.5f,System.currentTimeMillis());
+        FuelLevelData fuelLevelData = new FuelLevelData(routeData.getId(), 87.5f, System.currentTimeMillis());
         fuelLevelDataDao.insert(fuelLevelData);
 
         OilTemperatureDataDao oilTemperatureDataDao = daoSession.getOilTemperatureDataDao();
-        OilTemperatureData oilTemperatureData = new OilTemperatureData(routeData.getId(),37.5f,System.currentTimeMillis());
+        OilTemperatureData oilTemperatureData = new OilTemperatureData(routeData.getId(), 37.5f, System.currentTimeMillis());
         oilTemperatureDataDao.insert(oilTemperatureData);
 
         RPMDataDao rpmDataDao = daoSession.getRPMDataDao();
-        RPMData rpmData = new RPMData(routeData.getId(),System.currentTimeMillis(),987);
+        RPMData rpmData = new RPMData(routeData.getId(), System.currentTimeMillis(), 987);
         rpmDataDao.insert(rpmData);
 
         SpeedDataDao speedDataDao = daoSession.getSpeedDataDao();
-        SpeedData speedData = new SpeedData(routeData.getId(),15,System.currentTimeMillis());
+        SpeedData speedData = new SpeedData(routeData.getId(), 15, System.currentTimeMillis());
         speedDataDao.insert(speedData);
 
         TroubleCodesDataDao troubleCodesDataDao = daoSession.getTroubleCodesDataDao();
-        TroubleCodesData troubleCodesData = new TroubleCodesData(routeData.getId(),"15",System.currentTimeMillis(),1);
+        TroubleCodesData troubleCodesData = new TroubleCodesData(routeData.getId(), "15", System.currentTimeMillis(), 1);
         troubleCodesDataDao.insert(troubleCodesData);
-        troubleCodesData = new TroubleCodesData(routeData.getId(),"15",System.currentTimeMillis()+10000,0);
+        troubleCodesData = new TroubleCodesData(routeData.getId(), "15", System.currentTimeMillis() + 10000, 0);
         troubleCodesDataDao.insert(troubleCodesData);
 
-        routeData.setEndDate(System.currentTimeMillis()+100000);
+        routeData.setEndDate(System.currentTimeMillis() + 100000);
         routeDataDao.update(routeData);
     }
 
