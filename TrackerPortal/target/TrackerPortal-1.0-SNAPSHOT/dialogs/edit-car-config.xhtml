@@ -10,7 +10,7 @@
             <p:panelGrid styleClass="ui-noborder" >
                 <p:row>
                     <p:column>
-                        <p:outputLabel value="Numer VIN"/>
+                        <p:outputLabel value="VIN number"/>
                     </p:column>
                     <p:column>
                         <p:inputText value="#{carManagement.car.vinNumber}"/>
@@ -18,7 +18,7 @@
                 </p:row>
                 <p:row>
                     <p:column>
-                        <p:outputLabel value="Marka"/>
+                        <p:outputLabel value="Make"/>
                     </p:column>
                     <p:column>
                         <p:inputText value="#{carManagement.car.make}"/>
@@ -34,7 +34,7 @@
                 </p:row>
                 <p:row >
                     <p:column colspan="2" style="text-align: center">
-                        <p:commandButton  value="Zapisz" action="#{carManagement.editCar()}" update="carManagementForm">
+                        <p:commandButton  value="Save" action="#{carManagement.editCar()}" update="carManagementForm">
                         </p:commandButton>
                     </p:column>
                 </p:row>
