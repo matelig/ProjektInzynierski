@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:background="@color/background"
     android:layout_height="match_parent"
     tools:context="com.polsl.android.employeetracker.activity.RouteListActivity">
 
@@ -17,12 +18,14 @@
             android:paddingTop="8dp"
             android:paddingEnd="16dp"
             android:paddingStart="16dp"
-            android:layout_height="match_parent"
+            android:layout_height="0dp"
             android:layout_weight="1"/>
 
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:background="@drawable/button_selector"
             android:layout_marginLeft="@dimen/vertical_activity_margin"
             android:layout_marginRight="@dimen/vertical_activity_margin"
             android:text="@string/send"

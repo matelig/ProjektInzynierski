@@ -5,6 +5,7 @@
     android:orientation="vertical"
     android:paddingEnd="@dimen/horizontal_activity_padding"
     android:paddingTop="@dimen/vertical_activity_margin"
+    android:background="@color/background"
     android:paddingBottom="@dimen/vertical_activity_margin"
     android:paddingStart="@dimen/horizontal_activity_padding"
     tools:context="com.polsl.android.employeetracker.fragment.SettingsActivityFragment">
@@ -13,34 +14,29 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textColor="@color/primaryTextColor"
         android:textSize="25sp"
         android:paddingBottom="@dimen/vertical_activity_margin"
         android:gravity="center"
         android:text="@string/logged_as_string" />
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
+        android:layout_gravity="center"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:layout_marginBottom="90dp">
 
         <TextView
             android:id="@+id/user_name"
             android:layout_width="wrap_content"
+            android:textColor="@color/primaryTextColor"
+            android:gravity="center"
             android:layout_height="wrap_content"
             android:textSize="25sp"
             android:text="Mateusz" />
 
-        <View
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1" />
 
-        <TextView
-            android:id="@+id/user_surname"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="25sp"
-            android:text="Ligus" />
 
 
     </LinearLayout>
@@ -48,15 +44,24 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:background="@drawable/default_layout_background">
 
         <LinearLayout
-            android:layout_marginTop="90dp"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:paddingStart="6dp"
+            android:paddingEnd="6dp"
+            android:id="@+id/obd-layout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
             <TextView
+
+                android:textColor="@color/primaryTextColor"
                 android:layout_width="wrap_content"
+                android:layout_gravity="center"
                 android:layout_height="wrap_content"
+                android:textSize="15sp"
                 android:text="@string/obd_device"/>
             <View
                 android:layout_width="0dp"
@@ -65,22 +70,71 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+
+                android:textColor="@color/primaryTextColor"
+                android:textSize="15sp"
                 android:textAlignment="textEnd"
                 android:id="@+id/obd_device_name"/>
         </LinearLayout>
 
     </LinearLayout>
 
-   <!--<LinearLayout-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:orientation="vertical">-->
-        <!--<Button-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:id="@+id/test"-->
-            <!--android:text="dodaj trase testowa"/>-->
-    <!--</LinearLayout>-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:paddingStart="6dp"
+        android:paddingEnd="6dp"
+        android:orientation="vertical"
+        android:background="@drawable/default_layout_background"
+        android:layout_marginTop="20dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/primaryTextColor"
+                android:textSize="15sp"
+                android:text="Send current location"/>
+            <View
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"/>
+            <Switch
+                android:paddingEnd="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/location_switch"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:paddingTop="10dp"
+            android:layout_height="match_parent">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/primaryTextColor"
+                android:paddingStart="30dp"
+                android:textSize="15sp"
+                android:text="Frequency"/>
+            <View
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"/>
+
+            <Spinner
+                android:paddingEnd="10dp"
+                android:layout_width="wrap_content"
+                android:textColor="@color/primaryTextColor"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:layout_height="wrap_content"
+                android:spinnerMode="dropdown"
+                android:id="@+id/frequency_spinner"/>
+        </LinearLayout>
+    </LinearLayout>
 
     <View
         android:layout_width="0dp"
@@ -94,6 +148,7 @@
 
         <Button
             android:layout_width="wrap_content"
+            android:background="@drawable/button_selector"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="@string/logout"

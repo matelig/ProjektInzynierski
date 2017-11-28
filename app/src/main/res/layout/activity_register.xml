@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@color/background"
     android:paddingLeft="@dimen/horizontal_activity_padding"
     android:paddingRight="@dimen/horizontal_activity_padding"
     tools:context="com.polsl.android.employeetracker.activity.RegisterActivity">
@@ -11,51 +12,64 @@
     <LinearLayout
         android:layout_marginTop="@dimen/vertical_activity_margin"
         android:orientation="vertical"
+        android:background="@color/background"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <TextView
             android:layout_width="match_parent"
+            android:textColor="@color/primaryTextColor"
             android:layout_height="wrap_content"
             android:text="@string/login_activity_name_string" />
 
         <EditText
             android:id="@+id/register_activity_name"
+            android:textColor="@color/primaryTextColor"
+            android:drawableStart="@drawable/ic_account_circle_black_24dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="@android:dimen/app_icon_size"
             android:inputType="text" />
 
         <TextView
             android:layout_width="match_parent"
+            android:textColor="@color/primaryTextColor"
             android:layout_height="wrap_content"
             android:text="@string/login_activity_surname" />
 
         <EditText
             android:id="@+id/register_activity_surname"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textPassword" />
+            android:drawableStart="@drawable/ic_account_circle_black_24dp"
+            android:textColor="@color/primaryTextColor"
+            android:layout_height="@android:dimen/app_icon_size"
+            android:inputType="text" />
 
         <TextView
             android:layout_width="match_parent"
+            android:textColor="@color/primaryTextColor"
             android:layout_height="wrap_content"
             android:text="@string/register_pesel" />
 
         <EditText
             android:id="@+id/register_activity_pesel"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textPassword" />
+            android:drawableStart="@drawable/ic_account_circle_black_24dp"
+            android:textColor="@color/primaryTextColor"
+            android:layout_height="@android:dimen/app_icon_size"
+            android:inputType="text" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textColor="@color/primaryTextColor"
             android:text="@string/login_activity_password_button" />
 
         <EditText
             android:id="@+id/register_activity_password"
+            android:drawableStart="@drawable/ic_lock_black_24dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:textColor="@color/primaryTextColor"
+            android:layout_height="@android:dimen/app_icon_size"
             android:inputType="textPassword" />
 
         <Button

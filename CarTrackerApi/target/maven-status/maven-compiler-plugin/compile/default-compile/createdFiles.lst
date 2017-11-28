@@ -25,6 +25,7 @@ com\polsl\projektinzynierski\cartrackerapi\service\LocationFacadeREST.class
 com\polsl\projektinzynierski\cartrackerapi\service\RouteFacadeREST.class
 com\polsl\projektinzynierski\cartrackerapi\CurrentLocation.class
 com\polsl\projektinzynierski\cartrackerapi\Car_.class
+util\Message.class
 com\polsl\projektinzynierski\cartrackerapi\User_.class
 com\polsl\projektinzynierski\cartrackerapi\Location_.class
 com\polsl\projektinzynierski\cartrackerapi\TroubleCodesNames_.class

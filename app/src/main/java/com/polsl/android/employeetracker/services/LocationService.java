@@ -16,6 +16,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NotificationCompat;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -25,6 +26,7 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResult;
+import com.orhanobut.hawk.Hawk;
 import com.polsl.android.employeetracker.R;
 import com.polsl.android.employeetracker.RESTApi.CurrentLocation;
 import com.polsl.android.employeetracker.activity.SlideActivityPager;
@@ -62,6 +64,9 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
     private PowerManager powerManager;
     private SharedPreferences preferences;
     private Long userId;
+    private int maxCycle;
+    private int currentCycle;
+    private boolean sendLocation;
     /**
      * Wake lock used to maintain the device active
      */
@@ -76,6 +81,8 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
         wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,
                 "MyWakelockTag");
         wakeLock.acquire();
+        currentCycle = 0;
+
         daoSession = ((CarApp) getApplication()).getDaoSession();
         routeDataDao = daoSession.getRouteDataDao();
         locationDataDao = daoSession.getLocationDataDao();
@@ -97,6 +104,10 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
         if (intent.getAction().equals(ApiHelper.START_SERVICE)) {
             Toast.makeText(this, "Serwis uruchomiony", Toast.LENGTH_SHORT).show();
             User user = intent.getExtras().getParcelable(ApiHelper.USER);
+            maxCycle = intent.getIntExtra("frequency",1);
+            sendLocation = intent.getBooleanExtra("sendLocation",true);
+            Log.v("service cycles",String.valueOf(maxCycle));
+            Log.v("service location",String.valueOf(sendLocation));
             userId = user.getId();
             deviceAddress = intent.getStringExtra(ApiHelper.OBD_DEVICE_ADDRESS);
             PendingIntent contentIntent =
@@ -156,13 +167,19 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
         locationData.setTimestamp(timestamp);
         locationData.setRouteId(routeData.getId());
         locationDataDao.insert(locationData);
-        CurrentLocation currentLocation = new CurrentLocation();
-        currentLocation.setCarVin(routeData.getVinNumber());
-        currentLocation.setLatitude(latitude);
-        currentLocation.setLongitude(longitude);
-        currentLocation.setTimestamp(timestamp);
-        currentLocation.setUserId(userId);
-        currentLocation.send();
+        if (sendLocation) {
+            currentCycle++;
+            if (currentCycle == maxCycle) {
+                CurrentLocation currentLocation = new CurrentLocation();
+                currentLocation.setCarVin(routeData.getVinNumber());
+                currentLocation.setLatitude(latitude);
+                currentLocation.setLongitude(longitude);
+                currentLocation.setTimestamp(timestamp);
+                currentLocation.setUserId(userId);
+                currentLocation.send();
+                currentCycle=0;
+            }
+        }
     }
 
 

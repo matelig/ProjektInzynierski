@@ -9,12 +9,17 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
+import android.text.Layout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CompoundButton;
+import android.widget.LinearLayout;
+import android.widget.Spinner;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import com.orhanobut.hawk.Hawk;
@@ -41,6 +46,7 @@ import com.polsl.android.employeetracker.entity.TroubleCodesDataDao;
 import com.polsl.android.employeetracker.entity.User;
 import com.polsl.android.employeetracker.helper.ApiHelper;
 import com.polsl.android.employeetracker.helper.UploadStatus;
+import com.polsl.android.employeetracker.util.SpinnerListener;
 
 import java.util.ArrayList;
 import java.util.Set;
@@ -53,24 +59,23 @@ import butterknife.ButterKnife;
  */
 public class SettingsActivityFragment extends Fragment {
 
-    @BindView(R.id.obd_device_button)
-    Button obdButton;
-
     @BindView(R.id.obd_device_name)
     TextView obdDeviceName;
 
     @BindView(R.id.user_name)
     TextView userName;
 
-    @BindView(R.id.user_surname)
-    TextView userSurname;
-
     @BindView(R.id.logout_button)
     Button logoutButton;
 
-//    @BindView(R.id.test)
-//    Button test;
+    @BindView(R.id.obd_layout)
+    LinearLayout obdLayout;
 
+    @BindView(R.id.frequency_spinner)
+    Spinner locationFrequencySpinner;
+
+    @BindView(R.id.location_switch)
+    Switch locationSwitch;
 
     public SettingsActivityFragment() {
     }
@@ -85,71 +90,76 @@ public class SettingsActivityFragment extends Fragment {
         ButterKnife.bind(this, rootView); //jedyne słuszne bindowanie widoku z polami
         if (Hawk.contains(ApiHelper.USER)) {
             User user = Hawk.get(ApiHelper.USER);
-            userName.setText(user.getName());
-            userSurname.setText(user.getSurname());
+            userName.setText(String.format("%s %s", user.getName(), user.getSurname()));
         }
 
         obdDeviceName.setText("Current address:\n" + Hawk.get(ApiHelper.OBD_DEVICE_ADDRESS, ""));
 
-        logoutButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Hawk.deleteAll();
-                Intent intent = new Intent(getActivity(), LoginActivity.class);
-                getActivity().startActivity(intent);
-                getActivity().finish();
-            }
+        locationFrequencySpinner.setLayoutMode(Spinner.MODE_DIALOG);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(),
+                R.array.sending_frequency, R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(R.layout.simple_spinner_dropdown_item);
+        locationFrequencySpinner.setAdapter(adapter);
+        locationFrequencySpinner.setOnItemSelectedListener(new SpinnerListener());
+        locationFrequencySpinner.setSelection(Hawk.get("selectedSpinnerItem",0));
+        locationSwitch.setChecked(Hawk.get("sendLocation",true));
+        locationSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            Hawk.put("sendLocation",isChecked);
         });
 
-//        test.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                addToDatabase();
-//            }
-//        });
+        logoutButton.setOnClickListener(v -> {
+            Hawk.deleteAll();
+            Intent intent = new Intent(getActivity(), LoginActivity.class);
+            getActivity().startActivity(intent);
+            getActivity().finish();
+        });
 
-        obdButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        obdLayout.setOnClickListener(v -> {
 
-                final ArrayList<String> deviceStrs = new ArrayList<>();
-                final ArrayList<String> devices = new ArrayList<>();
-                boolean useOldAddress = false;
-                BluetoothAdapter btAdapter = BluetoothAdapter.getDefaultAdapter();
-                int REQUEST_ENABLE_BT = 99;
-                if (!btAdapter.isEnabled()) {
-                    Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-                    startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
-                } else {
-                    final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
-                    Set<BluetoothDevice> pairedDevices = btAdapter.getBondedDevices();
+            final ArrayList<String> deviceStrs = new ArrayList<>();
+            final ArrayList<String> devices = new ArrayList<>();
+            boolean useOldAddress = false;
+            BluetoothAdapter btAdapter = BluetoothAdapter.getDefaultAdapter();
+            int REQUEST_ENABLE_BT = 99;
+            if (!btAdapter.isEnabled()) {
+                Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+                startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
+            } else {
+                final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+                Set<BluetoothDevice> pairedDevices = btAdapter.getBondedDevices();
 
-                    if (pairedDevices.size() > 0) {
-                        for (Object device : pairedDevices) {
-                            BluetoothDevice device1 = (BluetoothDevice) device;
-                            Log.d("gping2", "BT: " + device1.getName() + " - " + device1.getAddress());
-                            deviceStrs.add(device1.getName() + "\n" + device1.getAddress());
-                            devices.add(device1.getAddress());
+                if (pairedDevices.size() > 0) {
+                    for (Object device : pairedDevices) {
+                        BluetoothDevice device1 = (BluetoothDevice) device;
+                        Log.d("gping2", "BT: " + device1.getName() + " - " + device1.getAddress());
+                        deviceStrs.add(device1.getName() + "\n" + device1.getAddress());
+                        devices.add(device1.getAddress());
 
-                        }
                     }
-                    final android.app.AlertDialog.Builder alertDialog = new android.app.AlertDialog.Builder(getContext());
-
-                    final ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), android.R.layout.select_dialog_singlechoice,
-                            deviceStrs.toArray(new String[deviceStrs.size()]));
-                    alertDialog.setSingleChoiceItems(adapter, -1, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                            int position = ((android.app.AlertDialog) dialog).getListView().getCheckedItemPosition();
-                            Hawk.put(ApiHelper.OBD_DEVICE_ADDRESS, devices.get(position));
-                            Hawk.put(ApiHelper.OBD_DEVICE_NAME, deviceStrs.get(position));
-                            obdDeviceName.setText("Current address:\n" + devices.get(position));
-                        }
-                    });
-                    alertDialog.setTitle("Choose Bluetooth device");
-                    alertDialog.show();
                 }
+                final android.app.AlertDialog.Builder alertDialog = new android.app.AlertDialog.Builder(getContext());
+
+                final ArrayAdapter<String> adapter1 = new ArrayAdapter<>(getActivity(), android.R.layout.select_dialog_singlechoice,
+                        deviceStrs.toArray(new String[deviceStrs.size()]));
+                int selectedPosition = -1;
+                for (int i = 0 ; i<devices.size();i++) {
+                    if (devices.get(i).equals(Hawk.get(ApiHelper.OBD_DEVICE_ADDRESS))) {
+                        selectedPosition = i;
+                        break;
+                    }
+                }
+                alertDialog.setSingleChoiceItems(adapter1, selectedPosition, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        int position = ((android.app.AlertDialog) dialog).getListView().getCheckedItemPosition();
+                        Hawk.put(ApiHelper.OBD_DEVICE_ADDRESS, devices.get(position));
+                        Hawk.put(ApiHelper.OBD_DEVICE_NAME, deviceStrs.get(position));
+                        obdDeviceName.setText("Current address:\n" + devices.get(position));
+                    }
+                });
+                alertDialog.setTitle("Choose Bluetooth device");
+                alertDialog.show();
             }
         });
 

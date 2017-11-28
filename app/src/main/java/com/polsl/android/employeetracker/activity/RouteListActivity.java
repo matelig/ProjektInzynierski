@@ -98,50 +98,6 @@ public class RouteListActivity extends AppCompatActivity {
         routeListView.invalidate();
     }
 
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        getMenuInflater().inflate(R.menu.list_menu, menu);
-//        return super.onCreateOptionsMenu(menu);
-//    }
-
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        int clickedItemInd = item.getItemId();
-//        switch (clickedItemInd) {
-//            //Info icon
-//            case R.id.btn_info:
-//                Toast.makeText(this, R.string.list_info, Toast.LENGTH_LONG).show();
-//                break;
-//            //Back icon
-//            case android.R.id.home:
-//                NavUtils.navigateUpFromSameTask(this);
-//                break;
-//        }
-//        return true;
-//    }
-
-//    public void onMenuItemMapClick(MenuItem w) {
-//        Intent intent = new Intent(RouteListActivity.this, MapActivity.class);
-//        startActivity(intent);
-//    }
-
-    public void onMenuItemListClick(MenuItem w) {
-
-    }
-
-    public void onMenuItemSendClick(MenuItem w) {
-        message = Toast.makeText(this, "Wysle dane", Toast.LENGTH_SHORT);
-        message.show();
-    }
-
-//    public void testClick(MenuItem w) {
-//        Intent intent = new Intent(RouteListActivity.this, ExampleActivity.class);
-//        startActivity(intent);
-//    }
-
-    private void prepareView() {
-
-    }
 
     public void sendRoutesClick(View view) {
         RESTServicesEndpoints endpoints = RetrofitClient.getApiService();

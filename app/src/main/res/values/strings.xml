@@ -26,7 +26,7 @@
     <string name="register">Register</string>
     <string name="login_failure">No internet connection</string>
     <string name="wrong_user">No user in database</string>
-    <string name="logged_as_string">Logged as</string>
+    <string name="logged_as_string">WELCOME</string>
     <string name="logout">Logout</string>
     <string name="send">SEND</string>
     <string name="speed_unit">hm/h</string>
@@ -35,4 +35,15 @@
     <string name="distance_km">Distance [km]</string>
     <string name="on">ON</string>
     <string name="obd_device">OBD Device</string>
+    <string name="default_value">-</string>
+    <string name="delete">Delete</string>
+    <string-array name="sending_frequency">
+        <item>5 sec</item>
+        <item>10 sec</item>
+        <item>30 sec</item>
+        <item>1 min</item>
+        <item>2 min</item>
+        <item>5 min</item>
+    </string-array>
+
 </resources>

@@ -220,6 +220,8 @@ public class MainActivityFragment extends Fragment {
                     Intent intent = new Intent(getActivity(), LocationService.class);
 //                    SharedPreferences prefs = getContext().getSharedPreferences(getContext().getPackageName(), Context.MODE_PRIVATE);
                     intent.putExtra(ApiHelper.OBD_DEVICE_ADDRESS, Hawk.get(ApiHelper.OBD_DEVICE_ADDRESS,""));
+                    intent.putExtra("frequency",Hawk.get("frequency",1));
+                    intent.putExtra("sendLocation", Hawk.get("sendLocation",true));
                     User user = Hawk.get(ApiHelper.USER);
                     intent.putExtra(ApiHelper.USER, user);
                     intent.setAction(ApiHelper.START_SERVICE);

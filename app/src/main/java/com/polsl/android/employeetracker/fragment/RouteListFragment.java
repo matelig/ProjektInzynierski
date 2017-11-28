@@ -1,8 +1,10 @@
 package com.polsl.android.employeetracker.fragment;
 
 
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -84,7 +86,10 @@ public class RouteListFragment extends Fragment {
         }
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         routeListView.setLayoutManager(layoutManager);
-        routeListView.addItemDecoration(new DividerItemDecoration(getContext(),DividerItemDecoration.VERTICAL));
+        DividerItemDecoration verticalDecoration = new DividerItemDecoration(routeListView.getContext(),DividerItemDecoration.VERTICAL);
+        Drawable verticalDivider = ContextCompat.getDrawable(routeListView.getContext(),R.drawable.vertical_list_divider);
+        verticalDecoration.setDrawable(verticalDivider);
+        routeListView.addItemDecoration(verticalDecoration);
         yearAdapter = new RouteListYearAdapter(usedYearsNames,rootView.getContext());
         routeListView.setAdapter(yearAdapter);
         return rootView;

@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@color/background"
     android:paddingEnd="@dimen/horizontal_activity_padding"
     android:paddingStart="@dimen/horizontal_activity_padding"
     tools:context="com.polsl.android.employeetracker.fragment.MainActivityFragment">
@@ -35,14 +36,16 @@
                         android:id="@+id/car_speed"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:textColor="@color/primaryTextColor"
                         android:layout_gravity="center"
-                        android:text="-"
+                        android:text="@string/default_value"
                         android:textAlignment="center"
                         android:textSize="25sp" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:textColor="@color/primaryTextColor"
                         android:layout_gravity="center"
                         android:textAlignment="center"
                         android:text="@string/speed_unit" />
@@ -61,14 +64,16 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:textColor="@color/primaryTextColor"
                         android:id="@+id/main_time"
-                        android:text="-"
+                        android:text="@string/default_value"
                         android:textAlignment="center"
                         android:textSize="25sp" />
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:textColor="@color/primaryTextColor"
                         android:text="@string/time"
                         android:textAlignment="center" />
                 </LinearLayout>
@@ -86,14 +91,16 @@
                     <TextView
                         android:id="@+id/road_length"
                         android:layout_width="match_parent"
+                        android:textColor="@color/primaryTextColor"
                         android:layout_height="wrap_content"
-                        android:text="-"
+                        android:text="@string/default_value"
                         android:textAlignment="center"
                         android:textSize="25sp" />
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:textColor="@color/primaryTextColor"
                         android:text="@string/distance_km"
                         android:textAlignment="center" />
                 </LinearLayout>
@@ -112,12 +119,14 @@
                         android:id="@+id/car_rpm"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="-"
+                        android:textColor="@color/primaryTextColor"
+                        android:text="@string/default_value"
                         android:textAlignment="center"
                         android:textSize="25sp" />
 
                     <TextView
                         android:layout_width="match_parent"
+                        android:textColor="@color/primaryTextColor"
                         android:layout_height="wrap_content"
                         android:textAlignment="center"
                         android:text="@string/rpm_unit" />
@@ -133,6 +142,7 @@
 
             <Button
                 android:id="@+id/service_button"
+                android:background="@drawable/button_selector"
                 android:layout_width="wrap_content"
                 android:elevation="2dp"
                 android:layout_height="wrap_content"
@@ -149,6 +159,7 @@
 
             <TextView
                 android:layout_width="wrap_content"
+                android:textColor="@color/primaryTextColor"
                 android:layout_height="match_parent"
                 android:text="@string/location_service_status" />
 
@@ -160,6 +171,7 @@
             <TextView
                 android:id="@+id/location_status"
                 android:layout_width="wrap_content"
+                android:textColor="@color/primaryTextColor"
                 android:layout_height="wrap_content"
                 android:text="@string/on" />
         </LinearLayout>
@@ -172,6 +184,7 @@
 
             <TextView
                 android:layout_width="wrap_content"
+                android:textColor="@color/primaryTextColor"
                 android:layout_height="match_parent"
                 android:text="@string/obd_connection_status" />
 
@@ -184,7 +197,8 @@
                 android:id="@+id/obd_status"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/on" />
+                android:textColor="@color/primaryTextColor"
+                android:text="@string/default_value" />
         </LinearLayout>
 
         <LinearLayout
@@ -195,6 +209,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:textColor="@color/primaryTextColor"
                 android:text="@string/bluetooth_status" />
 
             <View
@@ -205,6 +220,7 @@
             <TextView
                 android:id="@+id/bluetooth_status"
                 android:layout_width="wrap_content"
+                android:textColor="@color/primaryTextColor"
                 android:layout_height="wrap_content"
                 android:text="@string/on" />
         </LinearLayout>

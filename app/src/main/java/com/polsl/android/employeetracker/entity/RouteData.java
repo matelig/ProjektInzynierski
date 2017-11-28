@@ -142,31 +142,6 @@ public class RouteData {
         return  String.format("%02d:%02d:%02d", hours, minutes, seconds);
     }
 
-//    public void sendRoute(RESTServicesEndpoints endpoints ) {
-//        Route route = new Route(getStartDate(),getEndDate(),getUserId(),getVinNumber(),getLocationDataList());
-//        route.setRpmDataList(getRpmDataList());
-//        route.setSpeedDataList(getSpeedDataList());
-//        route.setTroubleCodesList(getTroubleCodesDataList());
-//        Call<ResponseBody> call = endpoints.create(route);
-//        call.enqueue(new Callback<ResponseBody>() {
-//            @Override
-//            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-//                if (response.code()==204) {
-//                    setUploadStatus(UploadStatus.UPLOADED);
-//                    r.setToSend(false);
-//                    routeDataDao.update(r);
-//                    Toast.makeText(context,"Route "+ r.getId()+" has been send.",Toast.LENGTH_SHORT).show();
-//                    tAdapter.notifyDataSetChanged();
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(Call<ResponseBody> call, Throwable t) {
-//
-//            }
-//        });
-//    }
-
     public Long getId() {
         return this.id;
     }

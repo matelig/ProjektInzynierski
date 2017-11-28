@@ -4,10 +4,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -71,6 +73,7 @@ public class RouteListAdapter extends RecyclerView.Adapter<RouteListAdapter.Data
 
         holder.checkBox.setChecked(tracks.get(position).getToSend());
         holder.checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
+
             tracks.get(position).setToSend(isChecked);
             DaoSession daoSession = ((CarApp) context.getApplicationContext()).getDaoSession();
             RouteDataDao routeDataDao = daoSession.getRouteDataDao();
@@ -84,32 +87,25 @@ public class RouteListAdapter extends RecyclerView.Adapter<RouteListAdapter.Data
         });
 
         holder.optionsItemView.setOnClickListener(v -> {
-            toast = Toast.makeText(context, "You clicked an menu of item " + tracks.get(position).getId(), Toast.LENGTH_SHORT);
-            toast.show();
-//            PopupMenu popup = new PopupMenu(context, holder.optionsItemView);
-//            popup.inflate(R.menu.list_popup_menu);
-//            popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-//                @Override
-//                public boolean onMenuItemClick(MenuItem item) {
-//                    switch (item.getItemId()) {
-//                        case R.id.ready_to_send:
-//                            //TODO: add some information about readiness to send
-//                            toast = Toast.makeText(context, "Ready to send", Toast.LENGTH_SHORT);
-//                            toast.show();
-//                            break;
-//                        case R.id.delete_route:
-//                            tracks.get(position).delete();
-//                            tracks.remove(position);
-//                            notifyItemRemoved(position);
-//                            notifyItemRangeChanged(position, tracks.size());
-//                            toast = Toast.makeText(context, "Delete successful", Toast.LENGTH_SHORT);
-//                            toast.show();
-//                            break;
-//                    }
-//                    return false;
-//                }
-//            });
-//            popup.show();
+            PopupMenu popup = new PopupMenu(context, holder.optionsItemView);
+            popup.inflate(R.menu.list_more_menu);
+            popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                @Override
+                public boolean onMenuItemClick(MenuItem item) {
+                    switch (item.getItemId()) {
+                        case R.id.delete_route:
+                            tracks.get(position).delete();
+                            tracks.remove(position);
+                            notifyItemRemoved(position);
+                            notifyItemRangeChanged(position, tracks.size());
+                            toast = Toast.makeText(context, "Delete successful", Toast.LENGTH_SHORT);
+                            toast.show();
+                            break;
+                    }
+                    return false;
+                }
+            });
+            popup.show();
         });
     }
 
