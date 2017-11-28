@@ -1,7 +1,6 @@
 package com.polsl.android.employeetracker.helper;
 
 
-
 public enum UploadStatus {
     NOT_UPLOADED(0),
     READY_TO_UPLOAD(1),

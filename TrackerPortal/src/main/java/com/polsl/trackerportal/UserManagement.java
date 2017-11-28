@@ -103,6 +103,7 @@ public class UserManagement implements Serializable {
     }
 
     public void editUser() {
+        
         try {
             userTransaction.begin();
             User user = (User) entityManager.createNamedQuery("User.findByPesel").setParameter("pesel", this.user.getPesel()).getSingleResult();
@@ -110,6 +111,7 @@ public class UserManagement implements Serializable {
             user.setEmail(this.user.getEmail());
             user.setName(this.user.getName());
             user.setSurname(this.user.getSurname());
+            user.setAdministrator(this.user.getAdministrator());
             entityManager.merge(user);
             userTransaction.commit();
         } catch (NotSupportedException | SystemException | RollbackException | HeuristicMixedException | HeuristicRollbackException | SecurityException | IllegalStateException ex) {

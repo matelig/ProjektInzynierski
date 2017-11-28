@@ -18,11 +18,9 @@ import java.util.List;
  * Created by m_lig on 11.09.2017.
  */
 
-public class RouteListYearAdapter extends RecyclerView.Adapter<RouteListYearAdapter.YearViewHolder>{
-    String[] mDataset = {"Data", "In", "Adapter"};
+public class RouteListYearAdapter extends RecyclerView.Adapter<RouteListYearAdapter.YearViewHolder> {
     private List<String> years;
     private Context context;
-    private Toast toast;
 
     public RouteListYearAdapter(List<String> years, Context context) {
         this.years = years;
@@ -46,7 +44,7 @@ public class RouteListYearAdapter extends RecyclerView.Adapter<RouteListYearAdap
 
         holder.view.setOnClickListener(v -> {
             Intent intent = new Intent(context, RouteMonthList.class);
-            intent.putExtra("year",years.get(position));
+            intent.putExtra("year", years.get(position));
             context.startActivity(intent);
         });
     }

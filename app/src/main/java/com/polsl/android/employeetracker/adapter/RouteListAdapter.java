@@ -33,7 +33,7 @@ import java.util.List;
  * Created by m_lig on 27.07.2017.
  */
 
-public class RouteListAdapter extends RecyclerView.Adapter<RouteListAdapter.DataViewHolder>  {
+public class RouteListAdapter extends RecyclerView.Adapter<RouteListAdapter.DataViewHolder> {
     private List<RouteData> tracks;
     private Context context;
     private Toast toast;
@@ -63,11 +63,11 @@ public class RouteListAdapter extends RecyclerView.Adapter<RouteListAdapter.Data
         RouteData info = tracks.get(position);
 
         holder.dateItemView.setText(dateFormat.format(info.getStartDate()));
-        holder.descriptionItemView.setText("Route " + info.getId());
+        holder.descriptionItemView.setText(context.getString(R.string.route_string) + info.getId());
         holder.durationItemView.setText("Duration: " + info.calculateDuration());
         holder.checkBox.setOnCheckedChangeListener(null);
 
-        if(info.getUploadStatus() == UploadStatus.UPLOADED)
+        if (info.getUploadStatus() == UploadStatus.UPLOADED)
             holder.checkBox.setEnabled(false);
         holder.position = position;
 
@@ -98,7 +98,7 @@ public class RouteListAdapter extends RecyclerView.Adapter<RouteListAdapter.Data
                             tracks.remove(position);
                             notifyItemRemoved(position);
                             notifyItemRangeChanged(position, tracks.size());
-                            toast = Toast.makeText(context, "Delete successful", Toast.LENGTH_SHORT);
+                            toast = Toast.makeText(context, R.string.delete_route_successful, Toast.LENGTH_SHORT);
                             toast.show();
                             break;
                     }
@@ -113,7 +113,6 @@ public class RouteListAdapter extends RecyclerView.Adapter<RouteListAdapter.Data
     public int getItemCount() {
         return tracks.size();
     }
-
 
 
     class DataViewHolder extends RecyclerView.ViewHolder {

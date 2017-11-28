@@ -2,6 +2,8 @@ package com.polsl.android.employeetracker.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
@@ -57,12 +59,12 @@ public class RouteListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_route_list);
         Intent intent = getIntent();
-        Integer year = intent.getIntExtra("year",0);
+        Integer year = intent.getIntExtra("year", 0);
         String monthName = intent.getStringExtra("month");
         User user = Hawk.get(ApiHelper.USER);
         Long userId = user.getId();
         int month = 0;
-        for (int i=1;i<=12;i++) {
+        for (int i = 1; i <= 12; i++) {
             if (monthName.equals(ApiHelper.monthNames[i])) {
                 month = i;
                 break;
@@ -74,17 +76,17 @@ public class RouteListActivity extends AppCompatActivity {
         tracks = routeDataDao.loadAll();
         for (int i = tracks.size() - 1; i >= 0; i--) {
             tracks.get(i).setToSend(false);
-            if (tracks.get(i).getEndDate() == null|| tracks.get(i).getUserId()!=userId) {
+            if (tracks.get(i).getEndDate() == null || tracks.get(i).getUserId() != userId) {
                 tracks.remove(i);
             }
         }
-        for (int i = tracks.size()-1;i>=0;i--) {
+        for (int i = tracks.size() - 1; i >= 0; i--) {
             Date startDate = new Date(tracks.get(i).getStartDate());
             Calendar cal = Calendar.getInstance();
             cal.setTime(startDate);
             int routeYear = cal.get(Calendar.YEAR);
             int routeMonth = cal.get(Calendar.MONTH);
-            if (routeYear != year || routeMonth!=month) {
+            if (routeYear != year || routeMonth != month) {
                 tracks.remove(i);
             }
 
@@ -92,7 +94,10 @@ public class RouteListActivity extends AppCompatActivity {
         routeListView = (RecyclerView) findViewById(R.id.route_recycler);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         routeListView.setLayoutManager(layoutManager);
-        routeListView.addItemDecoration(new DividerItemDecoration(this,DividerItemDecoration.VERTICAL));
+        DividerItemDecoration verticalDecoration = new DividerItemDecoration(routeListView.getContext(), DividerItemDecoration.VERTICAL);
+        Drawable verticalDivider = ContextCompat.getDrawable(this, R.drawable.vertical_list_divider);
+        verticalDecoration.setDrawable(verticalDivider);
+        routeListView.addItemDecoration(verticalDecoration);
         tAdapter = new RouteListAdapter(tracks, RouteListActivity.this);
         routeListView.setAdapter(tAdapter);
         routeListView.invalidate();
@@ -104,7 +109,7 @@ public class RouteListActivity extends AppCompatActivity {
 
         for (RouteData r : tracks) {
             if (r.getToSend()) {
-                Route route = new Route(r.getStartDate(),r.getEndDate(),r.getUserId(),r.getVinNumber(),r.getLocationDataList());
+                Route route = new Route(r.getStartDate(), r.getEndDate(), r.getUserId(), r.getVinNumber(), r.getLocationDataList());
                 route.setRpmDataList(r.getRpmDataList());
                 route.setSpeedDataList(r.getSpeedDataList());
                 route.setTroubleCodesList(r.getTroubleCodesDataList());
@@ -116,11 +121,11 @@ public class RouteListActivity extends AppCompatActivity {
                 call.enqueue(new Callback<ResponseBody>() {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                        if (response.code()==204) {
+                        if (response.code() == 204) {
                             r.setUploadStatus(UploadStatus.UPLOADED);
                             r.setToSend(false);
                             routeDataDao.update(r);
-                            Toast.makeText(context,"Route "+ r.getId()+" has been send.",Toast.LENGTH_SHORT).show();
+                            Toast.makeText(context, "Route " + r.getId() + " has been send.", Toast.LENGTH_SHORT).show();
                             tAdapter.notifyDataSetChanged();
                         }
                     }

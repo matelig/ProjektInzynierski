@@ -7,7 +7,7 @@
 
     <ui:define name="htmlHead">
         <meta name="description" content="Our Company Home Page" />
-        <title>Our Company - Home</title>
+        <title>Car tracker portal - Car management</title>
     </ui:define>
 
     <ui:define name="navigation">
@@ -28,13 +28,14 @@
                 <p:dataTable 
                     value="#{carManagement.carList}" 
                     var="car"
+                    styleClass="ui-corner-all"
                     rowIndexVar="row"
                     id="carDataTable"
                     rowStyleClass="#{row % 2 eq 0 ? 'row-even' : 'row-odd'}">
-                    <p:column headerText="Numer VIN" style="background-color: inherit;text-align: center" sortBy="#{car.vinNumber}" filterBy="#{car.vinNumber}">
+                    <p:column headerText="VIN number" style="background-color: inherit;text-align: center" sortBy="#{car.vinNumber}" filterBy="#{car.vinNumber}">
                         <h:outputText value="#{car.vinNumber}"/>
                     </p:column>
-                    <p:column headerText="Marka" style="background-color: inherit;text-align: center" sortBy="#{car.make}" filterBy="#{car.make}">
+                    <p:column headerText="Make" style="background-color: inherit;text-align: center" sortBy="#{car.make}" filterBy="#{car.make}">
                         <h:outputText value="#{car.make}"/>
                     </p:column>
                     <p:column headerText="Model" style="background-color: inherit;text-align: center" sortBy="#{car.model}" filterBy="#{car.model}">
@@ -43,17 +44,17 @@
                     <p:column style="width: 50px; background-color: inherit;text-align: center">
                         <p:commandButton id="show" style="width: 30px;height: 30px" icon="fa fa-road" action="#{carManagement.showRouteList(car)}">                    
                         </p:commandButton>
-                        <p:tooltip for="show" value="Pokaż trasy" />
+                        <p:tooltip for="show" value="Show routes" />
                     </p:column>
                     <p:column style="width: 50px; background-color: inherit;text-align: center">
                         <p:commandButton id="edit" style="width: 30px;height: 30px" icon="fa fa-edit" action="#{carManagement.openEditUserDialog(car)}" update="editCarDialog">                    
                         </p:commandButton>
-                        <p:tooltip for="edit" value="Edytuj" />
+                        <p:tooltip for="edit" value="Edit" />
                     </p:column>
                     <p:column style="width: 50px; background-color: inherit;text-align: center">
                         <p:commandButton id="delete" style="width: 30px;height: 30px" icon="fa fa-trash" action="#{carManagement.removeCar(car)}" update="carDataTable" >                    
                         </p:commandButton>
-                        <p:tooltip for="delete" value="Usuń" />
+                        <p:tooltip for="delete" value="Delete" />
                     </p:column>
 
                 </p:dataTable>
@@ -64,7 +65,7 @@
                     <div class="ui-g-1">
 
                     </div>
-                    <p:commandButton style="width: 150px;height: 40px" value="Dodaj" action="#{carManagement.openAddCarDialog()}" update="newCarDialog"/>
+                    <p:commandButton style="width: 150px;height: 40px" value="Add new" action="#{carManagement.openAddCarDialog()}" update="newCarDialog"/>
                 </div>
             </div>
             <div class="ui-g-1">

@@ -19,7 +19,6 @@ import java.util.List;
  */
 
 public class RouteListMonthAdapter extends RecyclerView.Adapter<RouteListMonthAdapter.MonthViewHolder> {
-    String[] mDataset = {"Data", "In", "Adapter"};
     private List<String> months;
     private Context context;
     private Toast toast;
@@ -48,7 +47,7 @@ public class RouteListMonthAdapter extends RecyclerView.Adapter<RouteListMonthAd
 
         holder.view.setOnClickListener(v -> {
             Intent intent = new Intent(context, RouteListActivity.class);
-            intent.putExtra("year",year);
+            intent.putExtra("year", year);
             intent.putExtra("month", months.get(position));
             context.startActivity(intent);
         });

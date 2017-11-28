@@ -67,7 +67,7 @@ public class RouteListFragment extends Fragment {
         tracks = routeDataDao.loadAll();
         for (int i = tracks.size() - 1; i >= 0; i--) {
             tracks.get(i).setToSend(false);
-            if (tracks.get(i).getEndDate() == null || tracks.get(i).getUserId()!=userId) {
+            if (tracks.get(i).getEndDate() == null || tracks.get(i).getUserId() != userId) {
                 tracks.remove(i);
             }
         }
@@ -86,11 +86,11 @@ public class RouteListFragment extends Fragment {
         }
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         routeListView.setLayoutManager(layoutManager);
-        DividerItemDecoration verticalDecoration = new DividerItemDecoration(routeListView.getContext(),DividerItemDecoration.VERTICAL);
-        Drawable verticalDivider = ContextCompat.getDrawable(routeListView.getContext(),R.drawable.vertical_list_divider);
+        DividerItemDecoration verticalDecoration = new DividerItemDecoration(routeListView.getContext(), DividerItemDecoration.VERTICAL);
+        Drawable verticalDivider = ContextCompat.getDrawable(routeListView.getContext(), R.drawable.vertical_list_divider);
         verticalDecoration.setDrawable(verticalDivider);
         routeListView.addItemDecoration(verticalDecoration);
-        yearAdapter = new RouteListYearAdapter(usedYearsNames,rootView.getContext());
+        yearAdapter = new RouteListYearAdapter(usedYearsNames, rootView.getContext());
         routeListView.setAdapter(yearAdapter);
         return rootView;
     }

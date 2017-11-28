@@ -196,7 +196,7 @@ public class OBDInterface {
     public void finishODBReadings(long timestamp) {
         readValues = false;
         for (String s : oldCodes) {
-            if (s!=null && !s.equals("")) {
+            if (s != null && !s.equals("")) {
                 TroubleCodesData tdc = new TroubleCodesData(routeId, s, timestamp, 0);
                 troubleCodesDataDao.insert(tdc);
             }
@@ -373,7 +373,7 @@ public class OBDInterface {
                                 try {
                                     fuelLevelCommand.run(socket.getInputStream(), socket.getOutputStream());
                                     float currentFuelLevel = fuelLevelCommand.getFuelLevel();
-                                    if (previousFuelLevel!=currentFuelLevel) {
+                                    if (previousFuelLevel != currentFuelLevel) {
                                         FuelLevelData fuelLevelData = new FuelLevelData(routeId, currentFuelLevel, System.currentTimeMillis());
                                         fuelLevelDataDao.insert(fuelLevelData);
                                         previousFuelLevel = currentFuelLevel;

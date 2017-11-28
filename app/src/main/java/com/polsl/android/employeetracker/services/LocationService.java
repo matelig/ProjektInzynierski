@@ -7,6 +7,7 @@ import android.app.Service;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -114,7 +115,9 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
                     PendingIntent.getActivity(this, 0, new Intent(this, SlideActivityPager.class), 0);
             Notification notification = new NotificationCompat.Builder(this)
                     .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
-                    .setSmallIcon(R.drawable.common_google_signin_btn_icon_dark)
+                    .setSmallIcon(R.drawable.logo_notification)
+                    .setLargeIcon(BitmapFactory.decodeResource(this.getResources(),
+                            R.drawable.logo_notification))
                     .setContentIntent(contentIntent)
                     .setContentTitle("Car Tracker is running")
                     .build();

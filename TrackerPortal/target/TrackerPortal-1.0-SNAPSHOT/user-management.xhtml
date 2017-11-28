@@ -7,7 +7,7 @@
 
     <ui:define name="htmlHead">
         <meta name="description" content="Our Company Home Page" />
-        <title>Our Company - Home</title>
+        <title>Car tracker portal - User management</title>
     </ui:define>
 
     <ui:define name="navigation">
@@ -29,37 +29,38 @@
                     value="#{userManagement.userList}" 
                     var="user"
                     rowIndexVar="row"
+                    styleClass="ui-corner-all"
                     id="usersDataTable"
                     rowStyleClass="#{row % 2 eq 0 ? 'row-even' : 'row-odd'}">
-                    <p:column headerText="Imię" style="background-color: inherit;text-align: center" sortBy="#{user.name}" filterBy="#{user.name}">
+                    <p:column headerText="Name" style="background-color: inherit;text-align: center" sortBy="#{user.name}" filterBy="#{user.name}">
                         <h:outputText value="#{user.name}"/>
                     </p:column>
-                    <p:column headerText="Nazwisko" style="background-color: inherit;text-align: center" sortBy="#{user.surname}" filterBy="#{user.surname}">
+                    <p:column headerText="Surname" style="background-color: inherit;text-align: center" sortBy="#{user.surname}" filterBy="#{user.surname}">
                         <h:outputText value="#{user.surname}"/>
                     </p:column>
                     <p:column headerText="Pesel" style="background-color: inherit;text-align: center" sortBy="#{user.pesel}" filterBy="#{user.pesel}">
                         <h:outputText value="#{user.pesel}"/>
                     </p:column>
-                    <p:column headerText="Adres e-mail" style="background-color: inherit;text-align: center" sortBy="#{user.email}" filterBy="#{user.email}">
+                    <p:column headerText="E-mail address" style="background-color: inherit;text-align: center" sortBy="#{user.email}" filterBy="#{user.email}">
                         <h:outputText value="#{user.email}"/>
                     </p:column>
-                    <p:column headerText="Numer telefonu" style="background-color: inherit;text-align: center" sortBy="#{user.phoneNumber}" filterBy="#{user.phoneNumber}">
+                    <p:column headerText="Phone number" style="background-color: inherit;text-align: center" sortBy="#{user.phoneNumber}" filterBy="#{user.phoneNumber}">
                         <h:outputText value="#{user.phoneNumber}"/>
                     </p:column>
                     <p:column style="width: 50px; background-color: inherit;text-align: center">
                         <p:commandButton id="show" style="width: 30px;height: 30px" icon="fa fa-road" action="#{userManagement.showRouteList(user)}">                    
                         </p:commandButton>
-                        <p:tooltip for="show" value="Pokaż trasy" />
+                        <p:tooltip for="show" value="Show user's routes" />
                     </p:column>
                     <p:column style="width: 50px; background-color: inherit;text-align: center">
                         <p:commandButton id="edit" style="width: 30px;height: 30px" icon="fa fa-edit" action="#{userManagement.openEditUserDialog(user)}" update="editUserDialog" >                    
                         </p:commandButton>
-                        <p:tooltip for="edit" value="Edytuj" />
+                        <p:tooltip for="edit" value="Edit" />
                     </p:column>
                     <p:column style="width: 50px; background-color: inherit;text-align: center">
                         <p:commandButton id="delete" style="width: 30px;height: 30px" icon="fa fa-trash" action="#{userManagement.removeUser(user)}" update="usersDataTable" >                    
                         </p:commandButton>
-                        <p:tooltip for="delete" value="Usuń" />
+                        <p:tooltip for="delete" value="Delete" />
                     </p:column>
                 </p:dataTable>
                 <div class="ui-g-12">

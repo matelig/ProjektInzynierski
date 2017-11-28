@@ -37,7 +37,7 @@ public class Timer {
 
                 case MSG_UPDATE_TIMER:
                     sendBroadcast();
-                    mHandler.sendEmptyMessageDelayed(MSG_UPDATE_TIMER,REFRESH_RATE);
+                    mHandler.sendEmptyMessageDelayed(MSG_UPDATE_TIMER, REFRESH_RATE);
                     break;
 
                 case MSG_STOP_TIMER:
@@ -60,9 +60,9 @@ public class Timer {
         long time = stopwatch.getElapsedTimeMins();
         long hours = time / 60;
         long minutes = time % 60;
-        Intent intent  = new Intent("elapsedTime");
-        intent.putExtra("hour",hours);
-        intent.putExtra("minute",minutes);
+        Intent intent = new Intent("elapsedTime");
+        intent.putExtra("hour", hours);
+        intent.putExtra("minute", minutes);
         context.sendBroadcast(intent);
     }
 }

@@ -12,6 +12,9 @@ import com.polsl.android.employeetracker.entity.User;
 import com.polsl.android.employeetracker.R;
 import com.polsl.android.employeetracker.RESTApi.RESTServicesEndpoints;
 import com.polsl.android.employeetracker.RESTApi.RetrofitClient;
+import com.polsl.android.employeetracker.util.CryptoHash;
+
+import java.security.NoSuchAlgorithmException;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -47,7 +50,13 @@ public class RegisterActivity extends AppCompatActivity {
         User user = new User();
         user.setName(name.getText().toString());
         user.setSurname(surname.getText().toString());
-        user.setPassword(password.getText().toString());
+        String hashedPassword;
+        try {
+            hashedPassword = CryptoHash.hashPassword(password.getText().toString());
+        } catch (NoSuchAlgorithmException e) {
+            hashedPassword = password.getText().toString();
+        }
+        user.setPassword(hashedPassword);
         user.setPesel(pesel.getText().toString());
         RESTServicesEndpoints endpoints = RetrofitClient.getApiService();
         Call<ResponseBody> call = endpoints.create(user);
@@ -55,8 +64,8 @@ public class RegisterActivity extends AppCompatActivity {
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                Toast.makeText(context,response.message(),Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(null,LoginActivity.class);
+                Toast.makeText(context, response.message(), Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(context, LoginActivity.class);
                 startActivity(intent);
             }
 

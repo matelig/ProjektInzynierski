@@ -1,8 +1,8 @@
 /*
-(c) Systemy Przetwarzania i Integracji Danych SPIID sp. z o.o.
-1:1 Realny obraz Twojej firmy
-*/
-
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package com.polsl.projektinzynierski.cartrackerapi;
 
 import java.io.Serializable;
@@ -21,7 +21,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author Mateusz Ligus <mateusz.ligus@spiid.pl>
+ * @author m_lig
  */
 @Entity
 @Table(name = "troubleCodesNames")
@@ -41,7 +41,7 @@ public class TroubleCodesNames implements Serializable {
     private Integer idTroubleCodesNames;
     @Basic(optional = false)
     @NotNull
-    @Size(min = 0, max = 10)
+    @Size(min = 1, max = 10)
     @Column(name = "code")
     private String code;
     @Basic(optional = false)
@@ -111,5 +111,5 @@ public class TroubleCodesNames implements Serializable {
     public String toString() {
         return "com.polsl.projektinzynierski.cartrackerapi.TroubleCodesNames[ idTroubleCodesNames=" + idTroubleCodesNames + " ]";
     }
-
+    
 }

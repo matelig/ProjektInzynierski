@@ -7,7 +7,7 @@
 
     <ui:define name="htmlHead">
         <meta name="description" content="Our Company Home Page" />
-        <title>Our Company - Home</title>        
+        <title>Car tracker portal - Settings</title>        
     </ui:define>
 
     <ui:define name="navigation">
@@ -15,66 +15,76 @@
     </ui:define>
 
     <ui:define name="main">
-        <div class="ui-g-4"/>
-        <div class="ui-g-4" align="center">
-            <p:panelGrid>
-                <p:row>
-                    <p:column>
-                        <p:outputLabel value="Pesel"/>
-                    </p:column>
-                    <p:column>
-                        <p:inputText value="#{loggedUser.pesel}" disabled="true" style="width: 100%"/>
-                    </p:column>
-                </p:row>
-                <p:row>
-                    <p:column>
-                        <p:outputLabel value="Name"/>
-                    </p:column>
-                    <p:column>
-                        <p:inputText value="#{loggedUser.userName}" style="width: 100%"/>
-                    </p:column>
-                </p:row>
-                <p:row>
-                    <p:column>
-                        <p:outputLabel value="Surname"/>
-                    </p:column>
-                    <p:column>
-                        <p:inputText value="#{loggedUser.userSurname}" style="width: 100%"/>
-                    </p:column>
-                </p:row>
-                <p:row>
-                    <p:column>
-                        <p:outputLabel value="Phone"/>
-                    </p:column>
-                    <p:column>
-                        <p:inputText value="#{loggedUser.phoneNumber}" style="width: 100%"/>
-                    </p:column>
-                </p:row>
-                <p:row>
-                    <p:column>
-                        <p:outputLabel value="E-mail"/>
-                    </p:column>
-                    <p:column>
-                        <p:inputText value="#{loggedUser.email}" style="width: 100%"/>
-                    </p:column>
-                </p:row>
-                <p:row>
-                    <p:column>
-                        <p:outputLabel value="Administrator account"/>
-                    </p:column>
-                    <p:column style="text-align: center;">
-                        <p:selectBooleanCheckbox value="#{loggedUser.administrator}" disabled="true"/>
-                    </p:column>                    
-                </p:row>
-            </p:panelGrid>
-            <div class="ui-g-6">
-                <p:commandButton value="Discard" action="index.xhtml?faces-redirect=true" style="width: 100px"/>
+        <ui:include src="dialogs/change-password-dialog.xhtml"/>
+        <h:form id="settingsForm" >
+            <p:growl id="errors" autoUpdate="true"/>       
+            <div class="ui-g-4"/>
+            <div class="ui-g-4" align="center">
+                <p:panelGrid>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel value="Pesel"/>
+                        </p:column>
+                        <p:column>
+                            <p:inputText value="#{currentUserSettings.pesel}" disabled="true" style="width: 100%"/>
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel value="Name"/>
+                        </p:column>
+                        <p:column>
+                            <p:inputText value="#{currentUserSettings.userName}" style="width: 100%"/>
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel value="Surname"/>
+                        </p:column>
+                        <p:column>
+                            <p:inputText value="#{currentUserSettings.userSurname}" style="width: 100%"/>
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel value="Phone"/>
+                        </p:column>
+                        <p:column>
+                            <p:inputText value="#{currentUserSettings.phoneNumber}" style="width: 100%"/>
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel value="E-mail"/>
+                        </p:column>
+                        <p:column>
+                            <p:inputText value="#{currentUserSettings.email}" style="width: 100%"/>
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel value="Administrator account"/>
+                        </p:column>
+                        <p:column style="text-align: center;">
+                            <p:selectBooleanCheckbox value="#{currentUserSettings.administrator}" disabled="true"/>
+                        </p:column>                    
+                    </p:row>
+                    <p:row>
+                        <p:column colspan="2" style="text-align: center">
+                            <p:commandButton value="Change password" action="#{currentUserSettings.openChangePasswordDialog()}" update="changePasswordDialogPanel"/>
+                        </p:column>
+                    </p:row>
+                </p:panelGrid>
+                <div class="ui-g-6">
+                    <p:commandButton value="Discard" action="index.xhtml?faces-redirect=true" style="width: 100px"/>
+                </div>
+                <div class="ui-g-6">
+                    <p:commandButton value="Save" action="#{currentUserSettings.update()}" style="width: 100px"/>
+                </div>
             </div>
-            <div class="ui-g-6">
-                <p:commandButton value="Save" action="#{loggedUser.update()}" process="@this" style="width: 100px"/>
-            </div>
-        </div>
 
+
+        </h:form>
     </ui:define>
 
 </ui:composition>

@@ -101,10 +101,10 @@ public class SettingsActivityFragment extends Fragment {
         adapter.setDropDownViewResource(R.layout.simple_spinner_dropdown_item);
         locationFrequencySpinner.setAdapter(adapter);
         locationFrequencySpinner.setOnItemSelectedListener(new SpinnerListener());
-        locationFrequencySpinner.setSelection(Hawk.get("selectedSpinnerItem",0));
-        locationSwitch.setChecked(Hawk.get("sendLocation",true));
+        locationFrequencySpinner.setSelection(Hawk.get("selectedSpinnerItem", 0));
+        locationSwitch.setChecked(Hawk.get("sendLocation", true));
         locationSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            Hawk.put("sendLocation",isChecked);
+            Hawk.put("sendLocation", isChecked);
         });
 
         logoutButton.setOnClickListener(v -> {
@@ -142,7 +142,7 @@ public class SettingsActivityFragment extends Fragment {
                 final ArrayAdapter<String> adapter1 = new ArrayAdapter<>(getActivity(), android.R.layout.select_dialog_singlechoice,
                         deviceStrs.toArray(new String[deviceStrs.size()]));
                 int selectedPosition = -1;
-                for (int i = 0 ; i<devices.size();i++) {
+                for (int i = 0; i < devices.size(); i++) {
                     if (devices.get(i).equals(Hawk.get(ApiHelper.OBD_DEVICE_ADDRESS))) {
                         selectedPosition = i;
                         break;
@@ -162,56 +162,6 @@ public class SettingsActivityFragment extends Fragment {
                 alertDialog.show();
             }
         });
-
         return rootView;
     }
-
-    private void addToDatabase() {
-        User user = Hawk.get(ApiHelper.USER);
-        DaoSession daoSession = ((CarApp) getActivity().getApplication()).getDaoSession();
-        RouteDataDao routeDataDao = daoSession.getRouteDataDao();
-        RouteData routeData = new RouteData();
-        routeData.setUserId(user.getId());
-        routeData.setStartDate(System.currentTimeMillis());
-        routeData.setRoadLength(2410.2154);
-        routeData.setVinNumber("123");
-
-        routeData.setUploadStatus(UploadStatus.READY_TO_UPLOAD);
-        routeDataDao.insert(routeData);
-
-
-        LocationDataDao locationDataDao = daoSession.getLocationDataDao();
-        LocationData locationData = new LocationData(System.currentTimeMillis(), 11.12, 12.11, routeData.getId());
-        locationDataDao.insert(locationData);
-
-        FuelConsumptionRateDataDao fuelConsumptionRateDataDao = daoSession.getFuelConsumptionRateDataDao();
-        FuelConsumptionRateData fuelConsumptionRateData = new FuelConsumptionRateData(routeData.getId(), 12.5f, System.currentTimeMillis());
-        fuelConsumptionRateDataDao.insert(fuelConsumptionRateData);
-
-        FuelLevelDataDao fuelLevelDataDao = daoSession.getFuelLevelDataDao();
-        FuelLevelData fuelLevelData = new FuelLevelData(routeData.getId(), 87.5f, System.currentTimeMillis());
-        fuelLevelDataDao.insert(fuelLevelData);
-
-        OilTemperatureDataDao oilTemperatureDataDao = daoSession.getOilTemperatureDataDao();
-        OilTemperatureData oilTemperatureData = new OilTemperatureData(routeData.getId(), 37.5f, System.currentTimeMillis());
-        oilTemperatureDataDao.insert(oilTemperatureData);
-
-        RPMDataDao rpmDataDao = daoSession.getRPMDataDao();
-        RPMData rpmData = new RPMData(routeData.getId(), System.currentTimeMillis(), 987);
-        rpmDataDao.insert(rpmData);
-
-        SpeedDataDao speedDataDao = daoSession.getSpeedDataDao();
-        SpeedData speedData = new SpeedData(routeData.getId(), 15, System.currentTimeMillis());
-        speedDataDao.insert(speedData);
-
-        TroubleCodesDataDao troubleCodesDataDao = daoSession.getTroubleCodesDataDao();
-        TroubleCodesData troubleCodesData = new TroubleCodesData(routeData.getId(), "15", System.currentTimeMillis(), 1);
-        troubleCodesDataDao.insert(troubleCodesData);
-        troubleCodesData = new TroubleCodesData(routeData.getId(), "15", System.currentTimeMillis() + 10000, 0);
-        troubleCodesDataDao.insert(troubleCodesData);
-
-        routeData.setEndDate(System.currentTimeMillis() + 100000);
-        routeDataDao.update(routeData);
-    }
-
 }

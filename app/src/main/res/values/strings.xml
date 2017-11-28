@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">EmployeeTracker</string>
+    <string name="app_name">Car Tracker</string>
     <string name="login_activity_button_string">Login</string>
     <string name="login_activity_name_string">Name:</string>
     <string name="login_activity_password_button">Password:</string>
@@ -25,7 +25,7 @@
     <string name="register_activity_button_click">Register</string>
     <string name="register">Register</string>
     <string name="login_failure">No internet connection</string>
-    <string name="wrong_user">No user in database</string>
+    <string name="wrong_user">Wrong credentials</string>
     <string name="logged_as_string">WELCOME</string>
     <string name="logout">Logout</string>
     <string name="send">SEND</string>
@@ -37,6 +37,8 @@
     <string name="obd_device">OBD Device</string>
     <string name="default_value">-</string>
     <string name="delete">Delete</string>
+    <string name="delete_route_successful">Delete successful</string>
+    <string name="route_string">Route</string>
     <string-array name="sending_frequency">
         <item>5 sec</item>
         <item>10 sec</item>

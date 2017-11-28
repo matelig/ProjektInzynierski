@@ -7,7 +7,7 @@
 
     <ui:define name="htmlHead">
         <meta name="description" content="Our Company Home Page" />
-        <title>Our Company - Home</title>
+        <title>Car tracker portal - Route list view</title>
     </ui:define>
 
     <ui:define name="navigation">
@@ -29,6 +29,7 @@
                              rowIndexVar="row"
                              rowStyleClass="#{row % 2 eq 0 ? 'row-even' : 'row-odd'}"
                              var="route"
+                             styleClass="ui-corner-all"
                              widgetVar="routeTable">
                     <p:column headerText="Name" style="background-color: inherit;text-align: center" sortBy="#{route.useridUser.name}" filterBy="#{route.useridUser.name}">
                         <h:outputText value="#{route.useridUser.name}"/>

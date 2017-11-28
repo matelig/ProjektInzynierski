@@ -29,7 +29,7 @@ public class ApiHelper {
             "November",
             "December"};
 
-    public class BluetoothStatus{
+    public class BluetoothStatus {
         public static final String DEVICE_ON = "ON";
         public static final String DEVICE_OFF = "OFF";
         public static final String TURING_ON = "TURNING ON";

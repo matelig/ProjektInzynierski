@@ -40,8 +40,6 @@ public class RouteMonthList extends AppCompatActivity {
     private List<RouteData> tracks = new ArrayList<>();
     private RouteListMonthAdapter tAdapter;
     private RecyclerView routeListView;
-    private Toast message;
-    private DaoMaster daoMaster;
     private DaoSession daoSession;
     private int year;
 
@@ -63,7 +61,7 @@ public class RouteMonthList extends AppCompatActivity {
         routeData1.finish();
         tracks.add(routeData1);
         for (int i = tracks.size() - 1; i >= 0; i--) {
-            if (tracks.get(i).getEndDate() == null|| tracks.get(i).getUserId()!=userId) {
+            if (tracks.get(i).getEndDate() == null || tracks.get(i).getUserId() != userId) {
                 tracks.remove(i);
             }
         }
@@ -87,8 +85,8 @@ public class RouteMonthList extends AppCompatActivity {
         routeListView = (RecyclerView) findViewById(R.id.route_recycler);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         routeListView.setLayoutManager(layoutManager);
-        DividerItemDecoration verticalDecoration = new DividerItemDecoration(routeListView.getContext(),DividerItemDecoration.VERTICAL);
-        Drawable verticalDivider = ContextCompat.getDrawable(this,R.drawable.vertical_list_divider);
+        DividerItemDecoration verticalDecoration = new DividerItemDecoration(routeListView.getContext(), DividerItemDecoration.VERTICAL);
+        Drawable verticalDivider = ContextCompat.getDrawable(this, R.drawable.vertical_list_divider);
         verticalDecoration.setDrawable(verticalDivider);
         routeListView.addItemDecoration(verticalDecoration);
         tAdapter = new RouteListMonthAdapter(monthNames, RouteMonthList.this, year);

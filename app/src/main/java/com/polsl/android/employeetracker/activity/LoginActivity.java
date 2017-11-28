@@ -20,6 +20,9 @@ import com.polsl.android.employeetracker.helper.ApiHelper;
 import com.polsl.android.employeetracker.R;
 import com.polsl.android.employeetracker.RESTApi.RESTServicesEndpoints;
 import com.polsl.android.employeetracker.RESTApi.RetrofitClient;
+import com.polsl.android.employeetracker.util.CryptoHash;
+
+import java.security.NoSuchAlgorithmException;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -55,7 +58,13 @@ public class LoginActivity extends AppCompatActivity {
         RESTServicesEndpoints endpoints = RetrofitClient.getApiService();
         User user = new User();
         user.setPesel(pesel.getText().toString());
-        user.setPassword(password.getText().toString());
+        String hashedPassword;
+        try {
+            hashedPassword = CryptoHash.hashPassword(password.getText().toString());
+        } catch (NoSuchAlgorithmException e) {
+            hashedPassword = password.getText().toString();
+        }
+        user.setPassword(hashedPassword);
 
         Call<User> calledUser = endpoints.login(user);
         calledUser.enqueue(new Callback<User>() {
@@ -65,7 +74,7 @@ public class LoginActivity extends AppCompatActivity {
                 if (loggedUser == null) {
                     Toast.makeText(context, R.string.wrong_user, Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(context, "logged as " + loggedUser.getName() + " " + loggedUser.getSurname(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "Logged as " + loggedUser.getName() + " " + loggedUser.getSurname(), Toast.LENGTH_SHORT).show();
                     Hawk.put(ApiHelper.USER, loggedUser);
                     Intent intent = new Intent(context, SlideActivityPager.class);
                     startActivity(intent);

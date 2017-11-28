@@ -7,7 +7,7 @@
 
     <ui:define name="htmlHead">
         <meta name="description" content="Our Company Home Page" />
-        <title>Our Company - Home</title>
+        <title>Car tracker portal - Last know locations</title>
         <script src="http://maps.google.com/maps/api/js?key=AIzaSyCoRgBWTUOwc82Jlfiz866dQfyL0YhSIVQ" 
         type="text/javascript"></script>
         
@@ -33,16 +33,17 @@
                 <p:dataTable 
                     value="#{lastKnowLocations.currentLocationList}" 
                     var="location"
+                    styleClass="ui-corner-all"
                     rowIndexVar="row"
                     id="locationDataTable"
                     rowStyleClass="#{row % 2 eq 0 ? 'row-even' : 'row-odd'}">
-                    <p:column headerText="Imię" style="background-color: inherit;text-align: center">
+                    <p:column headerText="Name" style="background-color: inherit;text-align: center">
                         <h:outputText value="#{location.useridUser.name}"/>
                     </p:column>
-                    <p:column headerText="Nazwisko" style="background-color: inherit;text-align: center">
+                    <p:column headerText="Surname" style="background-color: inherit;text-align: center">
                         <h:outputText value="#{location.useridUser.surname}"/>
                     </p:column>
-                    <p:column headerText="Data" style="background-color: inherit;text-align: center">
+                    <p:column headerText="Date" style="background-color: inherit;text-align: center">
                         <h:outputText value="#{location.calculatedDate}">
                             <f:convertDateTime pattern="dd.MM.yyyy HH:mm"/>
                         </h:outputText>
@@ -50,7 +51,7 @@
                     <p:column style="width: 50px; background-color: inherit;text-align: center">
                         <p:commandButton id="edit" style="width: 30px;height: 30px" icon="fa fa-edit" action="#{lastKnowLocations.showLocationDialog(location)}" update="locationDialog">                    
                         </p:commandButton>
-                        <p:tooltip for="edit" value="Edytuj" />
+                        <p:tooltip for="edit" value="Show on map" />
                     </p:column>
 
                 </p:dataTable>

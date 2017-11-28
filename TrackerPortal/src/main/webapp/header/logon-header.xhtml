@@ -6,20 +6,22 @@
       xmlns:f="http://java.sun.com/jsf/core" 
       xmlns:p="http://primefaces.org/ui">
 
-        <h:head>
-            <title>TODO supply a title</title>
-            <link rel="stylesheet" type="text/css" href="css/customStyles.css" />
-        </h:head>
-        <h:body>
-            <div class="ui-g-10">
-                <p:graphicImage value="resources/images/logo.png" />
-            </div>
-            
-            <div class="ui-g-2" align="right">
+    <h:head>
+        <title>TODO supply a title</title>
+        <link rel="stylesheet" type="text/css" href="css/customStyles.css" />
+    </h:head>
+    <h:body>
+        <div class="ui-g-10">
+            <p:graphicImage value="resources/images/logo.png" />
+        </div>
+        <div class="ui-g-2" style="display: table; height: 130px; overflow: hidden;">
+            <div  align="right" style="display: table-cell; vertical-align: middle">
                 <h:form>
                     <p:outputLabel value="#{loggedUser.userName} #{loggedUser.userSurname}"/>
                 </h:form>
             </div>
-        </h:body>
+        </div>
+
+    </h:body>
 
 </html>

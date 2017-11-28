@@ -49,6 +49,14 @@
                         <p:inputText value="#{userManagement.user.phoneNumber}"/>
                     </p:column>
                 </p:row>
+                <p:row>
+                    <p:column>
+                        <p:outputLabel value="Administrator"/>
+                    </p:column>
+                    <p:column>
+                        <p:selectBooleanCheckbox value="#{userManagement.user.administrator}" disabled="#{userManagement.user.pesel eq loggedUser.pesel}"/>
+                    </p:column>
+                </p:row>
                 <p:row >
                     <p:column colspan="2" style="text-align: center">
                         <p:commandButton  value="Zapisz" action="#{userManagement.editUser}" update="userManagementForm">

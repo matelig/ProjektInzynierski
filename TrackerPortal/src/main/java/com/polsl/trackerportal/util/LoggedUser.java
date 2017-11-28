@@ -7,6 +7,7 @@ package com.polsl.trackerportal.util;
 
 import com.polsl.trackerportal.database.entity.User;
 import java.io.Serializable;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -38,7 +39,7 @@ public class LoggedUser implements Serializable {
     private String email;
     private int phoneNumber;
     private String password;
-    
+
     @Resource
     UserTransaction userTransaction;
 
@@ -58,12 +59,21 @@ public class LoggedUser implements Serializable {
             return null;
         } else {
             User currentUser = userList.get(0);
-            if (password.equals(currentUser.getPassword())) {
+            String hashed;
+            try {
+                hashed = CryptoHash.hashPassword(password);
+            } catch (NoSuchAlgorithmException ex) {
+                hashed = password;
+            }
+            if (hashed.equals(currentUser.getPassword())) {
                 userName = currentUser.getName();
                 userSurname = currentUser.getSurname();
                 pesel = currentUser.getPesel();
-                phoneNumber = currentUser.getPhoneNumber();
+                if (currentUser.getPhoneNumber() != null) {
+                    phoneNumber = currentUser.getPhoneNumber();
+                }
                 email = currentUser.getEmail();
+                administrator = currentUser.getAdministrator();
 
                 context.getExternalContext().getSessionMap().put("user", currentUser);
                 return "index?faces-redirect=true";
@@ -80,21 +90,7 @@ public class LoggedUser implements Serializable {
         return "login?faces-redirect=true";
     }
 
-    public void update() {
-        try {
-            userTransaction.begin();
-            User user = (User) entityManager.createNamedQuery("User.findByPesel").setParameter("pesel", pesel).getSingleResult();
-            user.setPhoneNumber(phoneNumber);
-            user.setEmail(email);
-            user.setName(userName);
-            user.setSurname(userSurname);
-            entityManager.merge(user);            
-            userTransaction.commit();
-        } catch (NotSupportedException | SystemException | RollbackException | HeuristicMixedException | HeuristicRollbackException | SecurityException | IllegalStateException  ex) {
-            Logger.getLogger(LoggedUser.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-    }
+    
 
     public String getUserName() {
         return userName;

@@ -19,7 +19,8 @@ import retrofit2.http.Path;
 public interface RESTServicesEndpoints {
 
     @Headers("Content-Type: application/json")
-    @POST("user/login") //<- trzeba mieć w klasie User w api jakas deklaracje login żeby się odwołać
+    @POST("user/login")
+        //<- trzeba mieć w klasie User w api jakas deklaracje login żeby się odwołać
     Call<User> login(@Body User user);
 
     @Headers("Content-Type: application/json")
@@ -28,11 +29,13 @@ public interface RESTServicesEndpoints {
 
 
     @Headers("Content-Type: application/json")
-    @GET("user/{id}")  //pobieranie usera po ID
+    @GET("user/{id}")
+        //pobieranie usera po ID
     Call<User> user(@Path("id") int id);
 
     @Headers("Content-Type: application/json")
-    @GET("user")   //pobieranie listy userów
+    @GET("user")
+        //pobieranie listy userów
     Call<List<User>> usersList();
 
     @Headers("Content-Type: application/json")

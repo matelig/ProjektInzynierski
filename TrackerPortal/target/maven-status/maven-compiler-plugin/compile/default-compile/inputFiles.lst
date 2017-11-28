@@ -6,6 +6,7 @@ D:\Inzynierka nowe\employeetracker\TrackerPortal\src\main\java\com\polsl\tracker
 D:\Inzynierka nowe\employeetracker\TrackerPortal\src\main\java\com\polsl\trackerportal\util\ResourceFilter.java
 D:\Inzynierka nowe\employeetracker\TrackerPortal\src\main\java\com\polsl\trackerportal\MenuView.java
 D:\Inzynierka nowe\employeetracker\TrackerPortal\src\main\java\com\polsl\trackerportal\util\DateController.java
+D:\Inzynierka nowe\employeetracker\TrackerPortal\src\main\java\com\polsl\trackerportal\util\CryptoHash.java
 D:\Inzynierka nowe\employeetracker\TrackerPortal\src\main\java\com\polsl\trackerportal\util\LoggedUser.java
 D:\Inzynierka nowe\employeetracker\TrackerPortal\src\main\java\com\polsl\trackerportal\database\entity\CurrentLocation.java
 D:\Inzynierka nowe\employeetracker\TrackerPortal\src\main\java\com\polsl\trackerportal\database\entity\FuelLevel.java
@@ -19,6 +20,7 @@ D:\Inzynierka nowe\employeetracker\TrackerPortal\src\main\java\com\polsl\tracker
 D:\Inzynierka nowe\employeetracker\TrackerPortal\src\main\java\com\polsl\trackerportal\RouteDetails.java
 D:\Inzynierka nowe\employeetracker\TrackerPortal\src\main\java\com\polsl\trackerportal\database\entity\FuelComsumptionRate.java
 D:\Inzynierka nowe\employeetracker\TrackerPortal\src\main\java\com\polsl\trackerportal\CarManagement.java
+D:\Inzynierka nowe\employeetracker\TrackerPortal\src\main\java\com\polsl\trackerportal\util\Const.java
 D:\Inzynierka nowe\employeetracker\TrackerPortal\src\main\java\com\polsl\trackerportal\database\entity\Location.java
 D:\Inzynierka nowe\employeetracker\TrackerPortal\src\main\java\com\polsl\trackerportal\UserStatistics.java
 D:\Inzynierka nowe\employeetracker\TrackerPortal\src\main\java\com\polsl\trackerportal\database\entity\TroubleCodes.java

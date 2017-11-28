@@ -65,7 +65,7 @@ public class User implements Serializable {
     private String pesel;
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 45)
+    @Size(min = 1, max = 64)
     @Column(name = "password")
     private String password;
     @Column(name = "phoneNumber")
@@ -155,12 +155,12 @@ public class User implements Serializable {
         this.email = email;
     }
 
-    public short getAdministrator() {
-        return administrator;
+    public boolean getAdministrator() {
+        return administrator!=0;
     }
 
-    public void setAdministrator(short administrator) {
-        this.administrator = administrator;
+    public void setAdministrator(boolean administrator) {
+        this.administrator = administrator ? (short)1 : (short)0 ;
     }
 
     @XmlTransient

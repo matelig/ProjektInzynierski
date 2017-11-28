@@ -79,9 +79,9 @@ public class MainActivityFragment extends Fragment {
         public void onReceive(Context context, Intent intent) {
             final String action = intent.getAction();
             if (action.equals(LocationManager.MODE_CHANGED_ACTION)) {
-               ContentResolver contentResolver = getContext().getContentResolver();
-               final int state = Settings.Secure.getInt(contentResolver, Settings.Secure.LOCATION_MODE, Settings.Secure.LOCATION_MODE_OFF);
-               setupGPSState(state);
+                ContentResolver contentResolver = getContext().getContentResolver();
+                final int state = Settings.Secure.getInt(contentResolver, Settings.Secure.LOCATION_MODE, Settings.Secure.LOCATION_MODE_OFF);
+                setupGPSState(state);
             }
         }
     };
@@ -107,9 +107,9 @@ public class MainActivityFragment extends Fragment {
     private final BroadcastReceiver locationReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            Double distance = intent.getDoubleExtra("distance",0.0);
-            distance = distance/1000.0;
-            roadLength.setText(String.format("%d",Math.round(distance)));
+            Double distance = intent.getDoubleExtra("distance", 0.0);
+            distance = distance / 1000.0;
+            roadLength.setText(String.format("%d", Math.round(distance)));
         }
     };
 
@@ -117,14 +117,14 @@ public class MainActivityFragment extends Fragment {
         @Override
         public void onReceive(Context context, Intent intent) {
 
-            long hour = intent.getLongExtra("hour",0);
-            long minute = intent.getLongExtra("minute",0);
+            long hour = intent.getLongExtra("hour", 0);
+            long minute = intent.getLongExtra("minute", 0);
             serviceTime.setText(timeFormat.format(hour) + ":" + timeFormat.format(minute));
         }
     };
 
     private void setupBluetoothDeviceState(int state) {
-        switch(state) {
+        switch (state) {
             case BluetoothAdapter.STATE_OFF:
                 bluetoothStatusText.setText(ApiHelper.BluetoothStatus.DEVICE_OFF);
                 bluetoothStatusText.setTextColor(Color.RED);
@@ -162,18 +162,6 @@ public class MainActivityFragment extends Fragment {
                 break;
 
         }
-
-        /*
-        if (mode != Settings.Secure.LOCATION_MODE_OFF) {
-      if (mode == Settings.Secure.LOCATION_MODE_HIGH_ACCURACY) {
-        locationMode = "High accuracy. Uses GPS, Wi-Fi, and mobile networks to determine location";
-      } else if (mode == Settings.Secure.LOCATION_MODE_SENSORS_ONLY) {
-          locationMode = "Device only. Uses GPS to determine location";
-      } else if (mode == Settings.Secure.LOCATION_MODE_BATTERY_SAVING) {
-          locationMode = "Battery saving. Uses Wi-Fi and mobile networks to determine location";
-      }
-    }
-         */
     }
 
     @Nullable
@@ -182,7 +170,7 @@ public class MainActivityFragment extends Fragment {
         ViewGroup rootView = (ViewGroup) inflater.inflate(
                 R.layout.fragment_activity_main, container, false);
 
-        ButterKnife.bind(this, rootView); //jedyne słuszne bindowanie widoku z polami
+        ButterKnife.bind(this, rootView);
         ContentResolver contentResolver = getContext().getContentResolver();
         int state = Settings.Secure.getInt(contentResolver, Settings.Secure.LOCATION_MODE, Settings.Secure.LOCATION_MODE_OFF);
         setupGPSState(state);
@@ -197,19 +185,19 @@ public class MainActivityFragment extends Fragment {
         getActivity().registerReceiver(bluetoothStateReceiver, filter1);
 
         IntentFilter obdFilter = new IntentFilter("OBDStatus");
-        getActivity().registerReceiver(OBDStatusReceiver,obdFilter);
+        getActivity().registerReceiver(OBDStatusReceiver, obdFilter);
 
         IntentFilter obdGetReadings = new IntentFilter("OBDReadings");
-        getActivity().registerReceiver(OBDReadings,obdGetReadings);
+        getActivity().registerReceiver(OBDReadings, obdGetReadings);
 
         IntentFilter locationFilter = new IntentFilter("LocationData");
-        getActivity().registerReceiver(locationReceiver,locationFilter);
+        getActivity().registerReceiver(locationReceiver, locationFilter);
 
         IntentFilter timeFilter = new IntentFilter("elapsedTime");
-        getActivity().registerReceiver(timeReceiver,timeFilter);
+        getActivity().registerReceiver(timeReceiver, timeFilter);
 
         IntentFilter gpsFilter = new IntentFilter(LocationManager.MODE_CHANGED_ACTION);
-        getActivity().registerReceiver(GPSStateReceiver,gpsFilter);
+        getActivity().registerReceiver(GPSStateReceiver, gpsFilter);
 
         serviceButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -219,9 +207,9 @@ public class MainActivityFragment extends Fragment {
                     serviceButton.setText(R.string.stop_service);
                     Intent intent = new Intent(getActivity(), LocationService.class);
 //                    SharedPreferences prefs = getContext().getSharedPreferences(getContext().getPackageName(), Context.MODE_PRIVATE);
-                    intent.putExtra(ApiHelper.OBD_DEVICE_ADDRESS, Hawk.get(ApiHelper.OBD_DEVICE_ADDRESS,""));
-                    intent.putExtra("frequency",Hawk.get("frequency",1));
-                    intent.putExtra("sendLocation", Hawk.get("sendLocation",true));
+                    intent.putExtra(ApiHelper.OBD_DEVICE_ADDRESS, Hawk.get(ApiHelper.OBD_DEVICE_ADDRESS, ""));
+                    intent.putExtra("frequency", Hawk.get("frequency", 1));
+                    intent.putExtra("sendLocation", Hawk.get("sendLocation", true));
                     User user = Hawk.get(ApiHelper.USER);
                     intent.putExtra(ApiHelper.USER, user);
                     intent.setAction(ApiHelper.START_SERVICE);

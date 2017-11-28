@@ -48,7 +48,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mapFragment.getMapAsync(this);
 
         Intent intent = getIntent();
-        Long routeId = intent.getLongExtra(ApiHelper.ROUTE_ID,0);
+        Long routeId = intent.getLongExtra(ApiHelper.ROUTE_ID, 0);
         daoSession = ((CarApp) getApplication()).getDaoSession();
         routeDataDao = daoSession.getRouteDataDao();
         routeData = routeDataDao.load(routeId);
@@ -64,9 +64,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         DateFormat dateFormat = DateFormat.getDateTimeInstance();
         PolylineOptions polylineOptions = new PolylineOptions();
 
-        for (int i = 0;i<locationData.size();i++) {
+        for (int i = 0; i < locationData.size(); i++) {
             LocationData ld = locationData.get(i);
-            LatLng coords = new LatLng(ld.getLatitude(),ld.getLongitude());
+            LatLng coords = new LatLng(ld.getLatitude(), ld.getLongitude());
             Marker marker = mMap.addMarker(new MarkerOptions().position(coords)
                     .title(dateFormat.format(new Date(ld.getTimestamp())))
                     .visible(false));
@@ -74,7 +74,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             polylineOptions.add(coords);
         }
         markers.get(0).setVisible(true);
-        markers.get(markers.size()-1).setVisible(true);
+        markers.get(markers.size() - 1).setVisible(true);
         polylineOptions.width(20.0f);
         mMap.addPolyline(polylineOptions);
         mMap.setPadding(padding, padding, padding, padding);

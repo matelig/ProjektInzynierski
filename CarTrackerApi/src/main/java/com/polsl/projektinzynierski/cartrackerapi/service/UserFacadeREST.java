@@ -57,11 +57,16 @@ public class UserFacadeREST extends AbstractFacade<User> {
     @Consumes({MediaType.APPLICATION_JSON})
     @Produces({MediaType.APPLICATION_JSON})
     public User checkUser(User entity) {
-        List<User> userList = em.createNamedQuery("User.findByPesel").setParameter("pesel", entity.getPesel()).getResultList();
-        if (userList.isEmpty()) {
+        em.getEntityManagerFactory().getCache().evictAll();
+        User user = (User) em.createNamedQuery("User.findByPesel").setParameter("pesel", entity.getPesel()).getSingleResult();
+        if (user == null) {
             return null;
         } else {
-            return userList.get(0);
+            if (entity.getPassword().equals(user.getPassword())) {
+                return user;
+            } else {
+                return null;
+            }
         }
     }
 
