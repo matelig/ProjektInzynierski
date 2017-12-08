@@ -5,6 +5,8 @@
  */
 package com.polsl.projektinzynierski.cartrackerapi.service;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.polsl.projektinzynierski.cartrackerapi.Route;
 import com.polsl.projektinzynierski.cartrackerapi.User;
 import java.util.Collection;
@@ -56,16 +58,24 @@ public class UserFacadeREST extends AbstractFacade<User> {
     @POST
     @Path("login")
     @Consumes({MediaType.APPLICATION_JSON})
-    @Produces({MediaType.APPLICATION_JSON})
     public Response checkUser(User entity) {
         em.getEntityManagerFactory().getCache().evictAll();
         
-        User user = (User) em.createNamedQuery("User.findByPesel").setParameter("pesel", entity.getPesel()).getSingleResult();
-        if (user == null) {
+        List<User> users = em.createNamedQuery("User.findByPesel").setParameter("pesel", entity.getPesel()).getResultList();
+        if (users.isEmpty()) {
+            //return Response.serverError().entity("User not found in database").build();
             return Response.status(Response.Status.NOT_FOUND).entity("User not found in database").build();
         } else {
+            User user = users.get(0);
             if (entity.getPassword().equals(user.getPassword())) {
-                return Response.ok(user).build();
+                User returnedUser = new User();
+                returnedUser.setIdUser(user.getIdUser());
+                returnedUser.setName(user.getName());
+                returnedUser.setSurname(user.getSurname());
+                returnedUser.setPesel(user.getPesel());
+                Gson g = new Gson();
+                String json = g.toJson(returnedUser);
+                return Response.ok(json,MediaType.APPLICATION_JSON).build();
             } else {
                 return Response.status(Response.Status.NOT_FOUND).entity("User's password is incorrect").build();
             }
