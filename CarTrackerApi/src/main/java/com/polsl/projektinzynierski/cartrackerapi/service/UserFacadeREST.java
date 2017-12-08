@@ -21,6 +21,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 /**
  *
@@ -56,16 +57,17 @@ public class UserFacadeREST extends AbstractFacade<User> {
     @Path("login")
     @Consumes({MediaType.APPLICATION_JSON})
     @Produces({MediaType.APPLICATION_JSON})
-    public User checkUser(User entity) {
+    public Response checkUser(User entity) {
         em.getEntityManagerFactory().getCache().evictAll();
+        
         User user = (User) em.createNamedQuery("User.findByPesel").setParameter("pesel", entity.getPesel()).getSingleResult();
         if (user == null) {
-            return null;
+            return Response.status(Response.Status.NOT_FOUND).entity("User not found in database").build();
         } else {
             if (entity.getPassword().equals(user.getPassword())) {
-                return user;
+                return Response.ok(user).build();
             } else {
-                return null;
+                return Response.status(Response.Status.NOT_FOUND).entity("User's password is incorrect").build();
             }
         }
     }

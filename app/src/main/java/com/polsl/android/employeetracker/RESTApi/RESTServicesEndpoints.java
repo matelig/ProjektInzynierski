@@ -21,7 +21,7 @@ public interface RESTServicesEndpoints {
     @Headers("Content-Type: application/json")
     @POST("user/login")
         //<- trzeba mieć w klasie User w api jakas deklaracje login żeby się odwołać
-    Call<User> login(@Body User user);
+    Call<ResponseBody> login(@Body User user);
 
     @Headers("Content-Type: application/json")
     @POST("user/create")

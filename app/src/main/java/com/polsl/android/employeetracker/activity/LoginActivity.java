@@ -14,6 +14,8 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.orhanobut.hawk.Hawk;
 import com.polsl.android.employeetracker.entity.User;
 import com.polsl.android.employeetracker.helper.ApiHelper;
@@ -22,10 +24,12 @@ import com.polsl.android.employeetracker.RESTApi.RESTServicesEndpoints;
 import com.polsl.android.employeetracker.RESTApi.RetrofitClient;
 import com.polsl.android.employeetracker.util.CryptoHash;
 
+import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -66,24 +70,30 @@ public class LoginActivity extends AppCompatActivity {
         }
         user.setPassword(hashedPassword);
 
-        Call<User> calledUser = endpoints.login(user);
-        calledUser.enqueue(new Callback<User>() {
+        Call<ResponseBody> calledUser = endpoints.login(user);
+        calledUser.enqueue(new Callback<ResponseBody>() {
             @Override
-            public void onResponse(Call<User> call, Response<User> response) {
-                User loggedUser = response.body();
-                if (loggedUser == null) {
-                    Toast.makeText(context, R.string.wrong_user, Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(context, "Logged as " + loggedUser.getName() + " " + loggedUser.getSurname(), Toast.LENGTH_SHORT).show();
-                    Hawk.put(ApiHelper.USER, loggedUser);
-                    Intent intent = new Intent(context, SlideActivityPager.class);
-                    startActivity(intent);
-                    finish();
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                try {
+                    if (response.code() == 404) {
+                        Toast.makeText(context, response.errorBody().string(), Toast.LENGTH_SHORT).show();
+                    } else {
+                        String loggedUserJSON = response.body().string();
+                        Gson gson = new GsonBuilder().create();
+                        User loggedUser = gson.fromJson(loggedUserJSON,User.class);
+                        Toast.makeText(context, "Logged as " + loggedUser.getName() + " " + loggedUser.getSurname(), Toast.LENGTH_SHORT).show();
+                        Hawk.put(ApiHelper.USER, loggedUser);
+                        Intent intent = new Intent(context, SlideActivityPager.class);
+                        startActivity(intent);
+                        finish();
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
             }
 
             @Override
-            public void onFailure(Call<User> call, Throwable t) {
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
                 Toast.makeText(context, R.string.login_failure, Toast.LENGTH_SHORT).show();
             }
         });

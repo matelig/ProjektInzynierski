@@ -11,6 +11,7 @@ import android.util.Log;
 import com.github.pires.obd.commands.SpeedCommand;
 import com.github.pires.obd.commands.control.TroubleCodesCommand;
 import com.github.pires.obd.commands.control.VinCommand;
+import com.github.pires.obd.commands.engine.LoadCommand;
 import com.github.pires.obd.commands.engine.OilTempCommand;
 import com.github.pires.obd.commands.engine.RPMCommand;
 import com.github.pires.obd.commands.fuel.ConsumptionRateCommand;
@@ -28,6 +29,7 @@ import com.github.pires.obd.exceptions.NoDataException;
 import com.github.pires.obd.exceptions.NonNumericResponseException;
 import com.github.pires.obd.exceptions.UnableToConnectException;
 import com.github.pires.obd.exceptions.UnsupportedCommandException;
+import com.polsl.android.employeetracker.R;
 import com.polsl.android.employeetracker.commands.ObdSetDefaultCommand;
 import com.polsl.android.employeetracker.entity.DaoMaster;
 import com.polsl.android.employeetracker.entity.DaoSession;
@@ -233,6 +235,7 @@ public class OBDInterface {
                         boolean goodCodes = true;
                         boolean goodTemperature = true;
                         boolean goodLevel = true;
+                        boolean goodLoad = true;
                         try {
                             ObdSetDefaultCommand defaultCommand = new ObdSetDefaultCommand();
                             defaultCommand.setResponseTimeDelay(responseDelay);
@@ -298,6 +301,7 @@ public class OBDInterface {
                                 OilTempCommand oilTempCommand = new OilTempCommand();
                                 FuelLevelCommand fuelLevelCommand = new FuelLevelCommand();
                                 ConsumptionRateCommand consumptionRateCommand = new ConsumptionRateCommand();
+                                LoadCommand engineLoad = new LoadCommand();
 
 
                                 engineRpmCommand.setResponseTimeDelay(responseDelay);
@@ -306,11 +310,13 @@ public class OBDInterface {
                                 oilTempCommand.setResponseTimeDelay(responseDelay);
                                 fuelLevelCommand.setResponseTimeDelay(responseDelay);
                                 consumptionRateCommand.setResponseTimeDelay(responseDelay);
+                                engineLoad.setResponseTimeDelay(responseDelay);
 
                                 try {
                                     troubleCodesCommand.run(socket.getInputStream(), socket.getOutputStream());
                                     String[] splitted = troubleCodesCommand.getCalculatedResult().split("\n");
                                     Set<String> newCodes = new HashSet<>();
+                                    newCodes.add(context.getString(R.string.engine_runtime));
                                     Set<String> tempCodes = new HashSet<>();
                                     for (String s : splitted) {
                                         newCodes.add(s);
@@ -360,6 +366,17 @@ public class OBDInterface {
                                 } catch (IndexOutOfBoundsException | UnsupportedCommandException | NonNumericResponseException e) {
                                 }
                                 try {
+                                    engineLoad.run(socket.getInputStream(), socket.getOutputStream());
+//                                    SpeedData speedData = new SpeedData(routeId, speedCommand.getMetricSpeed(), System.currentTimeMillis());
+//                                    speedDataDao.insert(speedData);
+//                                    OBDReadings.putExtra("speed", String.valueOf(speedCommand.getMetricSpeed()));
+//                                    goodSpeed = true;
+                                } catch (NoDataException e) {
+                                    goodLoad = false;
+                                    OBDReadings.putExtra("speed", "-");
+                                } catch (IndexOutOfBoundsException | UnsupportedCommandException | NonNumericResponseException e) {
+                                }
+                                try {
                                     oilTempCommand.run(socket.getInputStream(), socket.getOutputStream());
                                     OilTemperatureData oilTemperatureData = new OilTemperatureData(routeId, oilTempCommand.getTemperature(), System.currentTimeMillis());
                                     oilTemperatureDataDao.insert(oilTemperatureData);
@@ -399,7 +416,7 @@ public class OBDInterface {
                                 }
 
                                 context.sendBroadcast(OBDReadings);
-                                if ((!goodCodes) && (!goodRPM) && (!goodSpeed) && (!goodTemperature) && (!goodConsumption) && (!goodLevel)) {
+                                if ((!goodCodes) && (!goodRPM) && (!goodSpeed) && (!goodTemperature) && (!goodConsumption) && (!goodLevel) &&(!goodLoad)) {
                                     closeConnection("Reconnect");
                                 }
                             } catch (IOException e) {

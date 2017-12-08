@@ -39,6 +39,7 @@
     <string name="delete">Delete</string>
     <string name="delete_route_successful">Delete successful</string>
     <string name="route_string">Route</string>
+    <string name="engine_runtime">Engine runtime</string>
     <string-array name="sending_frequency">
         <item>5 sec</item>
         <item>10 sec</item>
