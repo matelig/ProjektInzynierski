@@ -7,7 +7,7 @@ import javax.persistence.metamodel.CollectionAttribute;
 import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.StaticMetamodel;
 
-@Generated(value="EclipseLink-2.5.2.v20140319-rNA", date="2017-11-28T23:08:34")
+@Generated(value="EclipseLink-2.5.2.v20140319-rNA", date="2017-12-10T23:19:57")
 @StaticMetamodel(Car.class)
 public class Car_ { 
 
@@ -16,6 +16,6 @@ public class Car_ {
     public static volatile SingularAttribute<Car, String> model;
     public static volatile SingularAttribute<Car, String> make;
     public static volatile CollectionAttribute<Car, CurrentLocation> currentLocationCollection;
-    public static volatile SingularAttribute<Car, Long> idCar;
+    public static volatile SingularAttribute<Car, Integer> idCar;
 
 }

@@ -61,7 +61,7 @@ public class UserFacadeREST extends AbstractFacade<User> {
     public Response checkUser(User entity) {
         em.getEntityManagerFactory().getCache().evictAll();
         
-        List<User> users = em.createNamedQuery("User.findByPesel").setParameter("pesel", entity.getPesel()).getResultList();
+        List<User> users = em.createNamedQuery("User.findByLogin").setParameter("login", entity.getPesel()).getResultList();
         if (users.isEmpty()) {
             //return Response.serverError().entity("User not found in database").build();
             return Response.status(Response.Status.NOT_FOUND).entity("User not found in database").build();

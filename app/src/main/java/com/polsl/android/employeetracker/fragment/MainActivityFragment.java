@@ -1,18 +1,23 @@
 package com.polsl.android.employeetracker.fragment;
 
+import android.Manifest;
 import android.app.ActivityManager;
+import android.app.AlertDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -202,23 +207,37 @@ public class MainActivityFragment extends Fragment {
         serviceButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String startServiceText = getResources().getString(R.string.start_service);
-                if (serviceButton.getText().equals(startServiceText)) {
-                    serviceButton.setText(R.string.stop_service);
-                    Intent intent = new Intent(getActivity(), LocationService.class);
-//                    SharedPreferences prefs = getContext().getSharedPreferences(getContext().getPackageName(), Context.MODE_PRIVATE);
-                    intent.putExtra(ApiHelper.OBD_DEVICE_ADDRESS, Hawk.get(ApiHelper.OBD_DEVICE_ADDRESS, ""));
-                    intent.putExtra("frequency", Hawk.get("frequency", 1));
-                    intent.putExtra("sendLocation", Hawk.get("sendLocation", true));
-                    User user = Hawk.get(ApiHelper.USER);
-                    intent.putExtra(ApiHelper.USER, user);
-                    intent.setAction(ApiHelper.START_SERVICE);
-                    getActivity().startService(intent);
+                if (ContextCompat.checkSelfPermission(getContext(),
+                        Manifest.permission.ACCESS_FINE_LOCATION)
+                        == PackageManager.PERMISSION_GRANTED) {
+                    String startServiceText = getResources().getString(R.string.start_service);
+                    if (serviceButton.getText().equals(startServiceText)) {
+                        serviceButton.setText(R.string.stop_service);
+                        Intent intent = new Intent(getActivity(), LocationService.class);
+                        intent.putExtra(ApiHelper.OBD_DEVICE_ADDRESS, Hawk.get(ApiHelper.OBD_DEVICE_ADDRESS, ""));
+                        intent.putExtra(ApiHelper.LOCATION_FREQUENCY, Hawk.get(ApiHelper.LOCATION_FREQUENCY, 1));
+                        intent.putExtra(ApiHelper.SEND_LOCATION, Hawk.get(ApiHelper.SEND_LOCATION, true));
+                        User user = Hawk.get(ApiHelper.USER);
+                        intent.putExtra(ApiHelper.USER, user);
+                        intent.setAction(ApiHelper.START_SERVICE);
+                        getActivity().startService(intent);
+                    } else {
+                        serviceButton.setText(R.string.start_service);
+                        Intent intent = new Intent(getActivity(), LocationService.class);
+                        intent.setAction(ApiHelper.STOP_SERVICE);
+                        getActivity().startService(intent);
+                    }
                 } else {
-                    serviceButton.setText(R.string.start_service);
-                    Intent intent = new Intent(getActivity(), LocationService.class);
-                    intent.setAction(ApiHelper.STOP_SERVICE);
-                    getActivity().startService(intent);
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                    builder.setMessage("Application do not have permission to checking device location. Change that permission in device's options.")
+                            .setCancelable(false)
+                            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    dialog.cancel();
+                                }
+                            });
+                    AlertDialog alert = builder.create();
+                    alert.show();
                 }
             }
         });

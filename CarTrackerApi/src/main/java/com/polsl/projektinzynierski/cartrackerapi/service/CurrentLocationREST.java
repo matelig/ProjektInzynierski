@@ -5,6 +5,7 @@
  */
 package com.polsl.projektinzynierski.cartrackerapi.service;
 
+import com.polsl.projektinzynierski.cartrackerapi.Car;
 import com.polsl.projektinzynierski.cartrackerapi.CurrentLocation;
 import com.polsl.projektinzynierski.cartrackerapi.CurrentLocationJSON;
 import com.polsl.projektinzynierski.cartrackerapi.User;
@@ -51,11 +52,26 @@ public class CurrentLocationREST extends AbstractFacade<CurrentLocation> {
 
         List<User> users = em.createNamedQuery("User.findByIdUser").setParameter("idUser", cl.getUserId()).getResultList();
         List<CurrentLocation> usersLocation = new ArrayList<>(users.get(0).getCurrentLocationCollection());
+        Car usedCar = null;
+        if (cl.getCarVin()==null ||cl.getCarVin().isEmpty()) {
+            usedCar = null;
+        } else {
+            List<Car> cars = em.createNamedQuery("Car.findByVinNumber").setParameter("vinNumber", cl.getCarVin()).getResultList();
+            if (cars.isEmpty()) {
+            usedCar = new Car();
+            usedCar.setMake("unknown");
+            usedCar.setModel("unknown");
+            usedCar.setVinNumber(cl.getCarVin());
+            em.persist(usedCar);
+        }           
+        cars = em.createNamedQuery("Car.findByVinNumber").setParameter("vinNumber", cl.getCarVin()).getResultList();
+        }
         if (usersLocation.isEmpty()) {
             CurrentLocation currentLocation = new CurrentLocation();
             currentLocation.setUseridUser(users.get(0));
             currentLocation.setLatitude(cl.getLatitude());
             currentLocation.setLongitude(cl.getLongitude());
+            currentLocation.setCaridCar(usedCar);
             currentLocation.setTimestamp(cl.getTimestamp());
             super.create(currentLocation);
             
@@ -66,6 +82,7 @@ public class CurrentLocationREST extends AbstractFacade<CurrentLocation> {
             CurrentLocation currentLocation = usersLocation.get(0);
             currentLocation.setLatitude(cl.getLatitude());
             currentLocation.setLongitude(cl.getLongitude());
+            currentLocation.setCaridCar(usedCar);
             currentLocation.setTimestamp(cl.getTimestamp());
             super.edit(currentLocation);
         }

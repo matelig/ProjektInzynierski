@@ -106,7 +106,7 @@ public class UserManagement implements Serializable {
         
         try {
             userTransaction.begin();
-            User user = (User) entityManager.createNamedQuery("User.findByPesel").setParameter("pesel", this.user.getPesel()).getSingleResult();
+            User user = (User) entityManager.createNamedQuery("User.findByLogin").setParameter("login", this.user.getLogin()).getSingleResult();
             user.setPhoneNumber(this.user.getPhoneNumber());
             user.setEmail(this.user.getEmail());
             user.setName(this.user.getName());
@@ -141,7 +141,7 @@ public class UserManagement implements Serializable {
         return (user.getName() == null || user.getName().isEmpty()
                 || user.getSurname() == null || user.getSurname().isEmpty()
                 || user.getPassword() == null || user.getPassword().isEmpty()
-                || user.getPesel() == null || user.getPesel().isEmpty());
+                || user.getLogin()== null || user.getLogin().isEmpty());
     }
 
     public void openAddUserDialog() {
@@ -157,7 +157,7 @@ public class UserManagement implements Serializable {
     }
 
     private boolean checkUniquePesel() {
-        List<User> users = entityManager.createNamedQuery("User.findByPesel").setParameter("pesel", user.getPesel()).getResultList();
+        List<User> users = entityManager.createNamedQuery("User.findByLogin").setParameter("login", user.getLogin()).getResultList();
         return (!users.isEmpty());
     }
 

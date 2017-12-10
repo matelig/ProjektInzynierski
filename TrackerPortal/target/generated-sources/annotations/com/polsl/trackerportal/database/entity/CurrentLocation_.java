@@ -2,11 +2,12 @@ package com.polsl.trackerportal.database.entity;
 
 import com.polsl.trackerportal.database.entity.Car;
 import com.polsl.trackerportal.database.entity.User;
+import java.math.BigInteger;
 import javax.annotation.Generated;
 import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.StaticMetamodel;
 
-@Generated(value="EclipseLink-2.5.2.v20140319-rNA", date="2017-11-28T23:08:34")
+@Generated(value="EclipseLink-2.5.2.v20140319-rNA", date="2017-12-10T23:19:57")
 @StaticMetamodel(CurrentLocation.class)
 public class CurrentLocation_ { 
 
@@ -15,6 +16,6 @@ public class CurrentLocation_ {
     public static volatile SingularAttribute<CurrentLocation, Double> latitude;
     public static volatile SingularAttribute<CurrentLocation, Car> caridCar;
     public static volatile SingularAttribute<CurrentLocation, Double> longitude;
-    public static volatile SingularAttribute<CurrentLocation, Long> timestamp;
+    public static volatile SingularAttribute<CurrentLocation, BigInteger> timestamp;
 
 }

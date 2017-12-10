@@ -1,12 +1,11 @@
 /*
-(c) Systemy Przetwarzania i Integracji Danych SPIID sp. z o.o.
-1:1 Realny obraz Twojej firmy
-*/
-
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package com.polsl.trackerportal.database.entity;
 
 import java.io.Serializable;
-import java.math.BigInteger;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -18,11 +17,12 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author Mateusz Ligus <mateusz.ligus@spiid.pl>
+ * @author m_lig
  */
 @Entity
 @Table(name = "oilTemperature")
@@ -40,11 +40,14 @@ public class OilTemperature implements Serializable {
     @Basic(optional = false)
     @Column(name = "idoilTemperature")
     private Integer idoilTemperature;
-    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
+    @Basic(optional = false)
+    @NotNull
     @Column(name = "value")
-    private Double value;
+    private double value;
+    @Basic(optional = false)
+    @NotNull
     @Column(name = "timestamp")
-    private BigInteger timestamp;
+    private Long timestamp;
     @JoinColumn(name = "route_idRoute", referencedColumnName = "idRoute")
     @ManyToOne(optional = false)
     private Route routeidRoute;
@@ -56,6 +59,12 @@ public class OilTemperature implements Serializable {
         this.idoilTemperature = idoilTemperature;
     }
 
+    public OilTemperature(Integer idoilTemperature, double value, long timestamp) {
+        this.idoilTemperature = idoilTemperature;
+        this.value = value;
+        this.timestamp = timestamp;
+    }
+
     public Integer getIdoilTemperature() {
         return idoilTemperature;
     }
@@ -64,19 +73,19 @@ public class OilTemperature implements Serializable {
         this.idoilTemperature = idoilTemperature;
     }
 
-    public Double getValue() {
+    public double getValue() {
         return value;
     }
 
-    public void setValue(Double value) {
+    public void setValue(double value) {
         this.value = value;
     }
 
-    public BigInteger getTimestamp() {
+    public Long getTimestamp() {
         return timestamp;
     }
 
-    public void setTimestamp(BigInteger timestamp) {
+    public void setTimestamp(Long timestamp) {
         this.timestamp = timestamp;
     }
 
@@ -112,5 +121,5 @@ public class OilTemperature implements Serializable {
     public String toString() {
         return "com.polsl.trackerportal.database.entity.OilTemperature[ idoilTemperature=" + idoilTemperature + " ]";
     }
-
+    
 }

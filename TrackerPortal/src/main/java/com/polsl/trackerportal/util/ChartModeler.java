@@ -155,7 +155,7 @@ public class ChartModeler {
             JSONObject singleObject = new JSONObject();
             Date date = new Date(oilTemperatures.get(i).getTimestamp().longValue());
             singleObject.put("date", sfd.format(date));
-            singleObject.put("y" + graphID, oilTemperatures.get(i).getValue().doubleValue());
+            singleObject.put("y" + graphID, oilTemperatures.get(i).getValue());
             dataProvider.put(singleObject);
         }
         SERIES_COUNT = graphID;

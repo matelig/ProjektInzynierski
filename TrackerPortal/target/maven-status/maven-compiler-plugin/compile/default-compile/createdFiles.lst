@@ -1,5 +1,7 @@
 com\polsl\trackerportal\util\CryptoHash.class
+com\polsl\trackerportal\database\entity\EngineLoad_.class
 com\polsl\trackerportal\database\entity\FuelLevel.class
+com\polsl\trackerportal\database\entity\EngineLoad.class
 com\polsl\trackerportal\database\entity\FuelComsumptionRate.class
 com\polsl\trackerportal\util\Const.class
 com\polsl\trackerportal\util\DateController.class

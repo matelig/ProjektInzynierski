@@ -57,7 +57,7 @@ public class UserStatistics implements Serializable {
         averageSpeed = 0.0;
         List<Route> routeList = entityManager.createNamedQuery("Route.findAll").getResultList();
         for (int i = routeList.size() - 1; i >= 0; i--) {
-            if (!routeList.get(i).getUseridUser().getPesel().equals(loggedUser.getPesel())) {
+            if (!routeList.get(i).getUseridUser().getLogin().equals(loggedUser.getPesel())) {
                 routeList.remove(i);
             }
         }
@@ -70,15 +70,19 @@ public class UserStatistics implements Serializable {
                 speedCounter++;
             }
             Car car = route.getCaridCar();
-            if (carsMap.containsKey(car.getVinNumber())) {
-                carsMap.put(car.getVinNumber(), carsMap.get(car.getVinNumber()) + 1);
-            } else {
-                carsMap.put(car.getVinNumber(), 1);
+            if (car != null) {
+                if (carsMap.containsKey(car.getVinNumber())) {
+                    carsMap.put(car.getVinNumber(), carsMap.get(car.getVinNumber()) + 1);
+                } else {
+                    carsMap.put(car.getVinNumber(), 1);
+                }
+                totalLength += route.getRoadLength();
+                totalTime += (route.getEndDate().longValue() - route.getStartDate().longValue());
             }
-            totalLength += route.getLength();
-            totalTime += (route.getEndDate().longValue() - route.getStartDate().longValue());
         }
-        averageSpeed /= speedCounter;
+        if (speedCounter != 0) {
+            averageSpeed /= speedCounter;
+        }
         numberOfCars = carsMap.size();
         numberOfRoads = routeList.size();
         totalLength /= 1000.0;

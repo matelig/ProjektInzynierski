@@ -15,6 +15,8 @@ public class ApiHelper {
     public static final String OBD_DEVICE_ADDRESS = "deviceAddress";
     public static final String OBD_DEVICE_NAME = "deviceName";
     public static final String ROUTE_ID = "routeId";
+    public static final String LOCATION_FREQUENCY = "frequency";
+    public static final String SEND_LOCATION = "sendLocation";
 
     public static final String[] monthNames = {"January",
             "February",

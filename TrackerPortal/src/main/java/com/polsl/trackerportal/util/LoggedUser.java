@@ -49,7 +49,7 @@ public class LoggedUser implements Serializable {
     private EntityManager entityManager;
 
     public String login() {
-        List<User> userList = entityManager.createNamedQuery("User.findByPesel").setParameter("pesel", pesel).getResultList();
+        List<User> userList = entityManager.createNamedQuery("User.findByLogin").setParameter("login", pesel).getResultList();
         FacesContext context = FacesContext.getCurrentInstance();
 
         if (userList.isEmpty()) {
@@ -68,7 +68,7 @@ public class LoggedUser implements Serializable {
             if (hashed.equals(currentUser.getPassword())) {
                 userName = currentUser.getName();
                 userSurname = currentUser.getSurname();
-                pesel = currentUser.getPesel();
+                pesel = currentUser.getLogin();
                 if (currentUser.getPhoneNumber() != null) {
                     phoneNumber = currentUser.getPhoneNumber();
                 }

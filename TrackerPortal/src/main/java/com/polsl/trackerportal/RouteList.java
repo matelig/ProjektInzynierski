@@ -44,7 +44,7 @@ public class RouteList implements Serializable {
             String carID = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("carID");
             if (carID == null || carID.isEmpty()) {
                 for (int i = routeList.size() - 1; i >= 0; i--) {
-                    if (!routeList.get(i).getUseridUser().getPesel().equals(loggedUser.getPesel())) {
+                    if (!routeList.get(i).getUseridUser().getLogin().equals(loggedUser.getPesel())) {
                         routeList.remove(i);
                     }
                 }

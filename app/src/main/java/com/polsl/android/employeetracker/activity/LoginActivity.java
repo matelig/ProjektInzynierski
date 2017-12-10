@@ -69,7 +69,6 @@ public class LoginActivity extends AppCompatActivity {
             hashedPassword = password.getText().toString();
         }
         user.setPassword(hashedPassword);
-
         Call<ResponseBody> calledUser = endpoints.login(user);
         calledUser.enqueue(new Callback<ResponseBody>() {
             @Override

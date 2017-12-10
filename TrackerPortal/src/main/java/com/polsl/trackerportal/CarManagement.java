@@ -40,7 +40,7 @@ public class CarManagement implements Serializable {
 
     private Car car;
     
-    private Long clickedCarId;
+    private int clickedCarId;
 
     @PersistenceContext
     EntityManager entityManager;
@@ -160,11 +160,11 @@ public class CarManagement implements Serializable {
         this.car = car;
     }
 
-    public Long getClickedCarId() {
+    public int getClickedCarId() {
         return clickedCarId;
     }
 
-    public void setClickedCarId(Long clickedCarId) {
+    public void setClickedCarId(int clickedCarId) {
         this.clickedCarId = clickedCarId;
     }
     

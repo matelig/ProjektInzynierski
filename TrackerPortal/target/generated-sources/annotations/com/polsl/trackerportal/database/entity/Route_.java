@@ -1,6 +1,7 @@
 package com.polsl.trackerportal.database.entity;
 
 import com.polsl.trackerportal.database.entity.Car;
+import com.polsl.trackerportal.database.entity.EngineLoad;
 import com.polsl.trackerportal.database.entity.FuelComsumptionRate;
 import com.polsl.trackerportal.database.entity.FuelLevel;
 import com.polsl.trackerportal.database.entity.Location;
@@ -15,7 +16,7 @@ import javax.persistence.metamodel.CollectionAttribute;
 import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.StaticMetamodel;
 
-@Generated(value="EclipseLink-2.5.2.v20140319-rNA", date="2017-11-28T23:08:34")
+@Generated(value="EclipseLink-2.5.2.v20140319-rNA", date="2017-12-10T23:19:57")
 @StaticMetamodel(Route.class)
 public class Route_ { 
 
@@ -23,10 +24,11 @@ public class Route_ {
     public static volatile CollectionAttribute<Route, TroubleCodes> troubleCodesCollection;
     public static volatile SingularAttribute<Route, Integer> idRoute;
     public static volatile SingularAttribute<Route, BigInteger> endDate;
-    public static volatile SingularAttribute<Route, Double> length;
+    public static volatile CollectionAttribute<Route, EngineLoad> engineLoadCollection;
     public static volatile SingularAttribute<Route, Car> caridCar;
-    public static volatile CollectionAttribute<Route, OilTemperature> oilTemperatureCollection;
+    public static volatile SingularAttribute<Route, Double> roadLength;
     public static volatile CollectionAttribute<Route, FuelLevel> fuelLevelCollection;
+    public static volatile CollectionAttribute<Route, OilTemperature> oilTemperatureCollection;
     public static volatile SingularAttribute<Route, User> useridUser;
     public static volatile CollectionAttribute<Route, Rpm> rpmCollection;
     public static volatile CollectionAttribute<Route, Speed> speedCollection;

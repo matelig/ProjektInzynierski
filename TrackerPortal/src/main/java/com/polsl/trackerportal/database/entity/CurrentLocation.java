@@ -1,11 +1,12 @@
 /*
-(c) Systemy Przetwarzania i Integracji Danych SPIID sp. z o.o.
-1:1 Realny obraz Twojej firmy
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
  */
 package com.polsl.trackerportal.database.entity;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.math.BigInteger;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -22,7 +23,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author Mateusz Ligus <mateusz.ligus@spiid.pl>
+ * @author m_lig
  */
 @Entity
 @Table(name = "currentLocation")
@@ -44,15 +45,13 @@ public class CurrentLocation implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Column(name = "latitude")
-    private double latitude;
+    private Double latitude;    
     @Basic(optional = false)
     @NotNull
     @Column(name = "longitude")
-    private double longitude;
-    @Basic(optional = false)
-    @NotNull
+    private Double longitude;
     @Column(name = "timestamp")
-    private long timestamp;
+    private BigInteger timestamp;
     @JoinColumn(name = "car_idCar", referencedColumnName = "idCar")
     @ManyToOne
     private Car caridCar;
@@ -67,11 +66,9 @@ public class CurrentLocation implements Serializable {
         this.idcurrentLocation = idcurrentLocation;
     }
 
-    public CurrentLocation(Integer idcurrentLocation, double latitude, double longitude, long timestamp) {
+    public CurrentLocation(Integer idcurrentLocation, Double latitude) {
         this.idcurrentLocation = idcurrentLocation;
         this.latitude = latitude;
-        this.longitude = longitude;
-        this.timestamp = timestamp;
     }
 
     public Integer getIdcurrentLocation() {
@@ -82,27 +79,27 @@ public class CurrentLocation implements Serializable {
         this.idcurrentLocation = idcurrentLocation;
     }
 
-    public double getLatitude() {
+    public Double getLatitude() {
         return latitude;
     }
 
-    public void setLatitude(double latitude) {
+    public void setLatitude(Double latitude) {
         this.latitude = latitude;
     }
 
-    public double getLongitude() {
+    public Double getLongitude() {
         return longitude;
     }
 
-    public void setLongitude(double longitude) {
+    public void setLongitude(Double longitude) {
         this.longitude = longitude;
     }
 
-    public long getTimestamp() {
+    public BigInteger getTimestamp() {
         return timestamp;
     }
 
-    public void setTimestamp(long timestamp) {
+    public void setTimestamp(BigInteger timestamp) {
         this.timestamp = timestamp;
     }
 
@@ -141,13 +138,10 @@ public class CurrentLocation implements Serializable {
         }
         return true;
     }
-    public Date getCalculatedDate() {
-        return new Date(timestamp);
-    }
 
     @Override
     public String toString() {
         return "com.polsl.trackerportal.database.entity.CurrentLocation[ idcurrentLocation=" + idcurrentLocation + " ]";
     }
-
+    
 }

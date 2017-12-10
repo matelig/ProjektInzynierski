@@ -67,7 +67,7 @@ public class CurrentUserSettings {
     }
 
     public void update() {
-        User user = (User) entityManager.createNamedQuery("User.findByPesel").setParameter("pesel", pesel).getSingleResult();
+        User user = (User) entityManager.createNamedQuery("User.findByLogin").setParameter("login", pesel).getSingleResult();
         if (!email.matches(Const.EMAIL_PATTERN)) {
             FacesContext context = FacesContext.getCurrentInstance();
             context.addMessage(null, new FacesMessage("Email is incorrect."));
@@ -106,7 +106,7 @@ public class CurrentUserSettings {
     }
 
     public void changeUserPassword() {
-        User currentUser = (User) entityManager.createNamedQuery("User.findByPesel").setParameter("pesel", loggedUser.getPesel()).getSingleResult();
+        User currentUser = (User) entityManager.createNamedQuery("User.findByLogin").setParameter("login", loggedUser.getPesel()).getSingleResult();
         try {
             String hashedPassword = CryptoHash.hashPassword(password);
             if (hashedPassword.equals(currentUser.getPassword())) {
