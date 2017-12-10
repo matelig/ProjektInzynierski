@@ -1,11 +1,12 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+(c) Systemy Przetwarzania i Integracji Danych SPIID sp. z o.o.
+1:1 Realny obraz Twojej firmy
+*/
+
 package com.polsl.projektinzynierski.cartrackerapi;
 
 import java.io.Serializable;
+import java.math.BigInteger;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -22,7 +23,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author m_lig
+ * @author Mateusz Ligus <mateusz.ligus@spiid.pl>
  */
 @Entity
 @Table(name = "currentLocation")
@@ -49,10 +50,8 @@ public class CurrentLocation implements Serializable {
     @NotNull
     @Column(name = "longitude")
     private double longitude;
-    @Basic(optional = false)
-    @NotNull
     @Column(name = "timestamp")
-    private long timestamp;
+    private Long timestamp;
     @JoinColumn(name = "car_idCar", referencedColumnName = "idCar")
     @ManyToOne
     private Car caridCar;
@@ -67,11 +66,10 @@ public class CurrentLocation implements Serializable {
         this.idcurrentLocation = idcurrentLocation;
     }
 
-    public CurrentLocation(Integer idcurrentLocation, double latitude, double longitude, long timestamp) {
+    public CurrentLocation(Integer idcurrentLocation, double latitude, double longitude) {
         this.idcurrentLocation = idcurrentLocation;
         this.latitude = latitude;
         this.longitude = longitude;
-        this.timestamp = timestamp;
     }
 
     public Integer getIdcurrentLocation() {
@@ -98,11 +96,11 @@ public class CurrentLocation implements Serializable {
         this.longitude = longitude;
     }
 
-    public long getTimestamp() {
+    public Long getTimestamp() {
         return timestamp;
     }
 
-    public void setTimestamp(long timestamp) {
+    public void setTimestamp(Long timestamp) {
         this.timestamp = timestamp;
     }
 
@@ -146,5 +144,5 @@ public class CurrentLocation implements Serializable {
     public String toString() {
         return "com.polsl.projektinzynierski.cartrackerapi.CurrentLocation[ idcurrentLocation=" + idcurrentLocation + " ]";
     }
-    
+
 }

@@ -61,7 +61,7 @@ public class UserFacadeREST extends AbstractFacade<User> {
     public Response checkUser(User entity) {
         em.getEntityManagerFactory().getCache().evictAll();
         
-        List<User> users = em.createNamedQuery("User.findByLogin").setParameter("login", entity.getPesel()).getResultList();
+        List<User> users = em.createNamedQuery("User.findByLogin").setParameter("login", entity.getLogin()).getResultList();
         if (users.isEmpty()) {
             //return Response.serverError().entity("User not found in database").build();
             return Response.status(Response.Status.NOT_FOUND).entity("User not found in database").build();
@@ -72,7 +72,7 @@ public class UserFacadeREST extends AbstractFacade<User> {
                 returnedUser.setIdUser(user.getIdUser());
                 returnedUser.setName(user.getName());
                 returnedUser.setSurname(user.getSurname());
-                returnedUser.setPesel(user.getPesel());
+                returnedUser.setLogin(user.getLogin());
                 Gson g = new Gson();
                 String json = g.toJson(returnedUser);
                 return Response.ok(json,MediaType.APPLICATION_JSON).build();

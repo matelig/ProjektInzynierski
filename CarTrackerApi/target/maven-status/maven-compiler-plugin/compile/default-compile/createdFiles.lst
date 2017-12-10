@@ -10,6 +10,7 @@ com\polsl\projektinzynierski\cartrackerapi\OilTemperature.class
 com\polsl\projektinzynierski\cartrackerapi\FuelComsumptionRate_.class
 com\polsl\projektinzynierski\cartrackerapi\CurrentLocationJSON.class
 com\polsl\projektinzynierski\cartrackerapi\Speed.class
+com\polsl\projektinzynierski\cartrackerapi\EngineLoad.class
 com\polsl\projektinzynierski\cartrackerapi\TroubleCodes_.class
 serializer\LocationSerializer.class
 com\polsl\projektinzynierski\cartrackerapi\Location.class
@@ -36,6 +37,7 @@ com\polsl\projektinzynierski\cartrackerapi\Rpm_.class
 com\polsl\projektinzynierski\cartrackerapi\service\FuelComsumptionRateFacadeREST.class
 com\polsl\projektinzynierski\cartrackerapi\service\TroubleCodesFacadeREST.class
 com\polsl\projektinzynierski\cartrackerapi\FuelComsumptionRate.class
+com\polsl\projektinzynierski\cartrackerapi\EngineLoad_.class
 com\polsl\projektinzynierski\cartrackerapi\Route_.class
 com\polsl\projektinzynierski\cartrackerapi\service\CarFacadeREST.class
 com\polsl\projektinzynierski\cartrackerapi\service\CurrentLocationREST.class

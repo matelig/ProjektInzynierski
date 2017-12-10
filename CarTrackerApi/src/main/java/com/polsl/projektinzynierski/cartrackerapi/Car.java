@@ -1,8 +1,8 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+(c) Systemy Przetwarzania i Integracji Danych SPIID sp. z o.o.
+1:1 Realny obraz Twojej firmy
+*/
+
 package com.polsl.projektinzynierski.cartrackerapi;
 
 import java.io.Serializable;
@@ -24,30 +24,30 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author m_lig
+ * @author Mateusz Ligus <mateusz.ligus@spiid.pl>
  */
 @Entity
 @Table(name = "car")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Car.findAll", query = "SELECT c FROM Car c")
-    , @NamedQuery(name = "Car.findByVinNumber", query = "SELECT c FROM Car c WHERE c.vinNumber = :vinNumber")
     , @NamedQuery(name = "Car.findByIdCar", query = "SELECT c FROM Car c WHERE c.idCar = :idCar")
+    , @NamedQuery(name = "Car.findByVinNumber", query = "SELECT c FROM Car c WHERE c.vinNumber = :vinNumber")
     , @NamedQuery(name = "Car.findByMake", query = "SELECT c FROM Car c WHERE c.make = :make")
     , @NamedQuery(name = "Car.findByModel", query = "SELECT c FROM Car c WHERE c.model = :model")})
 public class Car implements Serializable {
 
     private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    @Column(name = "idCar")
+    private Integer idCar;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 50)
     @Column(name = "vinNumber")
     private String vinNumber;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    @Column(name = "idCar")
-    private Long idCar;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 45)
@@ -59,22 +59,30 @@ public class Car implements Serializable {
     @Column(name = "model")
     private String model;
     @OneToMany(mappedBy = "caridCar")
-    private Collection<Route> routeCollection;
-    @OneToMany(mappedBy = "caridCar")
     private Collection<CurrentLocation> currentLocationCollection;
+    @OneToMany(mappedBy = "caridCar")
+    private Collection<Route> routeCollection;
 
     public Car() {
     }
 
-    public Car(Long idCar) {
+    public Car(Integer idCar) {
         this.idCar = idCar;
     }
 
-    public Car(Long idCar, String vinNumber, String make, String model) {
+    public Car(Integer idCar, String vinNumber, String make, String model) {
         this.idCar = idCar;
         this.vinNumber = vinNumber;
         this.make = make;
         this.model = model;
+    }
+
+    public Integer getIdCar() {
+        return idCar;
+    }
+
+    public void setIdCar(Integer idCar) {
+        this.idCar = idCar;
     }
 
     public String getVinNumber() {
@@ -83,14 +91,6 @@ public class Car implements Serializable {
 
     public void setVinNumber(String vinNumber) {
         this.vinNumber = vinNumber;
-    }
-
-    public Long getIdCar() {
-        return idCar;
-    }
-
-    public void setIdCar(Long idCar) {
-        this.idCar = idCar;
     }
 
     public String getMake() {
@@ -110,21 +110,21 @@ public class Car implements Serializable {
     }
 
     @XmlTransient
-    public Collection<Route> getRouteCollection() {
-        return routeCollection;
-    }
-
-    public void setRouteCollection(Collection<Route> routeCollection) {
-        this.routeCollection = routeCollection;
-    }
-
-    @XmlTransient
     public Collection<CurrentLocation> getCurrentLocationCollection() {
         return currentLocationCollection;
     }
 
     public void setCurrentLocationCollection(Collection<CurrentLocation> currentLocationCollection) {
         this.currentLocationCollection = currentLocationCollection;
+    }
+
+    @XmlTransient
+    public Collection<Route> getRouteCollection() {
+        return routeCollection;
+    }
+
+    public void setRouteCollection(Collection<Route> routeCollection) {
+        this.routeCollection = routeCollection;
     }
 
     @Override
@@ -151,5 +151,5 @@ public class Car implements Serializable {
     public String toString() {
         return "com.polsl.projektinzynierski.cartrackerapi.Car[ idCar=" + idCar + " ]";
     }
-    
+
 }

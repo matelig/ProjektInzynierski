@@ -25,21 +25,21 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Mateusz Ligus <mateusz.ligus@spiid.pl>
  */
 @Entity
-@Table(name = "oilTemperature")
+@Table(name = "engineLoad")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "OilTemperature.findAll", query = "SELECT o FROM OilTemperature o")
-    , @NamedQuery(name = "OilTemperature.findByIdoilTemperature", query = "SELECT o FROM OilTemperature o WHERE o.idoilTemperature = :idoilTemperature")
-    , @NamedQuery(name = "OilTemperature.findByValue", query = "SELECT o FROM OilTemperature o WHERE o.value = :value")
-    , @NamedQuery(name = "OilTemperature.findByTimestamp", query = "SELECT o FROM OilTemperature o WHERE o.timestamp = :timestamp")})
-public class OilTemperature implements Serializable {
+    @NamedQuery(name = "EngineLoad.findAll", query = "SELECT e FROM EngineLoad e")
+    , @NamedQuery(name = "EngineLoad.findByIdengineLoad", query = "SELECT e FROM EngineLoad e WHERE e.idengineLoad = :idengineLoad")
+    , @NamedQuery(name = "EngineLoad.findByValue", query = "SELECT e FROM EngineLoad e WHERE e.value = :value")
+    , @NamedQuery(name = "EngineLoad.findByTimestamp", query = "SELECT e FROM EngineLoad e WHERE e.timestamp = :timestamp")})
+public class EngineLoad implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "idoilTemperature")
-    private Integer idoilTemperature;
+    @Column(name = "idengineLoad")
+    private Integer idengineLoad;
     @Basic(optional = false)
     @NotNull
     @Column(name = "value")
@@ -52,25 +52,25 @@ public class OilTemperature implements Serializable {
     @ManyToOne(optional = false)
     private Route routeidRoute;
 
-    public OilTemperature() {
+    public EngineLoad() {
     }
 
-    public OilTemperature(Integer idoilTemperature) {
-        this.idoilTemperature = idoilTemperature;
+    public EngineLoad(Integer idengineLoad) {
+        this.idengineLoad = idengineLoad;
     }
 
-    public OilTemperature(Integer idoilTemperature, double value, long timestamp) {
-        this.idoilTemperature = idoilTemperature;
+    public EngineLoad(Integer idengineLoad, double value, long timestamp) {
+        this.idengineLoad = idengineLoad;
         this.value = value;
         this.timestamp = timestamp;
     }
 
-    public Integer getIdoilTemperature() {
-        return idoilTemperature;
+    public Integer getIdengineLoad() {
+        return idengineLoad;
     }
 
-    public void setIdoilTemperature(Integer idoilTemperature) {
-        this.idoilTemperature = idoilTemperature;
+    public void setIdengineLoad(Integer idengineLoad) {
+        this.idengineLoad = idengineLoad;
     }
 
     public double getValue() {
@@ -100,18 +100,18 @@ public class OilTemperature implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (idoilTemperature != null ? idoilTemperature.hashCode() : 0);
+        hash += (idengineLoad != null ? idengineLoad.hashCode() : 0);
         return hash;
     }
 
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof OilTemperature)) {
+        if (!(object instanceof EngineLoad)) {
             return false;
         }
-        OilTemperature other = (OilTemperature) object;
-        if ((this.idoilTemperature == null && other.idoilTemperature != null) || (this.idoilTemperature != null && !this.idoilTemperature.equals(other.idoilTemperature))) {
+        EngineLoad other = (EngineLoad) object;
+        if ((this.idengineLoad == null && other.idengineLoad != null) || (this.idengineLoad != null && !this.idengineLoad.equals(other.idengineLoad))) {
             return false;
         }
         return true;
@@ -119,7 +119,7 @@ public class OilTemperature implements Serializable {
 
     @Override
     public String toString() {
-        return "com.polsl.projektinzynierski.cartrackerapi.OilTemperature[ idoilTemperature=" + idoilTemperature + " ]";
+        return "com.polsl.projektinzynierski.cartrackerapi.EngineLoad[ idengineLoad=" + idengineLoad + " ]";
     }
 
 }

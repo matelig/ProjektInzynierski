@@ -93,7 +93,7 @@ public class RouteFacadeREST extends AbstractFacade<Route> {
         route.setUseridUser(users.get(0));
         route.setEndDate(entity.getEndDate());
         route.setStartDate(entity.getStartDate());
-        route.setLength(entity.getRoadLength());
+        route.setRoadLength(entity.getRoadLength());
         for (Location l : locations) {
             l.setRouteidRoute(route);
         }

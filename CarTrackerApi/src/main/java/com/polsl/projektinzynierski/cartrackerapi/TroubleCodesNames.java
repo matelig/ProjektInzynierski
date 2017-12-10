@@ -1,8 +1,8 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+(c) Systemy Przetwarzania i Integracji Danych SPIID sp. z o.o.
+1:1 Realny obraz Twojej firmy
+*/
+
 package com.polsl.projektinzynierski.cartrackerapi;
 
 import java.io.Serializable;
@@ -21,14 +21,14 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author m_lig
+ * @author Mateusz Ligus <mateusz.ligus@spiid.pl>
  */
 @Entity
 @Table(name = "troubleCodesNames")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "TroubleCodesNames.findAll", query = "SELECT t FROM TroubleCodesNames t")
-    , @NamedQuery(name = "TroubleCodesNames.findByIdTroubleCodesNames", query = "SELECT t FROM TroubleCodesNames t WHERE t.idTroubleCodesNames = :idTroubleCodesNames")
+    , @NamedQuery(name = "TroubleCodesNames.findByIdtroubleCodeName", query = "SELECT t FROM TroubleCodesNames t WHERE t.idtroubleCodeName = :idtroubleCodeName")
     , @NamedQuery(name = "TroubleCodesNames.findByCode", query = "SELECT t FROM TroubleCodesNames t WHERE t.code = :code")
     , @NamedQuery(name = "TroubleCodesNames.findByDescription", query = "SELECT t FROM TroubleCodesNames t WHERE t.description = :description")})
 public class TroubleCodesNames implements Serializable {
@@ -37,8 +37,8 @@ public class TroubleCodesNames implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "idTroubleCodesNames")
-    private Integer idTroubleCodesNames;
+    @Column(name = "idtroubleCodeName")
+    private Integer idtroubleCodeName;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 10)
@@ -53,22 +53,22 @@ public class TroubleCodesNames implements Serializable {
     public TroubleCodesNames() {
     }
 
-    public TroubleCodesNames(Integer idTroubleCodesNames) {
-        this.idTroubleCodesNames = idTroubleCodesNames;
+    public TroubleCodesNames(Integer idtroubleCodeName) {
+        this.idtroubleCodeName = idtroubleCodeName;
     }
 
-    public TroubleCodesNames(Integer idTroubleCodesNames, String code, String description) {
-        this.idTroubleCodesNames = idTroubleCodesNames;
+    public TroubleCodesNames(Integer idtroubleCodeName, String code, String description) {
+        this.idtroubleCodeName = idtroubleCodeName;
         this.code = code;
         this.description = description;
     }
 
-    public Integer getIdTroubleCodesNames() {
-        return idTroubleCodesNames;
+    public Integer getIdtroubleCodeName() {
+        return idtroubleCodeName;
     }
 
-    public void setIdTroubleCodesNames(Integer idTroubleCodesNames) {
-        this.idTroubleCodesNames = idTroubleCodesNames;
+    public void setIdtroubleCodeName(Integer idtroubleCodeName) {
+        this.idtroubleCodeName = idtroubleCodeName;
     }
 
     public String getCode() {
@@ -90,7 +90,7 @@ public class TroubleCodesNames implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (idTroubleCodesNames != null ? idTroubleCodesNames.hashCode() : 0);
+        hash += (idtroubleCodeName != null ? idtroubleCodeName.hashCode() : 0);
         return hash;
     }
 
@@ -101,7 +101,7 @@ public class TroubleCodesNames implements Serializable {
             return false;
         }
         TroubleCodesNames other = (TroubleCodesNames) object;
-        if ((this.idTroubleCodesNames == null && other.idTroubleCodesNames != null) || (this.idTroubleCodesNames != null && !this.idTroubleCodesNames.equals(other.idTroubleCodesNames))) {
+        if ((this.idtroubleCodeName == null && other.idtroubleCodeName != null) || (this.idtroubleCodeName != null && !this.idtroubleCodeName.equals(other.idtroubleCodeName))) {
             return false;
         }
         return true;
@@ -109,7 +109,7 @@ public class TroubleCodesNames implements Serializable {
 
     @Override
     public String toString() {
-        return "com.polsl.projektinzynierski.cartrackerapi.TroubleCodesNames[ idTroubleCodesNames=" + idTroubleCodesNames + " ]";
+        return "com.polsl.projektinzynierski.cartrackerapi.TroubleCodesNames[ idtroubleCodeName=" + idtroubleCodeName + " ]";
     }
-    
+
 }

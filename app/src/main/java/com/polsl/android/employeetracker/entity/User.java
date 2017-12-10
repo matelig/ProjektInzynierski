@@ -19,6 +19,7 @@ public class User implements Parcelable {
     @Expose
     private String surname;
     @Expose
+    @SerializedName("login")
     private String pesel;
     @Expose
     private String password;

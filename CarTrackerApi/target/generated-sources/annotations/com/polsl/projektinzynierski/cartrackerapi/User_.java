@@ -7,7 +7,7 @@ import javax.persistence.metamodel.CollectionAttribute;
 import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.StaticMetamodel;
 
-@Generated(value="EclipseLink-2.5.2.v20140319-rNA", date="2017-12-10T23:13:54")
+@Generated(value="EclipseLink-2.5.2.v20140319-rNA", date="2017-12-10T23:44:04")
 @StaticMetamodel(User.class)
 public class User_ { 
 
@@ -18,7 +18,7 @@ public class User_ {
     public static volatile CollectionAttribute<User, Route> routeCollection;
     public static volatile SingularAttribute<User, String> surname;
     public static volatile SingularAttribute<User, String> name;
-    public static volatile SingularAttribute<User, String> pesel;
+    public static volatile SingularAttribute<User, String> login;
     public static volatile CollectionAttribute<User, CurrentLocation> currentLocationCollection;
     public static volatile SingularAttribute<User, String> email;
 

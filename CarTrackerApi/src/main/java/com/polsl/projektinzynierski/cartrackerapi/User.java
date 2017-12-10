@@ -1,8 +1,8 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+(c) Systemy Przetwarzania i Integracji Danych SPIID sp. z o.o.
+1:1 Realny obraz Twojej firmy
+*/
+
 package com.polsl.projektinzynierski.cartrackerapi;
 
 import java.io.Serializable;
@@ -25,7 +25,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author m_lig
+ * @author Mateusz Ligus <mateusz.ligus@spiid.pl>
  */
 @Entity
 @Table(name = "user")
@@ -35,7 +35,7 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "User.findByIdUser", query = "SELECT u FROM User u WHERE u.idUser = :idUser")
     , @NamedQuery(name = "User.findByName", query = "SELECT u FROM User u WHERE u.name = :name")
     , @NamedQuery(name = "User.findBySurname", query = "SELECT u FROM User u WHERE u.surname = :surname")
-    , @NamedQuery(name = "User.findByPesel", query = "SELECT u FROM User u WHERE u.pesel = :pesel")
+    , @NamedQuery(name = "User.findByLogin", query = "SELECT u FROM User u WHERE u.login = :login")
     , @NamedQuery(name = "User.findByPassword", query = "SELECT u FROM User u WHERE u.password = :password")
     , @NamedQuery(name = "User.findByPhoneNumber", query = "SELECT u FROM User u WHERE u.phoneNumber = :phoneNumber")
     , @NamedQuery(name = "User.findByEmail", query = "SELECT u FROM User u WHERE u.email = :email")
@@ -61,11 +61,11 @@ public class User implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 45)
-    @Column(name = "pesel")
-    private String pesel;
+    @Column(name = "login")
+    private String login;
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 64)
+    @Size(min = 1, max = 256)
     @Column(name = "password")
     private String password;
     @Column(name = "phoneNumber")
@@ -79,9 +79,9 @@ public class User implements Serializable {
     @Column(name = "administrator")
     private short administrator;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "useridUser")
-    private Collection<Route> routeCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "useridUser")
     private Collection<CurrentLocation> currentLocationCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "useridUser")
+    private Collection<Route> routeCollection;
 
     public User() {
     }
@@ -90,11 +90,11 @@ public class User implements Serializable {
         this.idUser = idUser;
     }
 
-    public User(Integer idUser, String name, String surname, String pesel, String password, short administrator) {
+    public User(Integer idUser, String name, String surname, String login, String password, short administrator) {
         this.idUser = idUser;
         this.name = name;
         this.surname = surname;
-        this.pesel = pesel;
+        this.login = login;
         this.password = password;
         this.administrator = administrator;
     }
@@ -123,12 +123,12 @@ public class User implements Serializable {
         this.surname = surname;
     }
 
-    public String getPesel() {
-        return pesel;
+    public String getLogin() {
+        return login;
     }
 
-    public void setPesel(String pesel) {
-        this.pesel = pesel;
+    public void setLogin(String login) {
+        this.login = login;
     }
 
     public String getPassword() {
@@ -164,21 +164,21 @@ public class User implements Serializable {
     }
 
     @XmlTransient
-    public Collection<Route> getRouteCollection() {
-        return routeCollection;
-    }
-
-    public void setRouteCollection(Collection<Route> routeCollection) {
-        this.routeCollection = routeCollection;
-    }
-
-    @XmlTransient
     public Collection<CurrentLocation> getCurrentLocationCollection() {
         return currentLocationCollection;
     }
 
     public void setCurrentLocationCollection(Collection<CurrentLocation> currentLocationCollection) {
         this.currentLocationCollection = currentLocationCollection;
+    }
+
+    @XmlTransient
+    public Collection<Route> getRouteCollection() {
+        return routeCollection;
+    }
+
+    public void setRouteCollection(Collection<Route> routeCollection) {
+        this.routeCollection = routeCollection;
     }
 
     @Override
@@ -205,5 +205,5 @@ public class User implements Serializable {
     public String toString() {
         return "com.polsl.projektinzynierski.cartrackerapi.User[ idUser=" + idUser + " ]";
     }
-    
+
 }
