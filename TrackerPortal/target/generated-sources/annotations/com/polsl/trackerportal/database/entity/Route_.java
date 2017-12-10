@@ -16,7 +16,7 @@ import javax.persistence.metamodel.CollectionAttribute;
 import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.StaticMetamodel;
 
-@Generated(value="EclipseLink-2.5.2.v20140319-rNA", date="2017-12-10T23:19:57")
+@Generated(value="EclipseLink-2.5.2.v20140319-rNA", date="2017-12-10T23:51:25")
 @StaticMetamodel(Route.class)
 public class Route_ { 
 

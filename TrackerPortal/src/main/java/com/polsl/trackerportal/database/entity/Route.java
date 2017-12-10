@@ -8,6 +8,7 @@ package com.polsl.trackerportal.database.entity;
 import java.io.Serializable;
 import java.math.BigInteger;
 import java.util.Collection;
+import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -228,6 +229,29 @@ public class Route implements Serializable {
         }
         return true;
     }
+    
+     public String getRouteDuration() {
+        long duration = this.getEndDate().longValue() - this.getStartDate().longValue();
+
+        long second = (duration / 1000) % 60;
+        long minute = (duration / (1000 * 60)) % 60;
+        long hour = (duration / (1000 * 60 * 60)) % 24;
+
+        String time = String.format("%02d:%02d:%02d", hour, minute, second);
+
+        return time;
+    }
+
+    public Date getCalculatedStartDate() {
+        long startDate = this.startDate.longValue();
+        return new Date(startDate);
+    }
+
+    public Date getCalculatedEndDate() {
+        long endDate = this.startDate.longValue();
+        return new Date(endDate);
+    }
+
 
     @Override
     public String toString() {

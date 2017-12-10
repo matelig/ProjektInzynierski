@@ -7,6 +7,7 @@ package com.polsl.trackerportal.database.entity;
 
 import java.io.Serializable;
 import java.math.BigInteger;
+import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -45,7 +46,7 @@ public class CurrentLocation implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Column(name = "latitude")
-    private Double latitude;    
+    private Double latitude;
     @Basic(optional = false)
     @NotNull
     @Column(name = "longitude")
@@ -139,9 +140,13 @@ public class CurrentLocation implements Serializable {
         return true;
     }
 
+    public Date getCalculatedDate() {
+        return new Date(timestamp.longValue());
+    }
+
     @Override
     public String toString() {
         return "com.polsl.trackerportal.database.entity.CurrentLocation[ idcurrentLocation=" + idcurrentLocation + " ]";
     }
-    
+
 }
