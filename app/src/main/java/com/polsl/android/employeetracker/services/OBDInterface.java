@@ -33,6 +33,8 @@ import com.polsl.android.employeetracker.R;
 import com.polsl.android.employeetracker.commands.ObdSetDefaultCommand;
 import com.polsl.android.employeetracker.entity.DaoMaster;
 import com.polsl.android.employeetracker.entity.DaoSession;
+import com.polsl.android.employeetracker.entity.EngineLoad;
+import com.polsl.android.employeetracker.entity.EngineLoadDao;
 import com.polsl.android.employeetracker.entity.FuelConsumptionRateData;
 import com.polsl.android.employeetracker.entity.FuelConsumptionRateDataDao;
 import com.polsl.android.employeetracker.entity.FuelLevelData;
@@ -102,6 +104,7 @@ public class OBDInterface {
     private OilTemperatureDataDao oilTemperatureDataDao;
     private FuelConsumptionRateDataDao fuelConsumptionRateDataDao;
     private FuelLevelDataDao fuelLevelDataDao;
+    private EngineLoadDao engineLoadDataDao;
     private Set<String> oldCodes;
 
     private String numberVIN;
@@ -123,6 +126,7 @@ public class OBDInterface {
         oilTemperatureDataDao = daoSession.getOilTemperatureDataDao();
         fuelConsumptionRateDataDao = daoSession.getFuelConsumptionRateDataDao();
         fuelLevelDataDao = daoSession.getFuelLevelDataDao();
+        engineLoadDataDao = daoSession.getEngineLoadDao();
     }
 
     /**
@@ -367,10 +371,9 @@ public class OBDInterface {
                                 }
                                 try {
                                     engineLoad.run(socket.getInputStream(), socket.getOutputStream());
-//                                    SpeedData speedData = new SpeedData(routeId, speedCommand.getMetricSpeed(), System.currentTimeMillis());
-//                                    speedDataDao.insert(speedData);
-//                                    OBDReadings.putExtra("speed", String.valueOf(speedCommand.getMetricSpeed()));
-//                                    goodSpeed = true;
+                                    EngineLoad engineLoaddb = new EngineLoad(routeId,engineLoad.getPercentage(),System.currentTimeMillis());
+                                    engineLoadDataDao.insert(engineLoaddb);
+                                    goodLoad = true;
                                 } catch (NoDataException e) {
                                     goodLoad = false;
                                     OBDReadings.putExtra("speed", "-");

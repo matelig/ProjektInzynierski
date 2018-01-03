@@ -6,6 +6,7 @@
 package com.polsl.projektinzynierski.cartrackerapi.service;
 
 import com.polsl.projektinzynierski.cartrackerapi.Car;
+import com.polsl.projektinzynierski.cartrackerapi.EngineLoad;
 import com.polsl.projektinzynierski.cartrackerapi.FuelComsumptionRate;
 import com.polsl.projektinzynierski.cartrackerapi.FuelLevel;
 import com.polsl.projektinzynierski.cartrackerapi.Location;
@@ -59,6 +60,7 @@ public class RouteFacadeREST extends AbstractFacade<Route> {
         List<FuelLevel> fuelLevels = entity.getFuelLevelCollection();
         List<OilTemperature> oilTemperatures = entity.getOilTemperatureCollection();
         List<TroubleCodes> troubleCodes = entity.getTroubleCodesCollection();
+        List<EngineLoad> engineLoad = entity.getEngineLoadCollection();
         Set<String> names = new HashSet<>();
         for (TroubleCodes tc : troubleCodes) {
             names.add(tc.getCode());
@@ -115,6 +117,9 @@ public class RouteFacadeREST extends AbstractFacade<Route> {
         for (OilTemperature ot : oilTemperatures) {
             ot.setRouteidRoute(route);
         }
+        for (EngineLoad el : engineLoad) {
+            el.setRouteidRoute(route);
+        }
         route.setTroubleCodesCollection(troubleCodes);
         route.setSpeedCollection(speed);
         route.setRpmCollection(rpm);
@@ -122,6 +127,7 @@ public class RouteFacadeREST extends AbstractFacade<Route> {
         route.setFuelComsumptionRateCollection(fuelComsumptionRates);
         route.setFuelLevelCollection(fuelLevels);
         route.setLocationCollection(locations);
+        route.setEngineLoadCollection(engineLoad);
         super.create(route);
     }
 

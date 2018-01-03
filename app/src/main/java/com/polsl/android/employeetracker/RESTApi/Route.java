@@ -2,6 +2,7 @@ package com.polsl.android.employeetracker.RESTApi;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.polsl.android.employeetracker.entity.EngineLoad;
 import com.polsl.android.employeetracker.entity.FuelConsumptionRateData;
 import com.polsl.android.employeetracker.entity.FuelLevelData;
 import com.polsl.android.employeetracker.entity.LocationData;
@@ -56,6 +57,12 @@ public class Route {
     @SerializedName("oilTemperatureCollection")
     @Expose
     private List<OilTemperatureData> oilTemperatureData;
+
+    @Expose
+    @SerializedName("engineLoadCollection")
+    private List<EngineLoad> engineLoadCollection;
+
+
 
     @SerializedName("roadLength")
     @Expose
@@ -167,5 +174,13 @@ public class Route {
 
     public void setRoadLength(Double roadLength) {
         this.roadLength = roadLength;
+    }
+
+    public List<EngineLoad> getEngineLoadCollection() {
+        return engineLoadCollection;
+    }
+
+    public void setEngineLoadCollection(List<EngineLoad> engineLoadCollection) {
+        this.engineLoadCollection = engineLoadCollection;
     }
 }

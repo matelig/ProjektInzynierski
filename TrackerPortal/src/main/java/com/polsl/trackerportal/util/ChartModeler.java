@@ -5,6 +5,7 @@
  */
 package com.polsl.trackerportal.util;
 
+import com.polsl.trackerportal.database.entity.EngineLoad;
 import com.polsl.trackerportal.database.entity.FuelComsumptionRate;
 import com.polsl.trackerportal.database.entity.FuelLevel;
 import com.polsl.trackerportal.database.entity.OilTemperature;
@@ -156,6 +157,27 @@ public class ChartModeler {
             Date date = new Date(oilTemperatures.get(i).getTimestamp().longValue());
             singleObject.put("date", sfd.format(date));
             singleObject.put("y" + graphID, oilTemperatures.get(i).getValue());
+            dataProvider.put(singleObject);
+        }
+        SERIES_COUNT = graphID;
+        return dataProvider;
+    }
+    
+    public static JSONArray initEngineLoadProvider(List<EngineLoad> engineLoad) {
+        SimpleDateFormat sfd = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        JSONArray dataProvider = new JSONArray();
+        long lastFrame = 0;
+        int graphID = 0;
+        for (int i = 0; i < engineLoad.size(); i++) {
+            long x;
+            if ((x = engineLoad.get(i).getTimestamp() - lastFrame) > 10000) {
+                graphID++;
+            }
+            lastFrame = engineLoad.get(i).getTimestamp();
+            JSONObject singleObject = new JSONObject();
+            Date date = new Date(engineLoad.get(i).getTimestamp());
+            singleObject.put("date", sfd.format(date));
+            singleObject.put("y" + graphID, engineLoad.get(i).getValue());
             dataProvider.put(singleObject);
         }
         SERIES_COUNT = graphID;

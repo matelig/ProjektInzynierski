@@ -117,6 +117,7 @@ public class RouteListActivity extends AppCompatActivity {
                 route.setFuelLevelData(r.getFuelLevelDataList());
                 route.setOilTemperatureData(r.getOilTemperatureDataList());
                 route.setRoadLength(r.getRoadLength());
+                route.setEngineLoadCollection(r.getEngineLoadDataList());
                 Call<ResponseBody> call = endpoints.create(route);
                 call.enqueue(new Callback<ResponseBody>() {
                     @Override

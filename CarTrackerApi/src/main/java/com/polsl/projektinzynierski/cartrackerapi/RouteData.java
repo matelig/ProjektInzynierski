@@ -26,6 +26,7 @@ public class RouteData {
     private List<FuelComsumptionRate> fuelConsumptionCollection;
     private List<FuelLevel> fuelLevelCollection;
     private List<OilTemperature> oilTemperatureCollection;
+    private List<EngineLoad> engineLoadCollection;
 
     public List<Speed> getSpeedCollection() {
         return speedCollection;
@@ -121,6 +122,14 @@ public class RouteData {
 
     public void setOilTemperatureCollection(List<OilTemperature> oilTemperatureCollection) {
         this.oilTemperatureCollection = oilTemperatureCollection;
+    }
+
+    public List<EngineLoad> getEngineLoadCollection() {
+        return engineLoadCollection;
+    }
+
+    public void setEngineLoadCollection(List<EngineLoad> engineLoadCollection) {
+        this.engineLoadCollection = engineLoadCollection;
     }
     
     

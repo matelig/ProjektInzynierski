@@ -72,7 +72,18 @@
                 <p:outputPanel rendered="#{0 eq routeDetails.rpmChartSeries}">
                     <p:outputLabel value="There are no data about RPM" />
                 </p:outputPanel>
-
+                
+                <p:outputPanel rendered="#{0 ne routeDetails.engineLoadSeries}">
+                    <div class="row">
+                        <div class="ui-g-1"/>
+                        <p:outputLabel style="font-size: 20px;font-weight: bold" value="Engine load"/>
+                    </div>
+                    <div id="engineLoadChartDiv" style="height: 400px;width: 100%"></div>	
+                </p:outputPanel>
+                <p:outputPanel rendered="#{0 eq routeDetails.engineLoadSeries}">
+                    <p:outputLabel value="There are no data about engine load" />
+                </p:outputPanel>
+                
                 <p:outputPanel rendered="#{0 ne routeDetails.fuelLevelSeries}">
                     <div class="row">
                         <div class="ui-g-1"/>
@@ -186,6 +197,57 @@
                 speedChart.graphs.push({
                     "id": id,
                     "balloonText": "<span style='font-size:12px;'>[[title]] in [[category]]:<br><span style='font-size:20px;'>[[value]]</span> km/h [[additional]]</span>",
+                    "lineThickness": 2,
+                    "valueField": valueId,
+                    "type": "line",
+                    "fillColors": "#ff0000"
+                }
+                );
+            }
+            ;
+            
+            var speedChart = AmCharts.makeChart("engineLoadChartDiv",
+                    {
+                        "theme": "light",
+                        "type": "serial",
+                        "legend": {
+                            "position": "bottom",
+                            "autoMargins": true,
+                            "useGraphSettings": true
+                        },
+                        "addClassNames": true,
+                        "language": "pl",
+                        "categoryField": "date",
+                        "chartCursor": {
+                            "valueBalloonsEnabled": true,
+                            "categoryBalloonDateFormat": "HH:NN:SS ",
+                            "valueLineEnable": true
+                        },
+                        "valueScrollbar": {
+                            "offset": 15,
+                            "autoGridCount": true
+                        },
+                        "categoryAxis": {
+                            "minorGridEnabled": true,
+                            "parseDates": true,
+                            "minPeriod": "ss"
+                        },
+                        "dataDateFormat": "YYYY-MM-DD HH:NN:SS",
+                        "chartScrollbar": {
+                            "offset": 15,
+                            "autoGridCount": true
+                        },
+                        "dataProvider": #{routeDetails.engineLoadProvider}
+                    });
+
+
+            var speedGraphsNumber = #{routeDetails.engineLoadSeries};
+            for (var i = 1; i <= speedGraphsNumber; i++) {
+                var valueId = "y" + i;
+                var id = "speed" + i;
+                speedChart.graphs.push({
+                    "id": id,
+                    "balloonText": "<span style='font-size:12px;'>[[title]] in [[category]]:<br><span style='font-size:20px;'>[[value]]</span> % [[additional]]</span>",
                     "lineThickness": 2,
                     "valueField": valueId,
                     "type": "line",

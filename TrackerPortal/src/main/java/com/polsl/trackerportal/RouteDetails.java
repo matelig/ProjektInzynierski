@@ -6,6 +6,7 @@
 package com.polsl.trackerportal;
 
 import com.polsl.trackerportal.database.entity.Car;
+import com.polsl.trackerportal.database.entity.EngineLoad;
 import com.polsl.trackerportal.database.entity.FuelComsumptionRate;
 import com.polsl.trackerportal.database.entity.FuelLevel;
 import com.polsl.trackerportal.database.entity.Location;
@@ -82,6 +83,7 @@ public class RouteDetails implements Serializable {
     private List<FuelComsumptionRate> fuelComsumptionRate;
     private List<OilTemperature> oilTemperature;
     private List<TroubleCodesNames> troubleCodesNames;
+    private List<EngineLoad> engineLoad;
     private Route route;
     private Car car;
     private String centerOfMap;
@@ -105,6 +107,9 @@ public class RouteDetails implements Serializable {
 
     private JSONArray oilTemperatureProvider;
     private int oilTemperatureSeries;
+
+    private JSONArray engineLoadProvider;
+    private int engineLoadSeries;
 
     private int sliderValue;
 
@@ -178,6 +183,9 @@ public class RouteDetails implements Serializable {
 
         oilTemperatureProvider = ChartModeler.initOilTemperatureProvider(oilTemperature);
         oilTemperatureSeries = ChartModeler.SERIES_COUNT;
+        
+        engineLoadProvider = ChartModeler.initEngineLoadProvider(engineLoad);
+        engineLoadSeries = ChartModeler.SERIES_COUNT;
     }
 
     private void createMapModel() {
@@ -212,6 +220,7 @@ public class RouteDetails implements Serializable {
         fuelList = new ArrayList<>(route.getFuelLevelCollection());
         fuelComsumptionRate = new ArrayList<>(route.getFuelComsumptionRateCollection());
         oilTemperature = new ArrayList<>(route.getOilTemperatureCollection());
+        engineLoad = new ArrayList<>(route.getEngineLoadCollection());
         if (locationList.size() > 0) {
             Collections.sort(locationList, (Location o1, Location o2) -> o1.getTimestamp().compareTo(o2.getTimestamp()));
         }
@@ -412,4 +421,22 @@ public class RouteDetails implements Serializable {
         this.selectedTroubleCodeId = selectedTroubleCodeId;
     }
 
+    public JSONArray getEngineLoadProvider() {
+        return engineLoadProvider;
+    }
+
+    public void setEngineLoadProvider(JSONArray engineLoadProvider) {
+        this.engineLoadProvider = engineLoadProvider;
+    }
+
+    public int getEngineLoadSeries() {
+        return engineLoadSeries;
+    }
+
+    public void setEngineLoadSeries(int engineLoadSeries) {
+        this.engineLoadSeries = engineLoadSeries;
+    }
+
+    
+    
 }

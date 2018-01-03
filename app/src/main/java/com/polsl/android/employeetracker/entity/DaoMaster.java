@@ -29,6 +29,7 @@ public class DaoMaster extends AbstractDaoMaster {
         RPMDataDao.createTable(db, ifNotExists);
         SpeedDataDao.createTable(db, ifNotExists);
         TroubleCodesDataDao.createTable(db, ifNotExists);
+        EngineLoadDao.createTable(db, ifNotExists);
     }
 
     /** Drops underlying database table using DAOs. */
@@ -41,6 +42,7 @@ public class DaoMaster extends AbstractDaoMaster {
         RPMDataDao.dropTable(db, ifExists);
         SpeedDataDao.dropTable(db, ifExists);
         TroubleCodesDataDao.dropTable(db, ifExists);
+        EngineLoadDao.dropTable(db, ifExists);
     }
 
     /**
@@ -67,6 +69,7 @@ public class DaoMaster extends AbstractDaoMaster {
         registerDaoClass(RPMDataDao.class);
         registerDaoClass(SpeedDataDao.class);
         registerDaoClass(TroubleCodesDataDao.class);
+        registerDaoClass(EngineLoadDao.class);
     }
 
     public DaoSession newSession() {
