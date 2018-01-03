@@ -15,6 +15,7 @@ import com.polsl.trackerportal.database.entity.Rpm;
 import com.polsl.trackerportal.database.entity.Speed;
 import com.polsl.trackerportal.database.entity.TroubleCodes;
 import com.polsl.trackerportal.database.entity.TroubleCodesNames;
+import com.polsl.trackerportal.database.entity.User;
 import com.polsl.trackerportal.util.ChartModeler;
 import com.polsl.trackerportal.util.LoggedUser;
 import java.awt.geom.Point2D;
@@ -27,14 +28,24 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
+import javax.annotation.Resource;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.transaction.HeuristicMixedException;
+import javax.transaction.HeuristicRollbackException;
+import javax.transaction.NotSupportedException;
+import javax.transaction.RollbackException;
+import javax.transaction.SystemException;
+import javax.transaction.UserTransaction;
 import org.json.JSONArray;
+import org.primefaces.context.RequestContext;
 import org.primefaces.event.SlideEndEvent;
 import org.primefaces.model.map.DefaultMapModel;
 import org.primefaces.model.map.LatLng;
@@ -55,6 +66,9 @@ public class RouteDetails implements Serializable {
     @PersistenceContext
     private EntityManager entityManager;
 
+    @Resource
+    private UserTransaction userTransaction;
+
     @ManagedProperty("#{loggedUser}")
     private LoggedUser loggedUser;
 
@@ -71,6 +85,8 @@ public class RouteDetails implements Serializable {
     private Route route;
     private Car car;
     private String centerOfMap;
+
+    private TroubleCodesNames selectedTroubleCodeId;
 
     private JSONArray speedProvider;
     private int speedChartSeries;
@@ -89,7 +105,7 @@ public class RouteDetails implements Serializable {
 
     private JSONArray oilTemperatureProvider;
     private int oilTemperatureSeries;
-    
+
     private int sliderValue;
 
     @PostConstruct
@@ -179,9 +195,9 @@ public class RouteDetails implements Serializable {
         centerOfMap = center.getX() + "," + center.getY();
         mapModel.addOverlay(polyline);
         Date startDate = new Date(locationList.get(0).getTimestamp().longValue());
-        Date endDate = new Date(locationList.get(locationList.size()-1).getTimestamp().longValue());
+        Date endDate = new Date(locationList.get(locationList.size() - 1).getTimestamp().longValue());
         mapModel.addOverlay(new Marker(new LatLng(locationList.get(0).getLatitude(), locationList.get(0).getLongitude()), "Start \n" + sfd.format(startDate)));
-        mapModel.addOverlay(new Marker(new LatLng(locationList.get(locationList.size()-1).getLatitude(), locationList.get(locationList.size()-1).getLongitude()), "End \n" + sfd.format(endDate)));
+        mapModel.addOverlay(new Marker(new LatLng(locationList.get(locationList.size() - 1).getLatitude(), locationList.get(locationList.size() - 1).getLongitude()), "End \n" + sfd.format(endDate)));
 
     }
 
@@ -227,9 +243,29 @@ public class RouteDetails implements Serializable {
 
         return new Point2D.Double(x, y);
     }
-    
+
+    public void openEditUserDialog(TroubleCodesNames troubleCode) {
+        this.selectedTroubleCodeId = troubleCode;
+        RequestContext context = RequestContext.getCurrentInstance();
+        context.execute("PF('changeTroubleCodeDialog').show();");
+    }
+
+    public void saveTroubleCodeDescription() {
+        try {
+            userTransaction.begin();
+            TroubleCodesNames troubleCode = (TroubleCodesNames) entityManager.createNamedQuery("TroubleCodesNames.findByCode").setParameter("code", selectedTroubleCodeId.getCode()).getSingleResult();
+            troubleCode.setDescription(selectedTroubleCodeId.getDescription());
+            entityManager.merge(troubleCode);
+            userTransaction.commit();
+            RequestContext context = RequestContext.getCurrentInstance();
+            context.execute("PF('changeTroubleCodeDialog').hide();");
+        } catch (RollbackException | HeuristicMixedException | HeuristicRollbackException | SecurityException | IllegalStateException | SystemException | NotSupportedException ex) {
+            Logger.getLogger(RouteDetails.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
     public void markerPositionChanged() {
-        System.out.println(getSliderValue());        
+        System.out.println(getSliderValue());
     }
 
     public MapModel getMapModel() {
@@ -368,5 +404,12 @@ public class RouteDetails implements Serializable {
         this.sliderValue = sliderValue;
     }
 
-    
+    public TroubleCodesNames getSelectedTroubleCodeId() {
+        return selectedTroubleCodeId;
+    }
+
+    public void setSelectedTroubleCodeId(TroubleCodesNames selectedTroubleCodeId) {
+        this.selectedTroubleCodeId = selectedTroubleCodeId;
+    }
+
 }

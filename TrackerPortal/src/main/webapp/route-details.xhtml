@@ -24,7 +24,8 @@
     </ui:define>
 
     <ui:define name="main">
-        <h:form>
+        <ui:include src="dialogs/change-trouble-code-description-dialog.xhtml"/>
+        <h:form id="routeDetailsForm">
             <div class="ui-g-1">
 
             </div>
@@ -105,7 +106,7 @@
                     <p:outputLabel value="There are no data about oil temperature" />
                 </p:outputPanel>
 
-                <p:outputPanel rendered="#{routeDetails.troubleCodesExists}">
+                <p:outputPanel rendered="#{routeDetails.troubleCodesExists}" >
                     <div class="row">
                         <div class="ui-g-1"/>
                         <p:outputLabel style="font-size: 20px;font-weight: bold" value="Diagnostic trouble codes"/>
@@ -116,12 +117,16 @@
 
                     </div>
                     <div class="ui-g-10">
-                        <p:dataTable value="#{routeDetails.troubleCodesNames}" var="troubleCode" styleClass="borderless borderless-background header-background" >
+                        <p:dataTable id="troubleCodesTable" value="#{routeDetails.troubleCodesNames}" var="troubleCode" styleClass="borderless borderless-background header-background" >
                             <p:column style="background-color: inherit;width: 20%">
                                 <p:outputLabel value="#{troubleCode.code}"/>
                             </p:column>
                             <p:column style="background-color: inherit">
                                 <p:outputLabel value="#{troubleCode.description}"/>
+                            </p:column>
+                            <p:column style="width: 50px; background-color: inherit;text-align: center">
+                                <p:commandButton icon="fa fa-edit" style="width: 30px;height: 30px" action="#{routeDetails.openEditUserDialog(troubleCode)}" update="changeTroubleCodeDialog">                    
+                                </p:commandButton>
                             </p:column>
                         </p:dataTable>
                     </div>
